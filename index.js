@@ -34,10 +34,10 @@ async function startBot() {
             console.log("Scan the QR code below to connect the bot to your WhatsApp account:");
             qrcode.generate(qr, { small: true });
             if (!sock.authState.creds.registered) {
-                const number = cache.configs.user.number || await question('Phone number (with country code): ') || '';
+                const number = cache.configs.number || await question('Phone number (with country code): ') || '';
                 const code = await sock.requestPairingCode(number.replace(/[^\d]/g, ''));
                 console.log(`\n🔗 Pairing Code: ${code}\n`);
-                if (!cache.configs.user.number) cache.configs.user.number = number;
+                if (!cache.configs.number) cache.configs.number = number;
             }
         }
         if (connection === "close") {

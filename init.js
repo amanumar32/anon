@@ -4,16 +4,23 @@ let initialized = false;
 
 export const cache = {
     configs: {
-        user: { name: '', number: '', id: '' },
-        bot: { name: 'Anon', version: 'v1.0.0' },
-        settings: { public: false, respond: false }
-    },
-    database: {
+        name: '',
+        number: '',
+        id: '',
+        bot: 'Anon',
+        version: 'v1.0.0',
+        mode: 'private',
+        respond: false,
         blacklist: [],
         banned: [],
-        admins: [],
-        groupSettings: {},
-        backgrounds: []
+        sudo: [],
+        sudoOn: true,
+        backgrounds: [],
+        notifications: true,
+        prefix: '/'
+    },
+    database: {
+        groupSettings: {}
     }
 }
 
@@ -29,7 +36,7 @@ export async function recache(sock = null, mode = 'update') {
             if (initialized) return true;
             cache.configs = JSON.parse(fs.readFileSync(config_path)) || cache.configs;
             cache.database = JSON.parse(fs.readFileSync(database_path)) || cache.database;
-            cache.configs.user.id = sock?.user?.lid ? sock?.user?.lid.split(':')[0] + '@lid' : cache.configs.user.id;
+            cache.configs.id = sock?.user?.lid ? sock?.user?.lid.split(':')[0] + '@lid' : cache.configs.id;
             initialized = true;
             console.log('Database loaded successfully!');
             return true;

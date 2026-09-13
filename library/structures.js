@@ -18,6 +18,18 @@ export const command_list = {
     hash: { name: 'hash', description: 'Hash a string', category: 'tools', param: ['string'] },
     qr: { name: 'qr', description: 'Generate a QR code', category: 'tools', param: ['text'] },
     morse: { name: 'morse', description: 'Convert text to morse code and back', category: 'tools', param: ['text'] },
+
+    // Owner commands
+    prefix: { name: 'prefix', description: 'Change the bot\'s command prefix', category: 'owner', param: ['prefix'] },
+    notification: { name: 'notification', description: 'Toggle bot notifications', category: 'owner', param: ['on/off'] },
+    mode: { name: 'mode', description: 'Change the bot\'s mode', category: 'owner', param: ['public/private'] },
+    respond: { name: 'respond', description: 'Toggle bot responses to messages', category: 'owner', param: ['on/off'] },
+    sudo: { name: 'sudo', description: 'Handle sudo users', category: 'owner', param: ['add/remove', 'on/off'] },
+    blacklist: { name: 'blacklist', description: 'Blacklist a group', category: 'owner', param: ['group'] },
+    whitelist: { name: 'whitelist', description: 'Whitelist a group', category: 'owner', param: ['group'] },
+    ban: { name: 'ban', description: 'Ban a user', category: 'owner', param: ['user'] },
+    unban: { name: 'unban', description: 'Unban a user', category: 'owner', param: ['user'] },
+    background: { name: 'background', description: 'Handle bot backgrounds', category: 'owner', param: ['add/remove'] },
 }
 
 const white_space = `​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​`;
