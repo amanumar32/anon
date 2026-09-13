@@ -139,3 +139,4 @@ config*.json
 database/
 temp
 other*
+auth/

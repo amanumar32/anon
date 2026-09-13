@@ -7,8 +7,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "npm install && node index.js",
-    "dev": "node index.js"
+    "start": "npm install && node -r ./library/logger.js index.js",
+    "dev": "node -r ./library/logger.js index.js"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
