@@ -1,3 +1,4 @@
+import { home } from "./commands/home.js";
 import { cache, recache } from "./init.js";
 import Send from "./library/send.js";
 import { command_list } from "./library/structures.js";
@@ -53,7 +54,7 @@ class Main {
                 if (!isOwner) return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);
                 //owner commands
             } else {
-                //public commands
+                if (text.startsWith('menu')) home.menu(this.send, text, msg, from);
             }
 
         } catch (error) {
