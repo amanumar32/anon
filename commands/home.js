@@ -25,7 +25,7 @@ class Home {
         } else {
             menu += Object.entries(categories).map(([category, list]) => format(category, list)).join('\n');
         }
-        menu += `> *Cyan+*\n`;
+        menu += `> *${cache.repo.name}*\n`;
         try {
             send.image(from, { url: link }, menu, msg);
         } catch (error) {

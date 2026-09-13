@@ -18,6 +18,32 @@ export const command_list = {
     hash: { name: 'hash', description: 'Hash a string', category: 'tools', param: ['string'] },
     qr: { name: 'qr', description: 'Generate a QR code', category: 'tools', param: ['text'] },
     morse: { name: 'morse', description: 'Convert text to morse code and back', category: 'tools', param: ['text'] },
+    pick: { name: 'pick', description: 'Pick a random option from a list', category: 'tools', param: ['opt1|opt2|...'] },
+    coin: { name: 'coin', description: 'Heads or tails', category: 'tools' },
+    dice: { name: 'dice', description: 'Roll a dice', category: 'tools' },
+
+    //Fun commands
+    joke: { name: 'joke', description: 'Get a random joke', category: 'fun' },
+    fact: { name: 'fact', description: 'Get a random fact', category: 'fun' },
+    quote: { name: 'quote', description: 'Get a random quote', category: 'fun' },
+    td: { name: 'td', description: 'Get a random truth or dare', category: 'fun' },
+    wyr: { name: 'wyr', description: 'Get a random would you rather question', category: 'fun' },
+    nhie: { name: 'nhie', description: 'Get a random "Never Have I Ever" question', category: 'fun' },
+    chess: { name: 'chess', description: 'Play a game of chess with a friend', category: 'fun' },
+    wordlink: { name: 'wordlink', description: 'Play a game of wordlink with a friend', category: 'fun' },
+
+    //Media commands
+    vv: { name: 'vv', description: 'Anti-view once command', category: 'media', param: ['&'] },
+    tostic: { name: 'tostic', description: 'Convert a picture/video to a sticker', category: 'media', param: ['c?', '&'] },
+    toimg: { name: 'toimg', description: 'Convert a sticker to an image', category: 'media', param: ['&'] },
+    tovid: { name: 'tovid', description: 'Convert a sticker to a video', category: 'media', param: ['&'] },
+    pack: { name: 'pack', description: 'Siphon a sticker as your own', category: 'media', param: ['pack|author?', '&'] },
+    song: { name: 'song', description: 'Download your favorite songs', category: 'media', param: ['title', 'artist'] },
+    vid: { name: 'vid', description: 'Download a video from YouTube', category: 'media', param: ['title'] },
+    img: { name: 'img', description: 'Download images from the internet', category: 'media', param: ['query'] },
+    download: { name: 'download', description: 'Download media from supported URLs', category: 'media', param: ['url'] },
+    upload: { name: 'upload', description: 'Upload an image and get a direct URL', category: 'media', param: ['&'] },
+    emix: { name: 'emix', description: 'Combine two emojis together and get a sticker', category: 'media', param: ['emoji 1 + emoji 2'] },
 
     // Owner commands
     prefix: { name: 'prefix', description: 'Change the bot\'s command prefix', category: 'owner', param: ['prefix'] },

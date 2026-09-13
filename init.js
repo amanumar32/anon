@@ -21,6 +21,10 @@ export const cache = {
     },
     database: {
         groupSettings: {}
+    },
+    repo: {
+        name: 'Cyan+',
+        url: 'https://github.com/amanumar32/anon.git'
     }
 }
 
