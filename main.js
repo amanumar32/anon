@@ -55,6 +55,7 @@ class Main {
                 //owner commands
             } else {
                 if (text.startsWith('menu')) home.menu(this.send, text, msg, from);
+                else if (text.startsWith('support')) home.support(this.send, msg, from);
             }
 
         } catch (error) {
