@@ -20,13 +20,13 @@ export const cache = {
     database: {
         groupSettings: {}
     },
-    bot_name: 'Anon',
+    bot_name: pkg.name,
     author: pkg.author,
     homepage_url: pkg.homepage,
     bot_id: '',
     current_version: pkg.version,
-    repo_url: pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
     latest_version: '',
+    repo_url: pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
 }
 
 export async function recache(sock = null, mode = 'update') {
