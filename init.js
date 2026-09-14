@@ -15,7 +15,7 @@ export const cache = {
         sudoOn: true,
         backgrounds: [],
         notifications: true,
-        prefix: '/'
+        prefix: '.'
     },
     database: {
         groupSettings: {}
