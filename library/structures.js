@@ -48,6 +48,8 @@ export const command_list = {
     emix: { name: 'emix', description: 'Combine two emojis together and get a sticker', category: 'media', param: ['emoji 1 + emoji 2'] },
 
     // Owner commands
+    configs: { name: 'configs', description: 'View the bot\'s configurations', category: 'owner' },
+    database: { name: 'database', description: 'View the bot\'s database', category: 'owner' },
     prefix: { name: 'prefix', description: 'Change the bot\'s command prefix', category: 'owner', param: ['set?', 'prefix'] },
     notification: { name: 'notification', description: 'Toggle bot notifications', category: 'owner', param: ['on/off'] },
     mode: { name: 'mode', description: 'Change the bot\'s mode', category: 'owner', param: ['public/private'] },
@@ -58,6 +60,7 @@ export const command_list = {
     ban: { name: 'ban', description: 'Ban a user', category: 'owner', requirements: ['@'] },
     unban: { name: 'unban', description: 'Unban a user', category: 'owner', requirements: ['@'] },
     background: { name: 'background', description: 'Handle bot backgrounds for the menu', category: 'owner', param: ['add/remove'] },
+    update: { name: 'update', description: 'Update the bot to the latest committed version', category: 'owner' },
 }
 
 export const white_space = `​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​`;

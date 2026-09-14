@@ -43,7 +43,7 @@ export async function recache(sock = null, mode = 'update') {
             cache.database = JSON.parse(fs.readFileSync(database_path)) || cache.database;
             cache.bot_id = sock?.user?.id ? sock.user.id.split(':')[0] + '@s.whatsapp.net' : (sock?.user?.lid ? sock?.user?.lid.split(':')[0] + '@lid' : '');
             const urlObj = new URL(cache.repo_url);
-            fetch(`https://raw.githubusercontent.com/${urlObj.pathname.replace(/^\//, '').replace(/\.git$/, '')}/refs/heads/main/package.json`).then((data) => data.json().then(e => cache.latest_version = e?.version || cache.current_version)).catch(e => { console.warn('Failed to fetch committed version:', e.message); cache.latest_version = cache.latest_version });
+            fetch(`https://raw.githubusercontent.com/${urlObj.pathname.replace(/^\//, '').replace(/\.git$/, '')}/refs/heads/main/package.json`).then((data) => data.json().then(e => cache.latest_version = e?.version || cache.current_version)).catch(e => { console.warn('Failed to fetch committed version:', e.message); cache.latest_version = cache.current_version });
             initialized = true;
             console.log('Database loaded successfully!');
             return true;

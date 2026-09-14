@@ -1,4 +1,5 @@
 import { _home } from "./commands/home.js";
+import { _owner } from "./commands/owner.js";
 import { _stats } from "./commands/status.js";
 import { _tools } from "./commands/tools.js";
 import { cache, recache } from "./init.js";
@@ -65,6 +66,7 @@ class Main {
                 else if (text.startsWith('ban')) return;
                 else if (text.startsWith('unban')) return;
                 else if (text.startsWith('background')) return;
+                else if (text.startsWith('update')) _owner.update(this.send, from, msg);
 
             } else {
                 //Home

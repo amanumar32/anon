@@ -1,6 +1,7 @@
 import { evaluate } from "mathjs";
 import { cache } from "../init.js";
 import { morse_code_map } from "../library/structures.js";
+import crypto from 'crypto';
 
 class Tools {
     async calc(send, from, text, msg) {
@@ -15,14 +16,23 @@ class Tools {
     async hash(send, from, context, msg, quotedText) {
         const message = context.slice(1).replace(/hash/i, '')?.trim() || quotedText?.trim() || '';
         if (!message) return await send.text(from, 'Please provide a text to hash.', msg);
-        //hash logic
-        send.text(from, '> This feature is under development..', msg);
+        try {
+            const result = crypto.createHash('sha256').update(message).digest('hex');
+            send.text(from, `*SHA-256 Hash:*\n\`\`\`${result}\`\`\``, msg);
+        } catch (error) {
+            send.text(from, 'An error occurred while generating the hash.', msg);
+        }
     }
     async qr(send, from, context, msg, quotedText) {
         const message = context.slice(1).replace(/qr/i, '')?.trim() || quotedText?.trim() || '';
         if (!message) return await send.text(from, 'Please provide a text to convert.', msg);
-        //qr logic
-        send.text(from, '> This feature is under development..', msg);
+        const qr_url = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(message)}`;
+        try {
+            send.image(from, { url: qr_url }, `QR Code for "${message}".`, msg);
+        } catch (error) {
+            console.warn('Error sending qrcode:', error.message);
+            send.text(from, `*QR Code Link:*\n${qr_url}`, msg);
+        }
     }
     async morse(send, context, msg, from, quotedText) {
         const message = context.slice(1).replace(/morse/i, '')?.trim() || quotedText?.trim() || '';
