@@ -16,7 +16,7 @@ class Home {
         let menu = `╭━━━ ■ *${cache.bot_name}* ■ ━━━\n┃ ◦ *Owner:* ${cache.configs.name}\n┃ ◦ *Version:* ${cache.current_version}\n┃ ◦ *Prefix:* ${cache.configs.prefix}\n╰━━━━━━━━━━━━━━━━━━━\n${white_space}\n`;
         const format = (category, list) => {
             const header = `┌── ► *${sentence_case(category)}* ◄\n│\n`;
-            const footer = `\n│\n└───────────────\n\n`;
+            const footer = `\n│\n└───────────────\n`;
             const body = list.map(cmd => param === 'full' ? `│ ◦ *${cache.configs.prefix}${cmd.name}* - _${cmd.description}_` : `│  ◦ ${cache.configs.prefix}${cmd.name}`).join(param === 'full' ? '\n\n' : '\n');
             return header + body + footer;
         };
@@ -48,7 +48,7 @@ class Home {
         send.text(from, 'Thank you for your feedback! We have received it and will respond soon...')
     }
     async donate(send, from, msg) {
-        send.text(from, `*Support the developer with a cup of coffee :) ...*\n\nThis project was developed and maintained by *Áà Män シ*, a solo developer and freelancer. If you appreciate this project, show some love by buying me a cup of coffee at ${cache.homepage_url}/donate\n\n> Thanks a bunch! 🙃`, msg);
+        send.text(from, `*Support the developer with a cup of coffee : ) ...*\n\nThis project was developed and maintained by *Áà Män シ*, a solo developer and freelancer. If you appreciate this project, show some love by buying me a cup of coffee at ${cache.homepage_url}/donate\n\n> Thanks a bunch! 🙃`, msg);
     }
     async help(send, from, text, msg) {
         const param = text.split(' ')[1];

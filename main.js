@@ -41,7 +41,7 @@ class Main {
             const text = `${command.slice(1)}`;
 
             const isPublic = cache.configs.mode === 'public';
-            const isOwner = [cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
+            const isOwner = msg.key.fromMe || [cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
             const isSudo = cache.configs.sudoOn && cache.configs.sudo.includes(userid);
             const willRespond = cache.configs.respond;
 

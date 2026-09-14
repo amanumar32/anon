@@ -13,19 +13,19 @@ class Tools {
         }
     }
     async hash(send, from, context, msg, quotedText) {
-        const message = context.replace('hash', '')?.trim() || quotedText?.trim() || '';
+        const message = context.slice(1).replace(/hash/i, '')?.trim() || quotedText?.trim() || '';
         if (!message) return await send.text(from, 'Please provide a text to hash.', msg);
         //hash logic
         send.text(from, '> This feature is under development..', msg);
     }
     async qr(send, from, context, msg, quotedText) {
-        const message = context.replace('qr', '')?.trim() || quotedText?.trim() || '';
+        const message = context.slice(1).replace(/qr/i, '')?.trim() || quotedText?.trim() || '';
         if (!message) return await send.text(from, 'Please provide a text to convert.', msg);
         //qr logic
         send.text(from, '> This feature is under development..', msg);
     }
     async morse(send, context, msg, from, quotedText) {
-        const message = context.replace(/^morse\s*/i, '')?.trim() || quotedText?.trim() || '';
+        const message = context.slice(1).replace(/morse/i, '')?.trim() || quotedText?.trim() || '';
         if (!message) return await send.text(from, 'Please provide a text to convert.', msg);
         let result = '';
         if (/^[.\-\/\s]+$/.test(message.trim())) {

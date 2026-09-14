@@ -19,15 +19,15 @@ class Stats {
         const uptime = (await this.uptime(send, from, msg, startTime, true)).uptime;
         const version = (await this.version(send, from, msg, true))
 
-        const message = `> ■ *Status* ■\n\n- *Bot Name:* ${cache.bot_name}\n- *Bot Owner:* ${cache.configs.name}\n\n- *Version:* ${version.current}\n- *Uptime:* ${uptime}\n- *Ping:* ${ping.latency} ms\n- *Prefix:* ${cache.configs.prefix}\n\n- *Mode:* ${cache.configs.mode}\n- *Response:* ${cache.configs.respond}\n\n- *Sudo:* ${cache.configs.sudoOn}\n- *Date and Time:* ${new Date().toLocaleString()}\n${version.update ? `\n> *Update Available:* ${version.latest}. Send \`${cache.configs.prefix}update\` to update now.` : ''}`;
-        await send.edit(from, message, ping.sent);
+        const message = `> ■ *Status* ■\n\n- *Bot Name:* ${cache.bot_name}\n- *Bot Owner:* ${cache.configs.name}\n\n- *Version:* ${version.current}\n- *Uptime:* ${uptime}\n- *Ping:* ${ping.latency} ms\n- *Prefix:* ${cache.configs.prefix}\n\n- *Mode:* ${cache.configs.mode}\n- *Response:* ${cache.configs.respond}\n\n- *Sudo:* ${cache.configs.sudoOn}\n- *Date and Time:* ${new Date().toLocaleString()}\n${version.update ? `\n> *Update Available: ${version.latest}*. Send \`${cache.configs.prefix}update\` to update now.` : ''}`;
+        await send.edit(from, message, ping.sent.key);
     }
     async version(send, from, msg, _return = false) {
         const current = cache.current_version;
         const latest = cache.latest_version || cache.current_version;
         const update = current !== latest;
         if (_return) return { current, latest, update };
-        await send.text(from, `> *Version:* ${current}${update ? `\n> *Update Available:* ${latest}. Send \`${cache.configs.prefix}update\` to update now.` : ''}`)
+        await send.text(from, `> *Version:* ${current}${update ? `\n\n*> *Update Available: ${latest}*. Send \`${cache.configs.prefix}update\` to update now.` : ''}`)
     }
     async alive(send, from, msg) {
         send.text(from, '*Bot is active!*', msg);
