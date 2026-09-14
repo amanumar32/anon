@@ -1,2 +1,2 @@
 # anon
-Self-host baileys whatsapp bot
+Self-host baileys whatsapp bot.
