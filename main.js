@@ -1,4 +1,6 @@
-import { home } from "./commands/home.js";
+import { _home } from "./commands/home.js";
+import { _stats } from "./commands/status.js";
+import { _tools } from "./commands/tools.js";
 import { cache, recache } from "./init.js";
 import Send from "./library/send.js";
 import { command_list } from "./library/structures.js";
@@ -12,7 +14,7 @@ class Main {
     async init() {
         try {
             console.log('Bot connected successfully!');
-            if (cache.configs.notifications) await this.send.text(cache.configs.id, `*✅ Bot Activated*\n\nTime: ${new Date().toLocaleString()}\n\n> You can turn this off with \`${cache.configs.prefix}notification off\``);
+            if (cache.configs.notifications) await this.send.text(cache.bot_id, `*✅ Bot Activated*\n\nTime: ${new Date().toLocaleString()}\n\n> You can turn this off with \`${cache.configs.prefix}notification off\``);
             setInterval(() => recache(null, 'update'), 5 * 60 * 1000);
         } catch (error) {
             console.error('Error starting bot:', error.message);
@@ -35,11 +37,11 @@ class Main {
             const quoted_text = quoted_msg?.conversation || quoted_msg?.extendedTextMessage?.text || '';
             const quoted_jid = quoted?.participant || '';
 
-            if (!command.startsWith(cache.configs.prefix) && !['ping', 'bot', 'uptime', 'stats', 'prefix'].includes(command)) return;
-            const text = command.slice(1);
+            if (!command.startsWith(cache.configs.prefix) && !['ping', 'bot', 'uptime', 'stats', 'status', 'prefix', 'version', 'alive'].includes(command)) return;
+            const text = `${command.slice(1)}`;
 
             const isPublic = cache.configs.mode === 'public';
-            const isOwner = [cache.configs.id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
+            const isOwner = [cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
             const isSudo = cache.configs.sudoOn && cache.configs.sudo.includes(userid);
             const willRespond = cache.configs.respond;
 
@@ -52,10 +54,67 @@ class Main {
 
             if (commands.filter(i => i.category === 'owner').map(e => e.name).some(c => text.startsWith(c))) {
                 if (!isOwner) return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);
-                //owner commands
+                //Owner
+                else if (text.startsWith('prefix')) return;
+                else if (text.startsWith('notifications')) return;
+                else if (text.startsWith('mode')) return;
+                else if (text.startsWith('respond')) return;
+                else if (text.startsWith('sudo')) return;
+                else if (text.startsWith('blacklist')) return;
+                else if (text.startsWith('whitelist')) return;
+                else if (text.startsWith('ban')) return;
+                else if (text.startsWith('unban')) return;
+                else if (text.startsWith('background')) return;
+
             } else {
-                if (text.startsWith('menu')) home.menu(this.send, text, msg, from);
-                else if (text.startsWith('support')) home.support(this.send, msg, from);
+                //Home
+                if (text.startsWith('menu')) _home.menu(this.send, text, msg, from);
+                else if (text.startsWith('support')) _home.support(this.send, msg, from);
+                else if (text.startsWith('repo')) _home.repo(this.send, from, msg);
+                else if (text.startsWith('owner')) _home.owner(this.send, from, msg);
+                else if (text.startsWith('feedback')) _home.feedback(this.send, from, msg, text);
+                else if (text.startsWith('donate')) _home.donate(this.send, from, msg);
+                else if (text.startsWith('help')) _home.help(this.send, from, text, msg);
+
+                //Status
+                else if ([text, command].includes('ping')) _stats.ping(this.send, from, msg);
+                else if ([text, command].includes('uptime')) _stats.uptime(this.send, from, msg, this.startTime);
+                else if ([text, command].some(r => ['status', 'stats'].includes(r))) _stats.status(this.send, from, msg, this.startTime);
+                else if ([text, command].includes('version')) _stats.version(this.send, from, msg);
+                else if ([text, command].some(r => ['bot', 'alive'].includes(r))) _stats.alive(this.send, from, msg);
+
+                //Tools
+                else if (text.startsWith('calc')) _tools.calc(this.send, from, text, msg);
+                else if (text.startsWith('hash')) _tools.hash(this.send, from, context, msg, quoted_text);
+                else if (text.startsWith('qr')) _tools.qr(this.send, from, context, msg, quoted_text);
+                else if (text.startsWith('morse')) _tools.morse(this.send, context, msg, from, quoted_text);
+                else if (text.startsWith('pick')) _tools.pick(this.send, from, text, msg);
+                else if (text.startsWith('coin')) _tools.coin(this.send, from, msg);
+                else if (text.startsWith('dice')) _tools.dice(this.send, from, msg);
+
+                //Fun
+                else if (text.startsWith('joke')) return;
+                else if (text.startsWith('fact')) return;
+                else if (text.startsWith('quote')) return;
+                else if (text.startsWith('td')) return;
+                else if (text.startsWith('wyr')) return;
+                else if (text.startsWith('nhie')) return;
+                else if (text.startsWith('chess')) return;
+                else if (text.startsWith('wordlink')) return;
+
+                //Media
+                else if (text.startsWith('vv')) return;
+                else if (['tostic', 'stic'].some(r => text.startsWith(r))) return;
+                else if (text.startsWith('toimg')) return;
+                else if (text.startsWith('tovid')) return;
+                else if (['pack', 'take'].some(r => text.startsWith(r))) return;
+                else if (['song', 'play', 'music'].some(r => text.startsWith(r))) return;
+                else if (['vid', 'video'].some(r => text.startsWith(r))) return;
+                else if (['img', 'image'].some(r => text.startsWith(r))) return;
+                else if (['download', 'dl'].some(r => text.startsWith(r))) return;
+                else if (['upload', 'ul'].some(r => text.startsWith(r))) return;
+                else if (text.startsWith('emix')) return;
+
             }
 
         } catch (error) {

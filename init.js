@@ -1,14 +1,12 @@
 import fs from 'fs';
 
 let initialized = false;
+const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
 export const cache = {
     configs: {
         name: '',
         number: '',
-        id: '',
-        bot: 'Anon',
-        version: 'v1.0.0',
         mode: 'private',
         respond: false,
         blacklist: [],
@@ -22,10 +20,13 @@ export const cache = {
     database: {
         groupSettings: {}
     },
-    repo: {
-        name: 'Cyan+',
-        url: 'https://github.com/amanumar32/anon.git'
-    }
+    bot_name: 'Anon',
+    author: pkg.author,
+    homepage_url: pkg.homepage,
+    bot_id: '',
+    current_version: pkg.version,
+    repo_url: pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
+    latest_version: '',
 }
 
 export async function recache(sock = null, mode = 'update') {
@@ -40,7 +41,7 @@ export async function recache(sock = null, mode = 'update') {
             if (initialized) return true;
             cache.configs = JSON.parse(fs.readFileSync(config_path)) || cache.configs;
             cache.database = JSON.parse(fs.readFileSync(database_path)) || cache.database;
-            cache.configs.id = sock?.user?.lid ? sock?.user?.lid.split(':')[0] + '@lid' : cache.configs.id;
+            cache.bot_id = sock?.user?.lid ? sock?.user?.lid.split(':')[0] + '@lid' : id;
             initialized = true;
             console.log('Database loaded successfully!');
             return true;

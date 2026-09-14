@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "Self-host baileys whatsapp bot",
   "license": "ISC",
-  "author": "",
+  "author": "Cyan+",
+  "homepage": "cyan.halostudios.xyz",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "npm install && node -r ./library/logger.js index.js",
     "dev": "node -r ./library/logger.js index.js",
     "test": "node -r ./library/logger.js others/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amanumar32/anon.git"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
