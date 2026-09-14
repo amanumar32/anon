@@ -45,8 +45,8 @@ class Main {
             const isSudo = cache.configs.sudoOn && cache.configs.sudo.includes(userid);
             const willRespond = cache.configs.respond;
 
-            if ([...cache.configs.blacklist, ...cache.configs.banned].some(id => from === id || userid === id) && !['whitelist', 'help'].includes(text)) return;
             if (!isPublic && !isOwner && !isSudo) return;
+            if ([...cache.configs.blacklist, ...cache.configs.banned].some(id => from === id || userid === id) && !['whitelist', 'support'].includes(text)) return;
 
             console.log(`{ "context": "${context}", "from": "${from}", "id": "${userid}", "number": "${user_number}", "username": "${username}", "quoted": "${quoted_text}", "date": "${new Date().toLocaleString()}" }`);
 
