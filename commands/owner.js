@@ -67,26 +67,29 @@ class Owner {
     async unban() { }
     async background() { }
     async update(send, from, msg) {
+        let sent;
         try {
             await send.react(from, '🔄', msg.key);
-            const sent = await send.text(from, 'Checking for updates...', msg);
-            try {
-                await exec_as('git --version');
-            } catch (error) {
-                await send.edit(from, 'Git is required to update automatically and is not installed on your machine. Your options are:\n\n- Install git from https://git-scm.com/install/ *(recommended)*\n- Download the updated zip from the repository and extract the files to your machine.', sent.key);
-                return;
-            }
+            sent = await send.text(from, 'Checking for updates...', msg);
+            await exec_as('git --version').catch(() => { throw new Error('Git is required to update automatically and is not installed on your machine. Your options are:\n\n- Install git from https://git-scm.com/install/ *(recommended)*\n- Download the updated zip from the repository and extract the files to your machine.') });
             if (!fs.existsSync('.git')) {
-                send.edit(from, 'No repository found. Initializing...', sent.key);
+                await send.edit(from, 'No repository found. Initializing...', sent.key);
                 await exec_as('git init');
                 await exec_as(`git remote add origin ${cache.repo_url}`);
+                await exec_as('git add .').catch(() => { });
+                await exec_as('git commit -m "initial local backup"').catch(() => { });
                 await exec_as('git branch -M main');
                 await exec_as('git fetch origin');
-                await exec_as('git checkout -f origin/main || git checkout -f origin/master');
+                await exec_as('git reset --hard origin/main').catch(async () => await exec_as('git checkout -b main origin/main || git checkout -b master origin/master'));
+            } else {
+                await exec_as('git fetch origin');
+                await exec_as('git stash -u').catch(() => { });
+                await exec_as('git checkout main 2>/dev/null || git checkout master 2>/dev/null || git checkout -b main origin/main || git checkout -b master origin/master').catch(async () => await exec_as('git reset --hard origin/main').catch(() => { }));
             }
-            exec_as('git stash').catch(() => { });
-            const { stdout } = await exec_as('git pull');
-            if (cache.edited_source_code) exec_as('git stash pop').catch(() => { });
+            const branch_res = await exec_as('git rev-parse --abbrev-ref HEAD').catch(() => ({ stdout: 'main' }));
+            const current_branch = branch_res.stdout.trim() || 'main';
+            const { stdout } = await exec_as(`git pull origin ${current_branch}`);
+            if (cache.edited_source_code) await exec_as('git stash pop').catch(() => { });
             if (stdout.includes('Already up to date')) return send.edit(from, '✅ You\'re already running on the latest version!', sent.key);
             await send.edit(from, 'Checking dependencies...', sent.key);
             if (stdout.includes('package.json')) await exec_as('npm install');
@@ -96,6 +99,7 @@ class Owner {
             setTimeout(() => process.exit(0), 500);
         } catch (error) {
             console.error('Error processing update:', error.message);
+            await send.edit(from, error.message, sent.key);
         }
     }
 }
