@@ -57,7 +57,7 @@ class Main {
                 if (!isOwner) return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);
                 //Owner
                 else if (text.startsWith('prefix')) _owner.prefix(this.send, from, msg, text);
-                else if (text.startsWith('notifications')) _owner.notifications(this.send, from, msg, text);
+                else if (text.startsWith('notification')) _owner.notifications(this.send, from, msg, text);
                 else if (text.startsWith('mode')) _owner.mode(this.send, from, msg, text);
                 else if (text.startsWith('respond')) _owner.respond(this.send, from, msg, text);
                 else if (text.startsWith('sudo')) return;
