@@ -48,19 +48,19 @@ export const command_list = {
     emix: { name: 'emix', description: 'Combine two emojis together and get a sticker', category: 'media', param: ['emoji 1 + emoji 2'] },
 
     // Owner commands
-    configs: { name: 'configs', description: 'View the bot\'s configurations', category: 'owner' },
-    database: { name: 'database', description: 'View the bot\'s database', category: 'owner' },
-    prefix: { name: 'prefix', description: 'Change the bot\'s command prefix', category: 'owner', param: ['set?', 'prefix'] },
-    notification: { name: 'notification', description: 'Toggle bot notifications', category: 'owner', param: ['on/off'] },
-    mode: { name: 'mode', description: 'Change the bot\'s mode', category: 'owner', param: ['public/private'] },
-    respond: { name: 'respond', description: 'Toggle bot responses to messages', category: 'owner', param: ['on/off'] },
+    configs: { name: 'configs', description: 'View the bot\'s configurations', category: 'owner' },//
+    database: { name: 'database', description: 'View the bot\'s database', category: 'owner' },//
+    prefix: { name: 'prefix', description: 'Change the bot\'s command prefix', category: 'owner', param: ['set?', 'prefix'] },//
+    notification: { name: 'notification', description: 'Toggle bot notifications', category: 'owner', param: ['on/off'] },//
+    mode: { name: 'mode', description: 'Change the bot\'s mode', category: 'owner', param: ['public/private'] },//
+    respond: { name: 'respond', description: 'Toggle bot responses to messages', category: 'owner', param: ['on/off'] },//
     sudo: { name: 'sudo', description: 'Handle sudo users', category: 'owner', param: ['add/remove', 'on/off'], requirements: ['@'], note: 'Sudo users can use the bot while in private mode' },
     blacklist: { name: 'blacklist', description: 'Blacklist a group', category: 'owner', param: ['group'] },
     whitelist: { name: 'whitelist', description: 'Whitelist a group', category: 'owner', param: ['group'] },
     ban: { name: 'ban', description: 'Ban a user', category: 'owner', requirements: ['@'] },
     unban: { name: 'unban', description: 'Unban a user', category: 'owner', requirements: ['@'] },
     background: { name: 'background', description: 'Handle bot backgrounds for the menu', category: 'owner', param: ['add/remove'], requirements: ['&'] },
-    update: { name: 'update', description: 'Update the bot to the latest committed version', category: 'owner' },
+    update: { name: 'update', description: 'Update the bot to the latest committed version', category: 'owner' },//
     setresponse: { name: 'setresponse', description: 'Set a static response message from your responses as an alternative to `GEMINI_AI_API_KEY`', category: 'owner', param: ['response'] },
     env: { name: 'env', description: 'Add an env value automatically', category: 'owner', param: ['key', 'value'] },
     prompt: { name: 'prompt', description: 'Set a custom prompt for your AI responses', category: 'owner', param: ['prompt'] },

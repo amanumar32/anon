@@ -60,7 +60,7 @@ class Main {
                 else if (text.startsWith('notification')) _owner.notifications(this.send, from, msg, text);
                 else if (text.startsWith('mode')) _owner.mode(this.send, from, msg, text);
                 else if (text.startsWith('respond')) _owner.respond(this.send, from, msg, text);
-                else if (text.startsWith('sudo')) return;
+                else if (text.startsWith('sudo')) _owner.sudo(this.send, from, text, msg);
                 else if (text.startsWith('blacklist')) return;
                 else if (text.startsWith('whitelist')) return;
                 else if (text.startsWith('ban')) return;

@@ -15,10 +15,10 @@ class Owner {
         send.text(from, `> ■ *Database* ■\n\n- *Banned:* ${data.banned.length} users\n- *Blacklist:* ${data.blacklist.length} groups\n- *Sudo:* ${data.sudo.length} users\n- *Backgrounds:* ${data.backgrounds.length} items\n- *Group settings:* ${Object.keys(data.groupSettings).length} groups\n`, msg);
     }
     async prefix(send, from, msg, text) {
-        const param = text.replace('prefix', '').trim() + '';
+        const param = text.replace('prefix', '').trim();
         let message;
         if (!param) message = `> *Prefix:* ${cache.configs.prefix}`;
-        else if (param.match()) { //match non-letter and numbers
+        else if (param.match(/^[^\p{L}\p{N}\s]+$/u) && param.length === 1) {
             cache.configs.prefix = param;
             message = `> *Prefix updated:* ${cache.configs.prefix}`;
         } else message = 'This prefix is invalid! Please use a different prefix.';
@@ -55,25 +55,47 @@ class Owner {
         else {
             cache.configs.respond = param === 'on';
             message = `🤖 Auto-respond turned *${param}*`;
-            if (!process.env.GEMINI_AI_API_KEY && cache.configs.respond) message += `\n\n> Auto-responses may not function properly as \`GEMINI_AI_API_KEY\` has not been provided in \`.env\`. You can:\n> - Use \`${cache.configs.prefix}env GEMINI_AI_API_KEY <your-api-key>\` to add one automatically\n> - Define a static message you want to use with \`${cache.configs.prefix}setresponse <your-static-message>\`\n> - Add it to \`.env\` manually`;
+            if (!process.env.GEMINI_AI_API_KEY && cache.configs.respond) message += `\n\n> Auto-responses may not function properly as \`GEMINI_AI_API_KEY\` has not been provided in \`.env\`. You can: _Use \`${cache.configs.prefix}env GEMINI_AI_API_KEY <your-api-key>\` to add one automatically_, _define a static message you want to use with \`${cache.configs.prefix}setresponse <your-static-message>\`_ or _Add it to \`.env\` manually_.`;
         }
         recache();
         send.text(from, message, msg);
     }
-    async sudo() { }
+    async sudo(send, from, text, msg) {
+        const param = text.split(' ')[1];
+        const target = msg.message?.extendedTextMessage?.contextInfo?.participant || msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
+        let message;
+        if (['on', 'off'].includes(param)) {
+            cache.configs.sudoOn = param === 'on';
+            message = `*Sudo mode turned ${param}*`;
+            if (param === 'on') message += '\n\n> Sudo users can now use the bot anywhere, even in private mode.'
+        } else if (['add', 'remove'].includes(param)) {
+            if (target) {
+                const includes = cache.database.sudo.includes(target);
+                const add = param === 'add';
+                if ((add && includes) || (!add && !includes)) message = `@${target.split('@')[0]} *is ${add ? 'already' : 'not'} a sudo user*`;
+                else {
+                    cache.database.sudo = add ? [...cache.database.sudo, target] : cache.database.sudo.filter(i => i !== target);
+                    message = `@${target.split('@')[0]} *has been ${add ? 'added' : 'removed'} as a sudo user*`;
+                }
+            } else message = `*Please mention a user to ${param} as a sudo*`;
+        } else if (param === 'list') message = `> ■ *Sudo users* ■\n\n${cache.database.sudo.map(i => `- @${i.split('@')[0]}`).join('\n')}`;
+        else message = `*Usage:* \`${cache.configs.prefix}sudo <on/off/add/remove/list>\``;
+        recache();
+        send.text(from, message, msg, [target]);
+    }
     async blacklist() { }
     async whitelist() { }
     async ban() { }
     async unban() { }
     async background() { }
-    async update(send, from, msg) {
+    async update(send, from, msg, _return = false) {
         let sent;
         try {
-            await send.react(from, '🔄', msg.key);
-            sent = await send.text(from, 'Checking for updates...', msg);
+            if (!_return) await send.react(from, '🔄', msg.key);
+            sent = _return ? null : await send.text(from, 'Checking for updates...', msg);
             await exec_as('git --version').catch(() => { throw new Error('Git is required to update automatically and is not installed on your machine. Your options are:\n\n- Install git from https://git-scm.com/install/ *(recommended)*\n- Download the updated zip from the repository and extract the files to your machine.') });
             if (!fs.existsSync('.git')) {
-                await send.edit(from, 'No repository found. Initializing...', sent.key);
+                if (!_return) await send.edit(from, 'No repository found. Initializing...', sent.key);
                 await exec_as('git init');
                 await exec_as(`git remote add origin ${cache.repo_url}`);
                 await exec_as('git add .').catch(() => { });
@@ -90,16 +112,17 @@ class Owner {
             const current_branch = branch_res.stdout.trim() || 'main';
             const { stdout } = await exec_as(`git pull origin ${current_branch}`);
             if (cache.edited_source_code) await exec_as('git stash pop').catch(() => { });
-            if (stdout.includes('Already up to date')) return send.edit(from, '✅ You\'re already running on the latest version!', sent.key);
-            await send.edit(from, 'Checking dependencies...', sent.key);
+            if (stdout.includes('Already up to date')) return _return ? true : send.edit(from, '✅ You\'re already running on the latest version!', sent.key);
+            if (!_return) await send.edit(from, 'Checking dependencies...', sent.key);
             if (stdout.includes('package.json')) await exec_as('npm install');
             await recache();
-            await send.edit(from, '✅ Update completed. The bot will now restart...\n\n> This will stop the process. If you don\'t have pm2 running, you may need to start the bot again manually.', sent.key);
+            if (!_return) await send.edit(from, '✅ Update completed. The bot will now restart...\n\n> This will stop the process. If you don\'t have pm2 running, you may need to start the bot again manually.', sent.key);
             await exec_as('pm2 restart all').catch(() => { });
             setTimeout(() => process.exit(0), 500);
         } catch (error) {
             console.error('Error processing update:', error.message);
-            await send.edit(from, error.message, sent.key);
+            if (!_return) await send.edit(from, error.message, sent.key);
+            else throw error;
         }
     }
 }
