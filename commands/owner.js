@@ -85,7 +85,7 @@ class Owner {
             message = `> ■ *Sudo users* ■\n\n${cache.database.sudo?.map(i => `- @${i.split('@')[0]}`).join('\n') || '_none_'}`;
         } else message = `*Usage:* \`${cache.configs.prefix}sudo <on/off/add/remove/list>\``;
         recache();
-        send.text(from, message, msg, mentions);
+        send.text(from, message, msg, mentions || null);
     }
     async blacklist() { }
     async whitelist() { }
