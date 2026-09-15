@@ -39,7 +39,7 @@ class Main {
             const quoted_jid = quoted?.participant || '';
 
             if (!command.startsWith(cache.configs.prefix) && !['ping', 'bot', 'uptime', 'stats', 'status', 'prefix', 'version', 'alive'].includes(command)) return;
-            const text = `${command.slice(1)}`;
+            const text = `${command.slice(1)}`.trim();
 
             const isPublic = cache.configs.mode === 'public';
             const isOwner = msg.key.fromMe || [cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
@@ -56,10 +56,10 @@ class Main {
             if (commands.filter(i => i.category === 'owner').map(e => e.name).some(c => text.startsWith(c))) {
                 if (!isOwner) return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);
                 //Owner
-                else if (text.startsWith('prefix')) return;
-                else if (text.startsWith('notifications')) return;
-                else if (text.startsWith('mode')) return;
-                else if (text.startsWith('respond')) return;
+                else if (text.startsWith('prefix')) _owner.prefix(this.send, from, msg, text);
+                else if (text.startsWith('notifications')) _owner.notifications(this.send, from, msg, text);
+                else if (text.startsWith('mode')) _owner.mode(this.send, from, msg, text);
+                else if (text.startsWith('respond')) _owner.respond(this.send, from, msg, text);
                 else if (text.startsWith('sudo')) return;
                 else if (text.startsWith('blacklist')) return;
                 else if (text.startsWith('whitelist')) return;
