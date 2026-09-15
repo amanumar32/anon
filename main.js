@@ -64,6 +64,8 @@ class Main {
                 else if (text.startsWith('blacklist')) return;
                 else if (text.startsWith('whitelist')) return;
                 else if (text.startsWith('ban')) return;
+                else if (text.startsWith('database')) _owner.database(this.send, from, msg);
+                else if (text.startsWith('configs')) _owner.configs(this.send, from, msg);
                 else if (text.startsWith('unban')) return;
                 else if (text.startsWith('background')) return;
                 else if (text.startsWith('update')) _owner.update(this.send, from, msg);
