@@ -78,7 +78,7 @@ class Owner {
                     message = `@${target.split('@')[0]} *has been ${add ? 'added' : 'removed'} as a sudo user*`;
                 }
             } else message = `*Please mention a user to ${param} as a sudo*`;
-        } else if (param === 'list') message = `> ■ *Sudo users* ■\n\n${cache.database.sudo.map(i => `- @${i.split('@')[0]}`).join('\n')}`;
+        } else if (param === 'list') message = `> ■ *Sudo users* ■\n\n${cache.database.sudo?.map(i => `- @${i.split('@')[0]}`).join('\n') || '_none_'}`;
         else message = `*Usage:* \`${cache.configs.prefix}sudo <on/off/add/remove/list>\``;
         recache();
         send.text(from, message, msg, [target]);
