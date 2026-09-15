@@ -8,7 +8,7 @@ import Main from './main.js';
 import { re } from "mathjs";
 
 const rl = createInterface({ input: process.stdin, output: process.stdout });
-const question = (text) => new Promise((resolve) => rl.question(text, resolve)).catch(e => { console.warn("Readline failed to initialize. proceeding with default phone number") });
+const question = (text) => new Promise((resolve) => rl.question(text, resolve)).catch(e => console.warn("Readline failed to initialize. proceeding with default phone number"));
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState("auth");

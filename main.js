@@ -43,11 +43,11 @@ class Main {
 
             const isPublic = cache.configs.mode === 'public';
             const isOwner = msg.key.fromMe || [cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
-            const isSudo = cache.configs.sudoOn && cache.configs.sudo.includes(userid);
+            const isSudo = cache.configs.sudoOn && cache.database.sudo.includes(userid);
             const willRespond = cache.configs.respond;
 
             if (!isPublic && !isOwner && !isSudo) return;
-            if ([...cache.configs.blacklist, ...cache.configs.banned].some(id => from === id || userid === id) && !['whitelist', 'support'].includes(text)) return;
+            if ([...cache.database.blacklist, ...cache.database.banned].some(id => from === id || userid === id) && !['whitelist', 'support'].includes(text)) return;
 
             console.log(`{ "context": "${context}", "from": "${from}", "id": "${userid}", "number": "${user_number}", "username": "${username}", "quoted": "${quoted_text}", "date": "${new Date().toLocaleString()}" }`);
 

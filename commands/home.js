@@ -6,7 +6,7 @@ import { command_list } from "../library/structures.js";
 class Home {
     async menu(send, text, msg, from) {
         const param = text.split(' ')[1];
-        const backgrounds = [...default_background_links, ...cache.configs.backgrounds];
+        const backgrounds = [...default_background_links, ...cache.database.backgrounds];
         const link = backgrounds[Math.floor(Math.random() * backgrounds.length)];
         const categories = Object.values(command_list).reduce((acc, cmd) => {
             acc[cmd.category] = acc[cmd.category] || [];

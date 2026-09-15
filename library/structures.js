@@ -1,28 +1,28 @@
 export const command_list = {
     // Home commands
-    menu: { name: 'menu', description: 'Display a list of all commands', category: 'home', param: ['category'] },
-    support: { name: 'support', description: 'Contact and support the developer', category: 'home' },
-    repo: { name: 'repo', description: 'The bot\'s Github repository', category: 'home' },
-    owner: { name: 'owner', description: 'Bot owner', category: 'home' },
-    feedback: { name: 'feedback', description: 'Send us a feedback or report a bug', category: 'home', param: ['message'] },
-    donate: { name: 'donate', description: 'Support the developer', category: 'home' },
-    help: { name: 'help', description: 'Get help on how to use a command', category: 'home', param: ['command'] },
+    menu: { name: 'menu', description: 'Display a list of all commands', category: 'home', param: ['category'] }, //
+    support: { name: 'support', description: 'Contact and support the developer', category: 'home' },//
+    repo: { name: 'repo', description: 'The bot\'s Github repository', category: 'home' },//
+    owner: { name: 'owner', description: 'Bot owner', category: 'home' },//
+    feedback: { name: 'feedback', description: 'Send us a feedback or report a bug', category: 'home', param: ['message'] },//
+    donate: { name: 'donate', description: 'Support the developer', category: 'home' },//
+    help: { name: 'help', description: 'Get help on how to use a command', category: 'home', param: ['command'] },//
 
     // Status commands
-    ping: { name: 'ping', description: 'Check the bot\'s latency', category: 'status' },
-    uptime: { name: 'uptime', description: 'Check the bot\'s uptime', category: 'status' },
-    status: { name: 'status', description: 'Check the bot\'s full status', category: 'status' },
-    version: { name: 'version', description: 'Check the bot\'s version and available updates', category: 'status' },
-    alive: { name: 'alive', description: 'Check if the bot is alive and running', category: 'status' },
+    ping: { name: 'ping', description: 'Check the bot\'s latency', category: 'status' },//
+    uptime: { name: 'uptime', description: 'Check the bot\'s uptime', category: 'status' },//
+    status: { name: 'status', description: 'Check the bot\'s full status', category: 'status' },//
+    version: { name: 'version', description: 'Check the bot\'s version and available updates', category: 'status' },//
+    alive: { name: 'alive', description: 'Check if the bot is alive and running', category: 'status' },//
 
     //Tools commands
-    calc: { name: 'calc', description: 'Calculate a mathematical expression', category: 'tools', param: ['expression'] },
-    hash: { name: 'hash', description: 'Hash a string', category: 'tools', param: ['string'] },
-    qr: { name: 'qr', description: 'Generate a QR code', category: 'tools', param: ['text'] },
-    morse: { name: 'morse', description: 'Convert text to morse code and back', category: 'tools', param: ['text'] },
-    pick: { name: 'pick', description: 'Pick a random option from a list', category: 'tools', param: ['opt1, opt2, ...'] },
-    coin: { name: 'coin', description: 'Heads or tails', category: 'tools' },
-    dice: { name: 'dice', description: 'Roll a dice', category: 'tools' },
+    calc: { name: 'calc', description: 'Calculate a mathematical expression', category: 'tools', param: ['expression'] },//
+    hash: { name: 'hash', description: 'Hash a string', category: 'tools', param: ['string'] },//
+    qr: { name: 'qr', description: 'Generate a QR code', category: 'tools', param: ['text'] },//
+    morse: { name: 'morse', description: 'Convert text to morse code and back', category: 'tools', param: ['text'] },//
+    pick: { name: 'pick', description: 'Pick a random option from a list', category: 'tools', param: ['opt1, opt2, ...'] },//
+    coin: { name: 'coin', description: 'Heads or tails', category: 'tools' },//
+    dice: { name: 'dice', description: 'Roll a dice', category: 'tools' },//
 
     //Fun commands
     joke: { name: 'joke', description: 'Get a random joke', category: 'fun' },
@@ -59,8 +59,12 @@ export const command_list = {
     whitelist: { name: 'whitelist', description: 'Whitelist a group', category: 'owner', param: ['group'] },
     ban: { name: 'ban', description: 'Ban a user', category: 'owner', requirements: ['@'] },
     unban: { name: 'unban', description: 'Unban a user', category: 'owner', requirements: ['@'] },
-    background: { name: 'background', description: 'Handle bot backgrounds for the menu', category: 'owner', param: ['add/remove'] },
+    background: { name: 'background', description: 'Handle bot backgrounds for the menu', category: 'owner', param: ['add/remove'], requirements: ['&'] },
     update: { name: 'update', description: 'Update the bot to the latest committed version', category: 'owner' },
+    setresponse: { name: 'setresponse', description: 'Set a static response message from your responses as an alternative to `GEMINI_AI_API_KEY`', category: 'owner', param: ['response'] },
+    env: { name: 'env', description: 'Add an env value automatically', category: 'owner', param: ['key', 'value'] },
+    prompt: { name: 'prompt', description: 'Set a custom prompt for your AI responses', category: 'owner', param: ['prompt'] },
+    setname: { name: 'setname', description: 'Change your name on the bot', category: 'owner', param: ['name'] },
 }
 
 export const white_space = `​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​`;
