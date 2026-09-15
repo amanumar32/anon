@@ -54,7 +54,7 @@ export const command_list = {
     notification: { name: 'notification', description: 'Toggle bot notifications', category: 'owner', param: ['on/off'] },//
     mode: { name: 'mode', description: 'Change the bot\'s mode', category: 'owner', param: ['public/private'] },//
     respond: { name: 'respond', description: 'Toggle bot responses to messages', category: 'owner', param: ['on/off'] },//
-    sudo: { name: 'sudo', description: 'Handle sudo users', category: 'owner', param: ['add/remove', 'on/off'], requirements: ['@'], note: 'Sudo users can use the bot while in private mode' },
+    sudo: { name: 'sudo', description: 'Handle sudo users', category: 'owner', param: ['add/remove', 'on/off'], requirements: ['@'], note: 'Sudo users can use the bot while in private mode' },//
     blacklist: { name: 'blacklist', description: 'Blacklist a group', category: 'owner', param: ['group'] },
     whitelist: { name: 'whitelist', description: 'Whitelist a group', category: 'owner', param: ['group'] },
     ban: { name: 'ban', description: 'Ban a user', category: 'owner', requirements: ['@'] },

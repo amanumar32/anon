@@ -2,6 +2,7 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { cache, recache } from '../init.js';
+import { _media } from './media.js';
 
 const exec_as = promisify(exec);
 
@@ -88,10 +89,28 @@ class Owner {
         send.text(from, message, msg, mentions || null);
     }
     async blacklist() { }
-    async whitelist() { }
     async ban() { }
-    async unban() { }
-    async background() { }
+    async background(send, from, msg, text, context, quotedMsg) {
+        try {
+            const param = text.split(' ')[1]?.trim();
+            let message;
+            if (param === 'add') {
+                send.react(from, '🔄', msg.key);
+                const url = await _media.upload(send, from, msg, quotedMsg, true);
+                if (!url) throw new Error('Failed to upload image, please try again later.');
+                if (cache.database.backgrounds.includes(url)) throw new Error('This image is already included in your backgrounds.');
+                cache.database.backgrounds.push(url);
+                message = `Added image to your backgrounds. Type ${cache.configs.prefix}menu to check it out.`;
+            } else if (param === 'remove') {
+                //remove logic
+            }
+            recache();
+            send.text(from, message, msg);
+        } catch (error) {
+            console.error('Failed to add background:', error.message);
+            send.text(from, error.message, msg);
+        }
+    }
     async update(send, from, msg, _return = false) {
         let sent;
         try {
