@@ -118,9 +118,11 @@ class Main {
                 else if (['download', 'dl'].some(r => text.startsWith(r))) return;
                 else if (['upload', 'ul'].some(r => text.startsWith(r))) return;
                 else if (text.startsWith('emix')) return;
-
             }
-
+            if (!cache.configs.name && isOwner) {
+                cache.configs.name = username;
+                recache();
+            }
         } catch (error) {
             console.error('Error in message handler:', error.message);
         }
