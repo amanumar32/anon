@@ -64,12 +64,14 @@ class Owner {
         const param = text.split(' ')[1];
         const target = msg.message?.extendedTextMessage?.contextInfo?.participant || msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
         let message;
+        let mentions = [];
         if (['on', 'off'].includes(param)) {
             cache.configs.sudoOn = param === 'on';
             message = `*Sudo mode turned ${param}*`;
             if (param === 'on') message += '\n\n> Sudo users can now use the bot anywhere, even in private mode.'
         } else if (['add', 'remove'].includes(param)) {
             if (target) {
+                mentions.push(target);
                 const includes = cache.database.sudo.includes(target);
                 const add = param === 'add';
                 if ((add && includes) || (!add && !includes)) message = `@${target.split('@')[0]} *is ${add ? 'already' : 'not'} a sudo user*`;
@@ -78,10 +80,12 @@ class Owner {
                     message = `@${target.split('@')[0]} *has been ${add ? 'added' : 'removed'} as a sudo user*`;
                 }
             } else message = `*Please mention a user to ${param} as a sudo*`;
-        } else if (param === 'list') message = `> ■ *Sudo users* ■\n\n${cache.database.sudo?.map(i => `- @${i.split('@')[0]}`).join('\n') || '_none_'}`;
-        else message = `*Usage:* \`${cache.configs.prefix}sudo <on/off/add/remove/list>\``;
+        } else if (param === 'list') {
+            mentions = [...mentions, ...cache.database.sudo];
+            message = `> ■ *Sudo users* ■\n\n${cache.database.sudo?.map(i => `- @${i.split('@')[0]}`).join('\n') || '_none_'}`;
+        } else message = `*Usage:* \`${cache.configs.prefix}sudo <on/off/add/remove/list>\``;
         recache();
-        send.text(from, message, msg, target ? [target] : null);
+        send.text(from, message, msg, mentions);
     }
     async blacklist() { }
     async whitelist() { }
