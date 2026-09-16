@@ -69,6 +69,7 @@ class Main {
                 else if (text.startsWith('restart')) _owner.restart(this.send, from, msg);
                 else if (text.startsWith('reset')) _owner.reset(this.send, from, text, msg);
                 else if (text.startsWith('backup')) _owner.backup(this.send, from, msg);
+                else if (text.startsWith('prompt')) _owner.prompt(this.send, from, msg, context);
             } else {
                 //Home
                 if (text.startsWith('menu')) _home.menu(this.send, text, msg, from);

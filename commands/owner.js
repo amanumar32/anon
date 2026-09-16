@@ -73,7 +73,7 @@ class Owner {
         let mentions = [];
         if (['on', 'off'].includes(param)) {
             cache.configs.sudoOn = param === 'on';
-            message = `*Sudo mode turned ${param}*`;
+            message = `👤 *Sudo mode turned ${param}*`;
             if (param === 'on') message += '\n\n> Sudo users can now use the bot anywhere, even in private mode.'
         } else if (['add', 'remove'].includes(param)) {
             if (target) {
@@ -193,6 +193,7 @@ class Owner {
     }
     async restart(send, from, msg, _return = false) {
         if (!_return) send.text(from, '*Restarting...*\n\n> You may need to start the server manually.', msg);
+        await recache();
         await exec_as('pm2 restart all').catch(() => { });
         setTimeout(() => process.exit(0), 500);
     }
@@ -217,7 +218,16 @@ class Owner {
         return { url: '' }
     }
     async env(send, from, msg, text) { }
-    async prompt(send, from, msg, context) { }
+    async prompt(send, from, msg, context) {
+        let message;
+        const new_message = context?.slice(1)?.replace(/prompt/i, '')?.trim();
+        if (new_message) {
+            cache.configs.prompt = new_message;
+            message = 'Prompt set successfully.'
+        } else message = 'Please provide a prompt to set.';
+        recache();
+        send.text(from, message, msg);
+    }
 }
 
 export const _owner = new Owner();

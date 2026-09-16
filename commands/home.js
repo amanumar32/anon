@@ -6,7 +6,7 @@ class Home {
         const param = text.split(' ')[1];
         const backgrounds = [...cache.default_background_links, ...cache.database.backgrounds];
         const link = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-        const categories = Object.values(cache.cache.command_list).reduce((acc, cmd) => {
+        const categories = Object.values(cache.command_list).reduce((acc, cmd) => {
             acc[cmd.category] = acc[cmd.category] || [];
             acc[cmd.category].push(cmd);
             return acc;

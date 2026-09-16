@@ -55,7 +55,7 @@ export async function recache(sock = null, mode = 'update') {
             cache.bot_id = sock?.user?.lid ? sock.user.lid.split(':')[0] + '@lid' : cache.configs.number + '@s.whatsapp.net';
             const urlObj = new URL(cache.repo_url);
             fetch(`https://raw.githubusercontent.com/${urlObj.pathname.replace(/^\//, '').replace(/\.git$/, '')}/refs/heads/main/package.json`).then((response) => response.json().then(data => cache.latest_version = data?.version || cache.current_version)).catch(e => cache.latest_version = cache.current_version);
-            if (fs.existsSync('.env')) fs.writeFileSync('.env', fs.readFileSync('.env.example'));
+            if (!fs.existsSync('.env')) fs.writeFileSync('.env', fs.readFileSync('.env.example'));
             initialized = true;
             console.log('Database loaded successfully!');
         } else {
