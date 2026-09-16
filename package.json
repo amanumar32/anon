@@ -20,6 +20,7 @@
     "@hapi/boom": "^10.0.1",
     "@vitalets/google-translate-api": "^9.2.1",
     "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "archiver": "^8.0.0",
     "axios": "^1.20.0",
     "canvas": "^3.2.3",
     "cheerio": "^1.2.0",

@@ -6,6 +6,9 @@ import pino from 'pino';
 import { cache, recache } from "./init.js";
 import Main from './main.js';
 import { re } from "mathjs";
+import dotenv from 'dotenv';
+
+dotenv.config({ quiet: true });
 
 const rl = createInterface({ input: process.stdin, output: process.stdout });
 const question = (text) => new Promise((resolve) => rl.question(text, resolve)).catch(e => console.warn("Readline failed to initialize. proceeding with default phone number"));
