@@ -15,7 +15,7 @@ class Main {
         try {
             console.log('Bot connected successfully!');
             if (cache.configs.notifications) await this.send.text(cache.bot_id, `*✅ Bot Activated*\n\nTime: ${new Date().toLocaleString()}\n\n> You can turn this off with \`${cache.configs.prefix}notification off\``);
-            setInterval(() => recache(null, 'update'), 5 * 60 * 1000);
+            setInterval(() => recache(), 5 * 60 * 1000);
         } catch (error) {
             console.error('Error starting bot:', error.message);
         }
