@@ -1,5 +1,7 @@
-import { createWriteStream } from "fs";
+import { createWriteStream, mkdirSync } from "fs";
 import { format } from "util";
+
+mkdirSync(process.cwd() + '/logs', { recursive: true });
 
 const stream = createWriteStream("./logs/full.log", { flags: "a" });
 

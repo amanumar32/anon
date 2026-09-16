@@ -1,6 +1,5 @@
 import { evaluate } from "mathjs";
 import { cache } from "../init.js";
-import { morse_code_map } from "../library/structures.js";
 import crypto from 'crypto';
 
 class Tools {
@@ -40,7 +39,7 @@ class Tools {
         let result = '';
         if (/^[.\-\/\s]+$/.test(message.trim())) {
             const reverse_map = {};
-            for (const [char, code] of Object.entries(morse_code_map)) reverse_map[code] = char;
+            for (const [char, code] of Object.entries(cache.morse_code_map)) reverse_map[code] = char;
             const words = message.split(' / ');
             for (const word of words) {
                 const letters = word.split(' ');
@@ -51,7 +50,7 @@ class Tools {
             }
         } else {
             for (let char of message.toLowerCase()) {
-                if (morse_code_map[char]) result += morse_code_map[char] + ' ';
+                if (cache.morse_code_map[char]) result += cache.morse_code_map[char] + ' ';
             }
         }
         send.text(from, result.trim() || 'No valid characters to convert', msg);

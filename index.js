@@ -5,7 +5,6 @@ import qrcode from 'qrcode-terminal';
 import pino from 'pino';
 import { cache, recache } from "./init.js";
 import Main from './main.js';
-import { re } from "mathjs";
 import dotenv from 'dotenv';
 
 dotenv.config({ quiet: true });
@@ -41,6 +40,7 @@ async function startBot() {
                 const code = await sock.requestPairingCode(number.replace(/[^\d]/g, ''));
                 console.log(`\n🔗 Pairing Code: ${code}\n`);
                 if (!cache.configs.number) cache.configs.number = number;
+                recache();
             }
         }
         if (connection === "close") {

@@ -2,6 +2,7 @@ import fs from 'fs';
 
 let initialized = false;
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
+const structures = JSON.parse(fs.readFileSync('./library/structures.json'));
 
 export const cache = {
     configs: {
@@ -32,13 +33,18 @@ export const cache = {
     edited_source_code: false,
     last_owner_message: Date.now(),
     config_path: 'config.json',
-    database_path: './database/data.json'
+    database_path: './database/data.json',
+    necessary_directories: ['./logs', './database'],
+    command_list: Object.fromEntries(Object.entries(structures.command_list).map(([key, value]) => [key, { name: key, ...value }])),
+    white_space: structures.white_space,
+    morse_code_map: structures.morse_code_map,
+    default_background_links: structures.default_background_links,
 }
 
 export async function recache(sock = null, mode = 'update') {
     try {
         const { config_path, database_path } = cache;
-        ['./logs', './database'].forEach(dir => fs.mkdirSync(dir, { recursive: true }));
+        cache.necessary_directories.forEach(dir => fs.mkdirSync(dir, { recursive: true }));
         if (!fs.existsSync(config_path)) fs.writeFileSync(config_path, JSON.stringify(cache.configs, null, 4));
         if (!fs.existsSync(database_path)) fs.writeFileSync(database_path, JSON.stringify(cache.database, null, 4));
 
@@ -48,7 +54,8 @@ export async function recache(sock = null, mode = 'update') {
             cache.database = JSON.parse(fs.readFileSync(database_path)) || cache.database;
             cache.bot_id = sock?.user?.lid ? sock.user.lid.split(':')[0] + '@lid' : cache.configs.number + '@s.whatsapp.net';
             const urlObj = new URL(cache.repo_url);
-            fetch(`https://raw.githubusercontent.com/${urlObj.pathname.replace(/^\//, '').replace(/\.git$/, '')}/refs/heads/main/package.json`).then((data) => data.json().then(i => cache.latest_version = i?.version || cache.current_version)).catch(e => cache.latest_version = cache.current_version);
+            fetch(`https://raw.githubusercontent.com/${urlObj.pathname.replace(/^\//, '').replace(/\.git$/, '')}/refs/heads/main/package.json`).then((response) => response.json().then(data => cache.latest_version = data?.version || cache.current_version)).catch(e => cache.latest_version = cache.current_version);
+            if (fs.existsSync('.env')) fs.writeFileSync('.env', fs.readFileSync('.env.example'));
             initialized = true;
             console.log('Database loaded successfully!');
         } else {

@@ -1,0 +1,410 @@
+{
+    "command_list": {
+        "menu": {
+            "description": "Display a list of all commands",
+            "category": "home",
+            "param": [
+                "category"
+            ]
+        },
+        "support": {
+            "description": "Contact and support the developer",
+            "category": "home"
+        },
+        "repo": {
+            "description": "The bot's Github repository",
+            "category": "home"
+        },
+        "owner": {
+            "description": "Bot owner",
+            "category": "home"
+        },
+        "feedback": {
+            "description": "Send us a feedback or report a bug",
+            "category": "home",
+            "param": [
+                "message"
+            ]
+        },
+        "donate": {
+            "description": "Support the developer",
+            "category": "home"
+        },
+        "help": {
+            "description": "Get help on how to use a command",
+            "category": "home",
+            "param": [
+                "command"
+            ]
+        },
+        "ping": {
+            "description": "Check the bot's latency",
+            "category": "status"
+        },
+        "uptime": {
+            "description": "Check the bot's uptime",
+            "category": "status"
+        },
+        "status": {
+            "description": "Check the bot's full status",
+            "category": "status"
+        },
+        "version": {
+            "description": "Check the bot's version and available updates",
+            "category": "status"
+        },
+        "alive": {
+            "description": "Check if the bot is alive and running",
+            "category": "status"
+        },
+        "calc": {
+            "description": "Calculate a mathematical expression",
+            "category": "tools",
+            "param": [
+                "expression"
+            ]
+        },
+        "hash": {
+            "description": "Hash a string",
+            "category": "tools",
+            "param": [
+                "string"
+            ]
+        },
+        "qr": {
+            "description": "Generate a QR code",
+            "category": "tools",
+            "param": [
+                "text"
+            ]
+        },
+        "morse": {
+            "description": "Convert text to morse code and back",
+            "category": "tools",
+            "param": [
+                "text"
+            ]
+        },
+        "pick": {
+            "description": "Pick a random option from a list",
+            "category": "tools",
+            "param": [
+                "opt1, opt2, ..."
+            ]
+        },
+        "coin": {
+            "description": "Heads or tails",
+            "category": "tools"
+        },
+        "dice": {
+            "description": "Roll a dice",
+            "category": "tools"
+        },
+        "joke": {
+            "description": "Get a random joke",
+            "category": "fun"
+        },
+        "fact": {
+            "description": "Get a random fact",
+            "category": "fun"
+        },
+        "quote": {
+            "description": "Get a random quote",
+            "category": "fun"
+        },
+        "td": {
+            "description": "Get a random truth or dare",
+            "category": "fun"
+        },
+        "wyr": {
+            "description": "Get a random would you rather question",
+            "category": "fun"
+        },
+        "nhie": {
+            "description": "Get a random \"Never Have I Ever\" question",
+            "category": "fun"
+        },
+        "chess": {
+            "description": "Play a game of chess with a friend",
+            "category": "fun"
+        },
+        "wordlink": {
+            "description": "Play a game of wordlink with a friend",
+            "category": "fun"
+        },
+        "vv": {
+            "description": "Anti-view once command",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "tostic": {
+            "description": "Convert a picture/video to a sticker",
+            "category": "media",
+            "param": [
+                "c?"
+            ],
+            "requirements": [
+                "&"
+            ],
+            "note": "Add the `c` parameter to crop the sticker, or leave it blank otherwise"
+        },
+        "toimg": {
+            "description": "Convert a sticker to an image",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "tovid": {
+            "description": "Convert a sticker to a video",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "pack": {
+            "description": "Siphon a sticker as your own",
+            "category": "media",
+            "param": [
+                "pack|author?"
+            ],
+            "requirements": [
+                "&"
+            ]
+        },
+        "song": {
+            "description": "Download your favorite songs",
+            "category": "media",
+            "param": [
+                "title",
+                "artist"
+            ]
+        },
+        "vid": {
+            "description": "Download a video from YouTube",
+            "category": "media",
+            "param": [
+                "title"
+            ]
+        },
+        "img": {
+            "description": "Download images from the internet",
+            "category": "media",
+            "param": [
+                "query"
+            ]
+        },
+        "download": {
+            "description": "Download media from supported URLs",
+            "category": "media",
+            "param": [
+                "url"
+            ],
+            "note": "Supported platforms include: YouTube, Facebook, Instagram, and Direct URLs"
+        },
+        "upload": {
+            "description": "Upload an image and get a direct URL",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "emix": {
+            "description": "Combine two emojis together and get a sticker",
+            "category": "media",
+            "param": [
+                "emoji 1",
+                "emoji 2"
+            ]
+        },
+        "configs": {
+            "description": "View the bot's configurations",
+            "category": "owner"
+        },
+        "database": {
+            "description": "View the bot's database",
+            "category": "owner"
+        },
+        "prefix": {
+            "description": "Change the bot's command prefix",
+            "category": "owner",
+            "param": [
+                "prefix"
+            ]
+        },
+        "notification": {
+            "description": "Toggle bot notifications",
+            "category": "owner",
+            "param": [
+                "on/off"
+            ]
+        },
+        "mode": {
+            "description": "Change the bot's mode",
+            "category": "owner",
+            "param": [
+                "public/private"
+            ]
+        },
+        "respond": {
+            "description": "Toggle and set bot responses to messages",
+            "category": "owner",
+            "param": [
+                "on/off/set"
+            ]
+        },
+        "sudo": {
+            "description": "Handle sudo users",
+            "category": "owner",
+            "param": [
+                "add/remove/on/off/list"
+            ],
+            "requirements": [
+                "@"
+            ],
+            "note": "Sudo users can use the bot while in private mode"
+        },
+        "blacklist": {
+            "description": "Blacklist a group",
+            "category": "owner",
+            "param": [
+                "group"
+            ]
+        },
+        "whitelist": {
+            "description": "Whitelist a group",
+            "category": "owner",
+            "param": [
+                "group"
+            ]
+        },
+        "ban": {
+            "description": "Ban a user",
+            "category": "owner",
+            "requirements": [
+                "@"
+            ]
+        },
+        "unban": {
+            "description": "Unban a user",
+            "category": "owner",
+            "requirements": [
+                "@"
+            ]
+        },
+        "background": {
+            "description": "Handle bot backgrounds for the menu",
+            "category": "owner",
+            "param": [
+                "add/remove"
+            ],
+            "requirements": [
+                "&"
+            ]
+        },
+        "update": {
+            "description": "Update the bot to the latest committed version",
+            "category": "owner"
+        },
+        "restart": {
+            "description": "Attempts to restart the server",
+            "category": "owner",
+            "note": "You may need to start the server manually if the bot doesn't start after a few minutes"
+        },
+        "reset": {
+            "description": "Resets the bot to the factory state",
+            "category": "owner"
+        },
+        "backup": {
+            "description": "Backup your auth, configs and database to the cloud",
+            "category": "owner"
+        },
+        "env": {
+            "description": "Add an env value automatically",
+            "category": "owner",
+            "param": [
+                "key",
+                "value"
+            ]
+        },
+        "prompt": {
+            "description": "Set a custom prompt for your AI responses",
+            "category": "owner",
+            "param": [
+                "prompt"
+            ]
+        }
+    },
+    "white_space": "​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​",
+    "morse_code_map": {
+        "0": "-----",
+        "1": ".----",
+        "2": "..---",
+        "3": "...--",
+        "4": "....-",
+        "5": ".....",
+        "6": "-....",
+        "7": "--...",
+        "8": "---..",
+        "9": "----.",
+        "a": ".-",
+        "b": "-...",
+        "c": "-.-.",
+        "d": "-..",
+        "e": ".",
+        "f": "..-.",
+        "g": "--.",
+        "h": "....",
+        "i": "..",
+        "j": ".---",
+        "k": "-.-",
+        "l": ".-..",
+        "m": "--",
+        "n": "-.",
+        "o": "---",
+        "p": ".--.",
+        "q": "--.-",
+        "r": ".-.",
+        "s": "...",
+        "t": "-",
+        "u": "..-",
+        "v": "...-",
+        "w": ".--",
+        "x": "-..-",
+        "y": "-.--",
+        "z": "--..",
+        ".": ".-.-.-",
+        ",": "--..--",
+        "?": "..--..",
+        "'": ".----.",
+        "!": "-.-.--",
+        "/": "-..-.",
+        "-": "-....-",
+        ":": "---...",
+        ";": "-.-.-.",
+        "=": "-...-",
+        "+": ".-.-.",
+        "@": ".--.-.",
+        " ": "/",
+        "": " ",
+        "&": ".-...",
+        "(": "-.--.",
+        ")": "-.--.-",
+        "$": "...-..-",
+        "_": "..--.-",
+        "\"": ".-..-.",
+        "#": "...-.-",
+        "*": "-..--",
+        "\n": "\n"
+    },
+    "default_background_links": [
+        "https://i.ibb.co/6czK1t0q/upload.jpg",
+        "https://i.ibb.co/q36VdFqp/upload.jpg",
+        "https://i.ibb.co/pvffkk9Y/upload.png",
+        "https://i.ibb.co/8hxVNVK/upload.jpg",
+        "https://i.ibb.co/Cp9STRyr/upload.jpg",
+        "https://i.ibb.co/pNGvpbg/upload.jpg"
+    ]
+}

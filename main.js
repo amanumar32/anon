@@ -4,7 +4,6 @@ import { _stats } from "./commands/status.js";
 import { _tools } from "./commands/tools.js";
 import { cache, recache } from "./init.js";
 import Send from "./library/send.js";
-import { command_list } from "./library/structures.js";
 
 class Main {
     constructor(sock) {
@@ -51,7 +50,7 @@ class Main {
 
             console.log(`{ "context": "${context}", "from": "${from}", "id": "${userid}", "number": "${user_number}", "username": "${username}", "quoted": "${quoted_text}", "date": "${new Date().toLocaleString()}" }`);
 
-            const commands = Object.values(command_list);
+            const commands = Object.values(cache.command_list);
 
             if (commands.filter(i => i.category === 'owner').map(e => e.name).some(c => text.startsWith(c))) {
                 if (!isOwner) return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);

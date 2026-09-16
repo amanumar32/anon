@@ -1,6 +1,6 @@
 {
   "name": "Anon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Self-host baileys whatsapp bot",
   "license": "ISC",
   "author": "Cyan+",
@@ -10,7 +10,8 @@
   "scripts": {
     "start": "npm install && node -r ./library/logger.js index.js",
     "dev": "node -r ./library/logger.js index.js",
-    "test": "node -r ./library/logger.js others/test.js"
+    "test": "node -r ./library/logger.js others/test.js",
+    "init": "node -r ./library/logger.js ./library/initialize.js"
   },
   "repository": {
     "type": "git",
