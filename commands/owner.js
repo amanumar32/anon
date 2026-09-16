@@ -140,11 +140,11 @@ class Owner {
                 if (!url) throw new Error('Failed to upload image, please try again later.');
                 if (cache.database.backgrounds.includes(url)) throw new Error('This image is already included in your backgrounds.');
                 cache.database.backgrounds.push(url);
-                message = `Added image to your backgrounds. Type ${cache.configs.prefix}menu to check it out!`;
+                message = `Added image to your backgrounds.\n*ID*: ${cache.database.backgrounds.indexOf(url)}\n\n> Type ${cache.configs.prefix}menu to check it out!`;
             } else if (param === 'remove') {
-                const url = context.split(' ')[2]?.trim();
-                if (!cache.database.backgrounds.includes(url)) throw new Error('This image is not in your background database.');
-                cache.database.backgrounds = cache.database.backgrounds.filter(i => i !== url);
+                const index = parseInt(context.split(' ')[2]?.trim());
+                if (typeof index !== 'number' || index > (cache.database.backgrounds.length - 1)) throw new Error('This image is not in your background database.');
+                cache.database.backgrounds = cache.database.backgrounds.filter((_, i) => i !== index);
                 message = 'Removed background successfully!';
             }
             recache();
