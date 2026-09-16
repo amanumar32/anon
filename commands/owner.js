@@ -50,7 +50,7 @@ class Owner {
         send.text(from, message, msg);
     }
     async respond(send, from, msg, text, context) {
-        const param = text.replace(/respond/i, '').trim();
+        const param = text.split(' ')[1]?.trim();
         let message;
         if (['on', 'off'].includes(param)) {
             cache.configs.respond = param === 'on';
