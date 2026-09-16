@@ -107,7 +107,7 @@ class Owner {
             }
         } else message = `*Please provide a group to ${mode}*`;
         recache();
-        send.text(from, message, msg, mentions || null);
+        send.text(from, message, msg);
     }
     async ban(send, from, msg, text, isOwner) {
         const mode = text.startsWith('ban') ? 'ban' : 'unban';
