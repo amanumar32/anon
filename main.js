@@ -64,7 +64,7 @@ class Main {
                 else if (text.startsWith('respond')) _owner.respond(this.send, from, msg, text, context);
                 else if (text.startsWith('sudo')) _owner.sudo(this.send, from, text, msg);
                 else if (['blacklist', 'whitelist'].some(e => text.startsWith(e))) _owner.blacklist(this.send, from, msg, context, text);
-                else if (['ban', 'unban'].some(e => text.startsWith(e))) _owner.ban(this.send, from, msg, text);
+                else if (['ban', 'unban'].some(e => text.startsWith(e))) _owner.ban(this.send, from, msg, text, isOwner);
                 else if (text.startsWith('background')) _owner.background(this.send, from, msg, text, context, quoted_msg);
                 else if (text.startsWith('update')) _owner.update(this.send, from, msg, text);
                 else if (text.startsWith('restart')) _owner.restart(this.send, from, msg);

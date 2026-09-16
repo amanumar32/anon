@@ -109,19 +109,22 @@ class Owner {
         recache();
         send.text(from, message, msg, mentions || null);
     }
-    async ban(send, from, msg, text) {
+    async ban(send, from, msg, text, isOwner) {
         const mode = text.startsWith('ban') ? 'ban' : 'unban';
         const target = msg.message?.extendedTextMessage?.contextInfo?.participant || msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
         let message;
         let mentions = [];
         if (target) {
-            mentions.push(target);
-            const includes = cache.database.banned.includes(target);
-            const add = mode === 'ban';
-            if ((add && includes) || (!add && !includes)) message = `@${target.split('@')[0]} *is ${add ? 'already' : 'not'} banned*`;
+            if (isOwner) message = 'Cannot ban bot owner!';
             else {
-                cache.database.banned = add ? [...cache.database.banned, target] : cache.database.banned.filter(i => i !== target);
-                message = `@${target.split('@')[0]} *has been ${mode}ned*`;
+                mentions.push(target);
+                const includes = cache.database.banned.includes(target);
+                const add = mode === 'ban';
+                if ((add && includes) || (!add && !includes)) message = `@${target.split('@')[0]} *is ${add ? 'already' : 'not'} banned*`;
+                else {
+                    cache.database.banned = add ? [...cache.database.banned, target] : cache.database.banned.filter(i => i !== target);
+                    message = `@${target.split('@')[0]} *has been ${mode}ned*`;
+                }
             }
         } else message = `*Please mention a user to ${mode}*`;
         recache();
