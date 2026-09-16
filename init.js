@@ -30,13 +30,14 @@ export const cache = {
     latest_version: '',
     repo_url: pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
     edited_source_code: false,
-    last_owner_message: Date.now()
+    last_owner_message: Date.now(),
+    config_path: 'config.json',
+    database_path: './database/data.json'
 }
 
 export async function recache(sock = null, mode = 'update') {
     try {
-        const config_path = 'config.json';
-        const database_path = './database/data.json';
+        const { config_path, database_path } = cache;
         ['./logs', './database'].forEach(dir => fs.mkdirSync(dir, { recursive: true }));
         if (!fs.existsSync(config_path)) fs.writeFileSync(config_path, JSON.stringify(cache.configs, null, 4));
         if (!fs.existsSync(database_path)) fs.writeFileSync(database_path, JSON.stringify(cache.database, null, 4));
@@ -50,13 +51,12 @@ export async function recache(sock = null, mode = 'update') {
             fetch(`https://raw.githubusercontent.com/${urlObj.pathname.replace(/^\//, '').replace(/\.git$/, '')}/refs/heads/main/package.json`).then((data) => data.json().then(i => cache.latest_version = i?.version || cache.current_version)).catch(e => cache.latest_version = cache.current_version);
             initialized = true;
             console.log('Database loaded successfully!');
-            return true;
         } else {
             fs.writeFileSync(config_path, JSON.stringify(cache.configs, null, 4));
             fs.writeFileSync(database_path, JSON.stringify(cache.database, null, 4));
             console.log('Database updated successfully!');
-            return true;
         }
+        return true;
     } catch (error) {
         console.error('Error in recache:', error);
         return false;

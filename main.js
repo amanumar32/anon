@@ -56,20 +56,20 @@ class Main {
             if (commands.filter(i => i.category === 'owner').map(e => e.name).some(c => text.startsWith(c))) {
                 if (!isOwner) return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);
                 //Owner
-                else if (text.startsWith('prefix')) _owner.prefix(this.send, from, msg, text);
+                else if (text.startsWith('configs')) _owner.configs(this.send, from, msg);
+                else if (text.startsWith('database')) _owner.database(this.send, from, msg);
+                else if ([text, command].includes('prefix')) _owner.prefix(this.send, from, msg, text);
                 else if (text.startsWith('notification')) _owner.notifications(this.send, from, msg, text);
                 else if (text.startsWith('mode')) _owner.mode(this.send, from, msg, text);
-                else if (text.startsWith('respond')) _owner.respond(this.send, from, msg, text);
+                else if (text.startsWith('respond')) _owner.respond(this.send, from, msg, text, context);
                 else if (text.startsWith('sudo')) _owner.sudo(this.send, from, text, msg);
-                else if (text.startsWith('blacklist')) return;
-                else if (text.startsWith('whitelist')) return;
-                else if (text.startsWith('ban')) return;
-                else if (text.startsWith('database')) _owner.database(this.send, from, msg);
-                else if (text.startsWith('configs')) _owner.configs(this.send, from, msg);
-                else if (text.startsWith('unban')) return;
-                else if (text.startsWith('background')) return;
-                else if (text.startsWith('update')) _owner.update(this.send, from, msg);
-
+                else if (['blacklist', 'whitelist'].some(e => text.startsWith(e))) _owner.blacklist(this.send, from, msg, context, text);
+                else if (['ban', 'unban'].some(e => text.startsWith(e))) _owner.ban(this.send, from, msg, text);
+                else if (text.startsWith('background')) _owner.background(this.send, from, msg, text, context, quoted_msg);
+                else if (text.startsWith('update')) _owner.update(this.send, from, msg, text);
+                else if (text.startsWith('restart')) _owner.restart(this.send, from, msg);
+                else if (text.startsWith('reset')) _owner.reset(this.send, from, text, msg);
+                else if (text.startsWith('backup')) _owner.backup(this.send, from, msg);
             } else {
                 //Home
                 if (text.startsWith('menu')) _home.menu(this.send, text, msg, from);
@@ -119,8 +119,9 @@ class Main {
                 else if (['upload', 'ul'].some(r => text.startsWith(r))) return;
                 else if (text.startsWith('emix')) return;
             }
-            if (!cache.configs.name && isOwner) {
-                cache.configs.name = username;
+            if (isOwner) {
+                if (!cache.configs.name) cache.configs.name = username;
+                cache.last_owner_message = Date.now();
                 recache();
             }
         } catch (error) {

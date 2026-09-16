@@ -49,15 +49,20 @@ class Owner {
         recache();
         send.text(from, message, msg);
     }
-    async respond(send, from, msg, text) {
+    async respond(send, from, msg, text, context) {
         const param = text.replace(/respond/i, '').trim();
         let message;
-        if (!['on', 'off'].includes(param)) message = `*Usage:* \`${cache.configs.prefix}respond on/off\``;
-        else {
+        if (['on', 'off'].includes(param)) {
             cache.configs.respond = param === 'on';
             message = `🤖 Auto-respond turned *${param}*`;
-            if (!process.env.GEMINI_AI_API_KEY && cache.configs.respond) message += `\n\n> Auto-responses may not function properly as \`GEMINI_AI_API_KEY\` has not been provided in \`.env\`. You can: _Use \`${cache.configs.prefix}env GEMINI_AI_API_KEY <your-api-key>\` to add one automatically_, _define a static message you want to use with \`${cache.configs.prefix}setresponse <your-static-message>\`_ or _Add it to \`.env\` manually_.`;
-        }
+            if (!process.env.GEMINI_AI_API_KEY && cache.configs.respond) message += `\n\n> Auto-responses may not function properly as \`GEMINI_AI_API_KEY\` has not been provided in \`.env\`.`;
+        } else if (param === 'set') {
+            const new_message = context?.slice(1)?.replace(/respond set\s+/i, '')?.trim();
+            if (new_message) {
+                cache.configs.static_message = new_message;
+                message = 'Custom message set successfully.'
+            } else message = 'Please provide a custom message to set.'
+        } else message = `*Usage:* \`${cache.configs.prefix}respond on/off/set\``;
         recache();
         send.text(from, message, msg);
     }
@@ -84,25 +89,60 @@ class Owner {
         } else if (param === 'list') {
             mentions = [...mentions, ...cache.database.sudo];
             message = `> ■ *Sudo users* ■\n\n${cache.database.sudo?.map(i => `- @${i.split('@')[0]}`).join('\n') || '_none_'}`;
-        } else message = `*Usage:* \`${cache.configs.prefix}sudo <on/off/add/remove/list>\``;
+        } else message = `*Usage:* \`${cache.configs.prefix}sudo on/off/add/remove/list\``;
         recache();
         send.text(from, message, msg, mentions || null);
     }
-    async blacklist() { }
-    async ban() { }
+    async blacklist(send, from, msg, context, text) {
+        const mode = text.startsWith('blacklist') ? 'blacklist' : 'whitelist';
+        const target = context.split(' ')[1]?.trim() || from;
+        let message;
+        if (target) {
+            const includes = cache.database.blacklist.includes(target);
+            const add = mode === 'blacklist';
+            if ((add && includes) || (!add && !includes)) message = `This group is ${add ? 'already' : 'not'} blacklisted`;
+            else {
+                cache.database.blacklist = add ? [...cache.database.blacklist, target] : cache.database.blacklist.filter(i => i !== target);
+                message = `*Group has been ${mode}ed*`;
+            }
+        } else message = `*Please provide a group to ${mode}*`;
+        recache();
+        send.text(from, message, msg, mentions || null);
+    }
+    async ban(send, from, msg, text) {
+        const mode = text.startsWith('ban') ? 'ban' : 'unban';
+        const target = msg.message?.extendedTextMessage?.contextInfo?.participant || msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
+        let message;
+        let mentions = [];
+        if (target) {
+            mentions.push(target);
+            const includes = cache.database.banned.includes(target);
+            const add = mode === 'ban';
+            if ((add && includes) || (!add && !includes)) message = `@${target.split('@')[0]} *is ${add ? 'already' : 'not'} banned*`;
+            else {
+                cache.database.banned = add ? [...cache.database.banned, target] : cache.database.banned.filter(i => i !== target);
+                message = `@${target.split('@')[0]} *has been ${mode}ned*`;
+            }
+        } else message = `*Please mention a user to ${mode}*`;
+        recache();
+        send.text(from, message, msg, mentions || null);
+    }
     async background(send, from, msg, text, context, quotedMsg) {
         try {
             const param = text.split(' ')[1]?.trim();
             let message;
             if (param === 'add') {
                 send.react(from, '🔄', msg.key);
-                const url = await _media.upload(send, from, msg, quotedMsg, true);
+                const url = (await _media.upload(send, from, msg, quotedMsg, true)).url;
                 if (!url) throw new Error('Failed to upload image, please try again later.');
                 if (cache.database.backgrounds.includes(url)) throw new Error('This image is already included in your backgrounds.');
                 cache.database.backgrounds.push(url);
-                message = `Added image to your backgrounds. Type ${cache.configs.prefix}menu to check it out.`;
+                message = `Added image to your backgrounds. Type ${cache.configs.prefix}menu to check it out!`;
             } else if (param === 'remove') {
-                //remove logic
+                const url = context.split(' ')[2]?.trim();
+                if (!cache.database.backgrounds.includes(url)) throw new Error('This image is not in your background database.');
+                cache.database.backgrounds = cache.database.backgrounds.filter(i => i !== url);
+                message = 'Removed background successfully!';
             }
             recache();
             send.text(from, message, msg);
@@ -111,7 +151,8 @@ class Owner {
             send.text(from, error.message, msg);
         }
     }
-    async update(send, from, msg, _return = false) {
+    async update(send, from, msg, text, _return = false) {
+        const will_restart = text.replace('update', '')?.trim() === 'restart';
         let sent;
         try {
             if (!_return) await send.react(from, '🔄', msg.key);
@@ -137,17 +178,43 @@ class Owner {
             if (cache.edited_source_code) await exec_as('git stash pop').catch(() => { });
             if (stdout.includes('Already up to date')) return _return ? true : send.edit(from, '✅ You\'re already running on the latest version!', sent.key);
             if (!_return) await send.edit(from, 'Checking dependencies...', sent.key);
-            if (stdout.includes('package.json')) await exec_as('npm install');
+            if (stdout.includes('package.json') || _return) await exec_as('npm install').catch(() => { });
             await recache();
-            if (!_return) await send.edit(from, '✅ Update completed. The bot will now restart...\n\n> This will stop the process. If you don\'t have pm2 running, you may need to start the bot again manually.', sent.key);
-            await exec_as('pm2 restart all').catch(() => { });
-            setTimeout(() => process.exit(0), 500);
+            if (!_return) await send.edit(from, `✅ Update completed. ${will_restart ? 'The bot will now restart...' : `You can restart the bot with \`${cache.configs.prefix}restart\` to load changes.`}`, sent.key);
+            if (will_restart && !_return) this.restart(send, from, msg, true);
         } catch (error) {
             console.error('Error processing update:', error.message);
-            if (!_return) await send.edit(from, error.message, sent.key);
-            else throw error;
+            if (_return) throw error;
+            send.edit(from, error.message, sent.key);
         }
     }
+    async restart(send, from, msg, _return = false) {
+        if (!_return) send.text(from, '*Restarting...*\n\n> You may need to start the server manually.', msg);
+        await exec_as('pm2 restart all').catch(() => { });
+        setTimeout(() => process.exit(0), 500);
+    }
+    async reset(send, from, text, msg) {
+        try {
+            const param = text.replace('reset', '')?.trim();
+            if (param === 'true') {
+                await send.react(from, '🔄', msg.key);
+                cache.edited_source_code = false;
+                await this.update(send, from, msg, text, true);
+                const backup = (await this.backup(send, from, msg, true)).url;
+                if (backup) [cache.config_path, cache.database_path].forEach(e => fs.rmSync(e, { force: true }));
+                await send.text(from, `☑️ Reset to default settings.\n*Backup:* ${backup || '_Failed: Your files were not deleted._'}\n\nRestarting...\n> You may need to start the server manually.`, msg);
+                this.restart(send, from, msg, true);
+            } else send.text(from, `This will reset the bot to it's default state. All changes and modifications to the code will be discarded. Your configs and databases will be backed up.\nSend \`${cache.configs.prefix}reset true\` to proceed.`, msg);
+        } catch (error) {
+            console.log('Error resetting bot:', error.message);
+            send.text(from, error.message, msg);
+        }
+    }
+    async backup(send, from, msg, _return = false) {
+        return { url: '' }
+    }
+    async env(send, from, msg, text) { }
+    async prompt(send, from, msg, context) { }
 }
 
 export const _owner = new Owner();

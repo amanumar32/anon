@@ -14,12 +14,7 @@ class Home {
             return acc;
         }, {});
         let menu = `╭━━━ ■ *${cache.bot_name}* ■ ━━━\n┃ ◦ *Owner:* ${cache.configs.name}\n┃ ◦ *Version:* ${cache.current_version}\n┃ ◦ *Prefix:* ${cache.configs.prefix}\n╰━━━━━━━━━━━━━━━━━━━\n${white_space}\n`;
-        const format = (category, list) => {
-            const header = `┌── ► *${sentence_case(category)}* ◄\n│\n`;
-            const footer = `\n│\n└───────────────\n`;
-            const body = list.map(cmd => param === 'full' ? `│ ◦ *${cache.configs.prefix}${cmd.name}* - _${cmd.description}_` : `│  ◦ ${cache.configs.prefix}${cmd.name}`).join(param === 'full' ? '\n\n' : '\n');
-            return header + body + footer;
-        };
+        const format = (category, list) => `┌── ♦ *${sentence_case(category)}* ♦\n│\n` + list.map(cmd => `│ ◦  ${cache.configs.prefix}${cmd.name}`).join('\n') + `\n│\n└───────────────\n`;
         if (categories[param]) {
             menu += format(param, categories[param]);
         } else {
