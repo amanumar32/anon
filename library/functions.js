@@ -9,7 +9,7 @@ import yts from 'yt-search';
 import { igdl } from 'ruhend-scraper';
 import { cache } from '../init.js';
 import { createCanvas } from 'canvas';
-import Sticker from 'wa-sticker-formatter';
+import { Sticker } from 'wa-sticker-formatter';
 import { downloadMediaMessage } from '@whiskeysockets/baileys';
 
 class Functions {
@@ -68,7 +68,8 @@ class Functions {
         const { from, to, options } = configs;
         const temp = os.tmpdir();
         const input = path.join(temp, `in_${Date.now()}`);
-        const output = path.join(temp, `out_${Date.now()}${options?.ext ? `.${options.ext}` : ''}`);
+        const ext = to === 'video' ? 'mp4' : to === 'image' ? 'jpg' : options?.ext || '';
+        const output = path.join(temp, `out_${Date.now()}${ext ? `.${ext}` : ''}`);
         const frames = path.join(temp, `frames_${Date.now()}`);
         let result;
         try {
@@ -118,7 +119,7 @@ class Functions {
                 await new Promise((resolve, reject) => {
                     const command = ffmpeg().input(path.join(frames, 'frame_%03d.png')).inputOptions([`-framerate ${fps}`]).outputOptions(['-vcodec libx264', '-pix_fmt yuv420p', '-vf scale=trunc(iw/2)*2:trunc(ih/2)*2', '-an', '-preset ultrafast', '-threads 2', '-movflags +faststart']);
                     if (!config.isAnimated) command.inputOptions(['-loop 1']).outputOptions(['-t 3']);
-                    command.output(output).on('end', resolve).on('error', reject);
+                    command.output(output).toFormat('mp4').on('end', resolve).on('error', reject);
                     command.run();
                 });
             } else if (from === 'sticker' && to === 'image') {
