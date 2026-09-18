@@ -1,5 +1,6 @@
 import axios from "axios";
 import getEmojiMixUrl from 'emoji-mixer';
+import FormData from 'form-data';
 import { downloadMediaMessage } from "@whiskeysockets/baileys";
 import { _functions } from "../library/functions.js";
 import { cache } from "../init.js";
@@ -140,17 +141,16 @@ class Media {
             const buffer = await downloadMediaMessage({ key: { remoteJid: from }, message: media }, 'buffer', {});
             const form = new FormData();
             const mimetype = (media.stickerMessage || media.imageMessage || media.videoMessage)?.mimetype || 'image/jpeg';
-            const blob = new Blob([buffer], { type: mimetype });
             const ext = mimetype?.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
-            form.append('file', blob, `upload.${ext}`);
-            const response = await axios.post('https://telegra.ph/upload', form);
+            form.append('file', buffer, { filename: `upload.${ext}`, contentType: mimetype });
+            const response = await axios.post('https://telegra.ph/upload', form, { headers: { ...form.getHeaders() } });
             const file_path = response.data?.[0]?.src;
             if (!file_path) throw new Error('No response from upload server.');
             const url = `https://telegra.ph${file_path}`;
             if (_return) return { url };
             await send.text(from, `*Media URL:* ${url}`, msg);
         } catch (error) {
-            console.error('Media upload error:', error.message);
+            console.error('Image upload error:', error.message);
             if (_return) throw error;
             send.text(from, error.message, msg);
         }
