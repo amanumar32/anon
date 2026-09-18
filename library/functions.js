@@ -65,14 +65,14 @@ class Functions {
         return "■".repeat(filled) + "□".repeat(10 - filled);
     }
     async convert(media, configs = { from: '', to: '', options: {} }) {
+        const { from, to, options } = configs;
+        const temp = os.tmpdir();
+        const input = path.join(temp, `in_${Date.now()}`);
+        const output = path.join(temp, `out_${Date.now()}${options?.ext ? `.${options.ext}` : ''}`);
+        const frames = path.join(temp, `frames_${Date.now()}`);
+        let result;
         try {
             if (!media) throw new Error('No media received for conversion');
-            const { from, to, options } = configs;
-            const temp = os.tmpdir();
-            const input = path.join(temp, `in_${Date.now()}`);
-            const output = path.join(temp, `out_${Date.now()}${options?.ext ? `.${options.ext}` : ''}`);
-            const frames = path.join(temp, `frames_${Date.now()}`);
-            let result;
 
             if (!Buffer.isBuffer(media)) await axios.get(media, { responseType: 'arraybuffer', timeout: 60000, maxContentLength: 50 * 1024 * 1024 }).then(response => media = Buffer.from(response.data));
             fs.writeFileSync(input, media);
