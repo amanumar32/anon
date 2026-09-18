@@ -112,7 +112,7 @@ class Main {
                 else if (['tostic', 'stic'].some(r => text.startsWith(r))) _media.tostic(this.send, text, from, msg, quoted_msg);
                 else if (text.startsWith('toimg')) _media.toimg(this.send, text, from, msg, quoted_msg);
                 else if (text.startsWith('tovid')) _media.tovid(this.send, text, from, msg, quoted_msg);
-                else if (['pack', 'take'].some(r => text.startsWith(r))) _media.pack(this.send, text, from, msg, quoted_msg, username);
+                else if (['pack', 'take', 'siphon'].some(r => text.startsWith(r))) _media.pack(this.send, context, from, msg, quoted_msg, username);
                 else if (['song', 'play', 'music'].some(r => text.startsWith(r))) _media.song(this.send, text, from, msg);
                 else if (['vid', 'video'].some(r => text.startsWith(r))) _media.vid(this.send, text, from, msg);
                 else if (['img', 'image'].some(r => text.startsWith(r))) _media.img(this.send, from, text, msg);

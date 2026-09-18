@@ -56,10 +56,10 @@ class Media {
             send.text(from, error.message, msg);
         }
     }
-    async pack(send, text, from, msg, quotedMsg, username) {
+    async pack(send, context, from, msg, quotedMsg, username) {
         try {
             send.react(from, '🎨', msg.key);
-            const args = text.split(' ')[1]?.split('|')?.map(i => i.trim()) || [];
+            const args = context.slice(1)?.replace(/(pack|take|siphon)/i, '')?.split('|')?.map(i => i.trim()) || [];
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'sticker', options: { pack: args[0] || username || '', author: args[1] || '' } });
             await send.sticker(from, data, msg);
