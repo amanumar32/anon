@@ -1,4 +1,5 @@
 import axios from "axios";
+import getEmojiMixUrl from 'emoji-mixer';
 import { downloadMediaMessage } from "@whiskeysockets/baileys";
 import { _functions } from "../library/functions.js";
 import { cache } from "../init.js";
@@ -159,10 +160,9 @@ class Media {
             await send.react(from, '🫟', msg.key);
             const args = text.replace(/(emix|emoji)/i, '')?.split('+')?.map(i => i.trim()) || [];
             if (args.length !== 2 || !args[0] || !args[1]) throw new Error(`*Usage:* ${cache.configs.prefix}emix 😅+🙂‍↔️`);
-            if (!process.env.GOOGLE_EMOJI_KITCHEN_KEY) throw new Error('No `GOOGLE_EMOJI_KITCHEN_KEY` key found in `.env`');
-            const response = await axios.get(`https://tenor.googleapis.com/v2/featured?key=${process.env.GOOGLE_EMOJI_KITCHEN_KEY}&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(args[0])}_${encodeURIComponent(args[1])}`);
-            if (!response.data?.results[0]?.url) throw new Error('These emojis cannot be mixed! Try different ones.');
-            const data = await _functions.convert(response.data.results[0].url, { from: 'sticker', to: 'sticker', options: { pack: cache.bot_name, author: cache.author } });
+            const url = await getEmojiMixUrl(args[0], args[1]);
+            if (!url) throw new Error('These emojis cannot be mixed..');
+            const data = await _functions.convert(url, { from: 'sticker', to: 'sticker', options: { pack: cache.bot_name, author: cache.author } });
             await send.sticker(from, data, msg);
         } catch (error) {
             console.error('Error combining emojis:', error.message);
