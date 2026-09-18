@@ -1,4 +1,5 @@
 import { _home } from "./commands/home.js";
+import { _media } from "./commands/media.js";
 import { _owner } from "./commands/owner.js";
 import { _stats } from "./commands/status.js";
 import { _tools } from "./commands/tools.js";
@@ -107,17 +108,17 @@ class Main {
                 else if (text.startsWith('wordlink')) return;
 
                 //Media
-                else if (text.startsWith('vv')) return;
-                else if (['tostic', 'stic'].some(r => text.startsWith(r))) return;
-                else if (text.startsWith('toimg')) return;
-                else if (text.startsWith('tovid')) return;
-                else if (['pack', 'take'].some(r => text.startsWith(r))) return;
-                else if (['song', 'play', 'music'].some(r => text.startsWith(r))) return;
-                else if (['vid', 'video'].some(r => text.startsWith(r))) return;
-                else if (['img', 'image'].some(r => text.startsWith(r))) return;
-                else if (['download', 'dl'].some(r => text.startsWith(r))) return;
-                else if (['upload', 'ul'].some(r => text.startsWith(r))) return;
-                else if (text.startsWith('emix')) return;
+                else if (text.startsWith('vv')) _media.vv(this.send, msg, quoted_msg, from);
+                else if (['tostic', 'stic'].some(r => text.startsWith(r))) _media.tostic(this.send, text, from, msg, quoted_msg);
+                else if (text.startsWith('toimg')) _media.toimg(this.send, text, from, msg, quoted_msg);
+                else if (text.startsWith('tovid')) _media.tovid(this.send, text, from, msg, quoted_msg);
+                else if (['pack', 'take'].some(r => text.startsWith(r))) _media.pack(this.send, text, from, msg, quoted_msg, username);
+                else if (['song', 'play', 'music'].some(r => text.startsWith(r))) _media.song(this.send, text, from, msg);
+                else if (['vid', 'video'].some(r => text.startsWith(r))) _media.vid(this.send, text, from, msg);
+                else if (['img', 'image'].some(r => text.startsWith(r))) _media.img(this.send, from, text, msg);
+                else if (['download', 'dl'].some(r => text.startsWith(r))) _media.download(this.send, context, from, msg);
+                else if (['upload', 'ul'].some(r => text.startsWith(r))) _media.upload(this.send, from, msg, quoted_msg);
+                else if (text.startsWith('emix')) _media.emix(this.send, from, text, msg);
             }
             if (isOwner) {
                 if (!cache.configs.name) cache.configs.name = username;
