@@ -6,8 +6,10 @@ import pino from 'pino';
 import { cache, recache } from "./init.js";
 import Main from './main.js';
 import dotenv from 'dotenv';
+import logger from "./library/logger.js";
 
 dotenv.config({ quiet: true });
+logger();
 
 const rl = createInterface({ input: process.stdin, output: process.stdout });
 const question = (text) => new Promise((resolve) => rl.question(text, resolve)).catch(e => console.warn("Readline failed to initialize. proceeding with default phone number"));
