@@ -178,7 +178,7 @@ class Owner {
             const branch_res = await exec_as('git rev-parse --abbrev-ref HEAD').catch(() => ({ stdout: 'main' }));
             const current_branch = branch_res.stdout.trim() || 'main';
             const { stdout } = await exec_as(`git pull origin ${current_branch}`);
-            if (cache.edited_source_code) await exec_as('git stash pop').catch(() => { });
+            if (cache.configs.developer.edited_source_code) await exec_as('git stash pop').catch(() => { });
             if (stdout.includes('Already up to date')) return _return ? true : send.edit(from, '✅ You\'re already running on the latest version!', sent.key);
             if (!_return) await send.edit(from, 'Checking dependencies...', sent.key);
             if (stdout.includes('package.json') || _return) await exec_as('npm install').catch(() => { });
@@ -202,7 +202,7 @@ class Owner {
             const param = text.replace('reset', '')?.trim();
             if (param === 'true') {
                 await send.react(from, '🔄', msg.key);
-                cache.edited_source_code = false;
+                cache.configs.developer.edited_source_code = false;
                 await this.update(send, from, msg, text, true);
                 const backup = (await this.backup(send, from, msg, true)).url;
                 if (backup) [cache.config_path, cache.database_path].forEach(e => fs.rmSync(e, { force: true }));

@@ -14,7 +14,11 @@ export const cache = {
         notifications: true,
         prefix: '.',
         static_message: 'Hey <user>! I\'ll respond to you once I\'m online.\n\n> This is an automated message.',
-        prompt: ''
+        prompt: '',
+        developer: {
+            api_enabled: false,
+            edited_source_code: false,
+        }
     },
     database: {
         sudo: [],
@@ -30,15 +34,14 @@ export const cache = {
     current_version: pkg.version,
     latest_version: '',
     repo_url: pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
-    edited_source_code: false,
     last_owner_message: Date.now(),
-    config_path: 'config.json',
+    config_path: 'configs.json',
     database_path: './database/data.json',
     necessary_directories: ['./logs', './database'],
     command_list: Object.fromEntries(Object.entries(structures.command_list).map(([key, value]) => [key, { name: key, ...value }])),
     white_space: structures.white_space,
     morse_code_map: structures.morse_code_map,
-    default_background_links: structures.default_background_links,
+    default_background_links: structures.default_background_links
 }
 
 export async function recache(sock = null, mode = 'update') {
