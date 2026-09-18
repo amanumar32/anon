@@ -80,20 +80,27 @@ class Functions {
             if (from === 'audio' && to === 'audio') {
                 await new Promise((resolve, reject) => ffmpeg(input).noVideo().audioCodec('libmp3lame').audioBitrate('128k').audioFrequency(44100).audioChannels(2).toFormat('mp3').save(output).on('end', resolve).on('error', reject));
             } else if (from === 'video' && to === 'video') {
-                await new Promise((resolve, reject) => ffmpeg(input).outputOptions(['-c:v libx264', '-c:a aac', '-pix_fmt yuv420p', '-preset fast', '-crf 23', '-movflags +faststart']).toFormat('mp4').save(output).on('end', resolve).on('error', reject));
+                await new Promise((resolve, reject) => ffmpeg(input).outputOptions(['-c:v libx264', '-c:a aac', '-pix_fmt yuv420p', '-preset ultrafast', '-crf 26', '-threads 2', '-movflags +faststart']).toFormat('mp4').save(output).on('end', resolve).on('error', reject));
             } else if (from === 'gif' && to === 'video') {
                 await new Promise((resolve, reject) => ffmpeg(input).outputOptions(['-pix_fmt yuv420p', '-vf scale=512:-2', '-movflags faststart', '-preset ultrafast']).toFormat('mp4').save(output).on('end', resolve).on('error', reject));
             } else if (from === 'image' && to === 'image') {
                 await new Promise((resolve, reject) => ffmpeg(input).toFormat('mjpeg').save(output).on('end', resolve).on('error', reject));
-            } else if (from === 'image' && to === 'sticker') {
+            } else if (from === '*' && to === 'sticker') {
+                let buffer = null;
                 const crop = !!options?.crop || false;
-                const image = sharp(input);
-                const metadata = await image.metadata();
-                const size = Math.min(metadata.width, metadata.height, 512);
-                result = await image.resize({ width: crop ? size : 512, height: crop ? size : 512, fit: crop ? 'cover' : 'contain', withoutEnlargement: !crop }).webp({ quality: 80 }).toBuffer();
+                if (options?.type === 'video') buffer = fs.readFileSync(input);
+                else {
+                    const image = sharp(input);
+                    const metadata = await image.metadata();
+                    const size = Math.min(metadata.width, metadata.height, 512);
+                    buffer = await image.resize({ width: crop ? size : 512, height: crop ? size : 512, fit: crop ? 'cover' : 'contain', withoutEnlargement: !crop }).webp().toBuffer();
+                }
+                const sticker = new Sticker(buffer, { pack: cache.bot_name, author: cache.author, type: crop ? 'crop' : 'full' });
+                result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'sticker') {
                 const { pack = '', author = '' } = options;
-                //download sticker and send it back with new name if any...
+                const sticker = new Sticker(input, { pack: pack, author: author });
+                result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'video') {
                 const metadata = await sharp(input).metadata();
                 const delays = metadata.delay || [];
@@ -101,8 +108,6 @@ class Functions {
                 for (let i = 0; i < config.pages; i++) {
                     const frame = path.join(frames, `frame_${i.toString().padStart(3, '0')}.png`);
                     await sharp(input, { page: i }).png().toFile(frame);
-                    sharp.cache(false);
-                    sharp.cache(true);
                 }
                 let fps = 24;
                 if (config.delays.length > 0) {
@@ -111,8 +116,8 @@ class Functions {
                 } else if (config.isAnimated) fps = 10;
                 if (isNaN(fps) || fps <= 0) fps = 10;
                 await new Promise((resolve, reject) => {
-                    const command = ffmpeg().input(path.join(frames, 'frame_%03d.png')).inputOptions([`-framerate ${fps}`]).outputOptions(['-vcodec libx264', '-pix_fmt yuv420p', '-vf scale=trunc(iw/2)*2:trunc(ih/2)*2', '-an', '-movflags +faststart']);
-                    if (!config.isAnimated) command.inputOptions(['-loop 1']).duration(3);
+                    const command = ffmpeg().input(path.join(frames, 'frame_%03d.png')).inputOptions([`-framerate ${fps}`]).outputOptions(['-vcodec libx264', '-pix_fmt yuv420p', '-vf scale=trunc(iw/2)*2:trunc(ih/2)*2', '-an', '-preset ultrafast', '-threads 2', '-movflags +faststart']);
+                    if (!config.isAnimated) command.inputOptions(['-loop 1']).outputOptions(['-t 3']);
                     command.output(output).on('end', resolve).on('error', reject);
                     command.run();
                 });
@@ -158,7 +163,8 @@ class Functions {
                 data.media = data.url;
                 data.type = 'image';
             }
-            return data.media ? data : null;
+            if (!data.media) throw new Error('No media received from API');
+            return data;
         } catch (error) {
             console.error('Error downloading query:', error.message);
             throw error;
