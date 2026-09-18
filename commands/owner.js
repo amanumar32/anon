@@ -109,13 +109,13 @@ class Owner {
         recache();
         send.text(from, message, msg);
     }
-    async ban(send, from, msg, text, isOwner) {
+    async ban(send, from, msg, text) {
         const mode = text.startsWith('ban') ? 'ban' : 'unban';
         const target = msg.message?.extendedTextMessage?.contextInfo?.participant || msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
         let message;
         let mentions = [];
         if (target) {
-            if (isOwner) message = 'Cannot ban bot owner!';
+            if ([cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(target)) message = 'Cannot ban bot owner!';
             else {
                 mentions.push(target);
                 const includes = cache.database.banned.includes(target);
