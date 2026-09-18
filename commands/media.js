@@ -49,7 +49,7 @@ class Media {
             send.react(from, '🎥', msg.key);
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'video' });
-            await send.video(from, data, msg);
+            await send.video(from, data, '', msg);
         } catch (error) {
             console.error('Error creating video:', error.message);
             send.text(from, error.message, msg);
@@ -124,7 +124,7 @@ class Media {
             const query = context.slice(1).replace(/(dl|download)/i, '').trim();
             if (!query) throw new Error('No query provided!');
             const data = await _functions.download_query(query, { type: 'video' });
-            const media = await _functions.convert(data.media, { from: 'video', to: 'video' });
+            const media = await _functions.convert(data.media, { from: data.type, to: data.type });
             await send.video(from, media || { url: data.media }, `*${data.title || '...'}*`, msg);
         } catch (error) {
             console.error('Error downloading query:', error.message);
