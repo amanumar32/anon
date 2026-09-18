@@ -143,10 +143,8 @@ class Media {
             const mimetype = (media.stickerMessage || media.imageMessage || media.videoMessage)?.mimetype || 'image/jpeg';
             const ext = mimetype?.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
             form.append('file', buffer, { filename: `upload.${ext}`, contentType: mimetype });
-            const response = await axios.post('https://telegra.ph/upload', form, { headers: { ...form.getHeaders() } });
-            const file_path = response.data?.[0]?.src;
-            if (!file_path) throw new Error('No response from upload server.');
-            const url = `https://telegra.ph${file_path}`;
+            const response = await axios.post('https://graph.org', form, { headers: form.getHeaders(), });
+            const url = `https://graph.org${response?.data[0]?.src}`;
             if (_return) return { url };
             await send.text(from, `*Media URL:* ${url}`, msg);
         } catch (error) {

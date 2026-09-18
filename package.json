@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
+    "@ultramodz/graph-uploader": "^1.0.0",
     "@vitalets/google-translate-api": "^9.2.1",
     "@whiskeysockets/baileys": "^7.0.0-rc14",
     "archiver": "^8.0.0",
