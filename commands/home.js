@@ -12,7 +12,7 @@ class Home {
             return acc;
         }, {});
         let menu = `╭━━━ ■ *${cache.bot_name}* ■ ━━━\n┃ ◦ *Owner:* ${cache.configs.name}\n┃ ◦ *Version:* ${cache.current_version}\n┃ ◦ *Prefix:* ${cache.configs.prefix}\n╰━━━━━━━━━━━━━━━━━━━\n${cache.white_space}\n`;
-        const format = (category, list) => `┌── ♦ *${_functions.sentence_case(category)}* ♦\n│\n` + list.map(cmd => `│ ◦  ${cache.configs.prefix}${cmd.name}`).join('\n') + `\n│\n└───────────────\n`;
+        const format = (category, list) => `┌── ► *${_functions.sentence_case(category)}* ◄\n│\n` + list.map(cmd => `│ ◦  ${cache.configs.prefix}${cmd.name}`).join('\n') + `\n│\n└───────────────\n`;
         if (categories[param]) {
             menu += format(param, categories[param]);
         } else {
