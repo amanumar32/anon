@@ -58,7 +58,7 @@ class Main {
                 //Owner
                 else if (text.startsWith('configs')) _owner.configs(this.send, from, msg);
                 else if (text.startsWith('database')) _owner.database(this.send, from, msg);
-                else if ([text, command].includes('prefix')) _owner.prefix(this.send, from, msg, text);
+                else if ([text, command].some(r => text.startsWith(r))) _owner.prefix(this.send, from, msg, text);
                 else if (text.startsWith('notification')) _owner.notifications(this.send, from, msg, text);
                 else if (text.startsWith('mode')) _owner.mode(this.send, from, msg, text);
                 else if (text.startsWith('respond')) _owner.respond(this.send, from, msg, text, context);
