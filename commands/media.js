@@ -1,6 +1,5 @@
 import axios from "axios";
 import getEmojiMixUrl from 'emoji-mixer';
-import FormData from 'form-data';
 import { downloadMediaMessage } from "@whiskeysockets/baileys";
 import { _functions } from "../library/functions.js";
 import { cache } from "../init.js";
@@ -137,16 +136,19 @@ class Media {
         try {
             if (!_return) send.react(from, '🔄', msg.key);
             const media = quotedMsg || msg.message || null;
-            if (!media?.imageMessage && !media?.videoMessage && !media?.stickerMessage) throw new Error('Only images, videos, and stickers can be uploaded.');
+            if (!media?.imageMessage && !media?.stickerMessage) throw new Error('Only images and stickers can be uploaded.');
+            if (!process.env.IMGBB_API_KEY) throw new Error('No `IMGBB_API_KEY` api key provided in `.env`');
             const buffer = await downloadMediaMessage({ key: { remoteJid: from }, message: media }, 'buffer', {});
             const form = new FormData();
-            const mimetype = (media.stickerMessage || media.imageMessage || media.videoMessage)?.mimetype || 'image/jpeg';
-            const ext = mimetype?.split('/')[1]?.replace('jpeg', 'jpg') || 'jpg';
-            form.append('file', buffer, { filename: `upload.${ext}`, contentType: mimetype });
-            const response = await axios.post('https://graph.org', form, { headers: form.getHeaders(), });
-            const url = `https://graph.org${response?.data[0]?.src}`;
-            if (_return) return { url };
-            await send.text(from, `*Media URL:* ${url}`, msg);
+            const mimetype = (media.stickerMessage || media.imageMessage)?.mimetype || 'image/jpeg';
+            const blob = new Blob([buffer], { type: mimetype });
+            const ext = mimetype?.split('/')[1].replace('jpeg', 'jpg') || 'jpg';
+            form.append('image', blob, `upload.${ext}`);
+            const response = await axios.post(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`, form);
+            const url = response.data?.data?.display_url || '';
+            if (!url) throw new Error('No response from API.');
+            if (_return) return { url }
+            await send.text(from, `*Image URL:* ${url}`, msg);
         } catch (error) {
             console.error('Image upload error:', error.message);
             if (_return) throw error;
