@@ -61,7 +61,6 @@ export async function recache(sock = null, mode = 'update') {
         } else {
             fs.writeFileSync(config_path, JSON.stringify(cache.configs, null, 4));
             fs.writeFileSync(database_path, JSON.stringify(cache.database, null, 4));
-            console.log('Database updated successfully!');
         }
         return true;
     } catch (error) {
