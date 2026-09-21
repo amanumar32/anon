@@ -1,6 +1,7 @@
 import { _home } from "./commands/home.js";
 import { _media } from "./commands/media.js";
 import { _owner } from "./commands/owner.js";
+import { _services } from "./commands/services.js";
 import { _stats } from "./commands/status.js";
 import { _tools } from "./commands/tools.js";
 import { cache, recache } from "./init.js";
@@ -106,6 +107,15 @@ class Main {
                 else if (text.startsWith('nhie')) return;
                 else if (text.startsWith('chess')) return;
                 else if (text.startsWith('wordlink')) return;
+
+                //Services
+                else if (text.startsWith('weather')) _services.weather(this.send, text, from, msg);
+                else if (text.startsWith('news')) _services.news(this.send, text, from, msg);
+                else if (text.startsWith('tts')) _services.tts(this.send, from, msg, context, quoted_text);
+                else if (text.startsWith('stt')) _services.stt(this.send, from, msg);
+                else if (text.startsWith('lyric')) _services.lyrics(this.send, from, text, msg);
+                else if (['tr', 'translate'].some(r => text.startsWith(r))) _services.translate(this.send, text, from, msg, quoted_text);
+                else if (text.startsWith('ai')) _services.ai(this.send, msg, from, text, quoted_text);
 
                 //Media
                 else if (text.startsWith('vv')) _media.vv(this.send, msg, quoted_msg, from);

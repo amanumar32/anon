@@ -14,7 +14,7 @@ export const cache = {
         notifications: true,
         prefix: '.',
         static_message: 'Hey <user>! I\'ll respond to you once I\'m online.\n\n> This is an automated message.',
-        prompt: '',
+        prompt: 'You are a helpful Assistant.',
         developer: {
             api_enabled: false,
             edited_source_code: false,

@@ -132,6 +132,56 @@
             "description": "Play a game of wordlink with a friend",
             "category": "fun"
         },
+        "weather": {
+            "description": "Get the current weather of a city",
+            "category": "services",
+            "param": [
+                "city"
+            ]
+        },
+        "news": {
+            "description": "Get the latest headlines",
+            "category": "services",
+            "param": [
+                "topic?"
+            ]
+        },
+        "tts": {
+            "description": "Text-to-speech services",
+            "category": "services",
+            "param": [
+                "text"
+            ]
+        },
+        "stt": {
+            "description": "Speech-to-text services",
+            "category": "services",
+            "requirements": [
+                "&"
+            ]
+        },
+        "lyrics": {
+            "description": "Get the lyrics of your favorite songs",
+            "category": "services",
+            "param": [
+                "artist",
+                "title"
+            ]
+        },
+        "translate": {
+            "description": "Translate a sentence",
+            "category": "services",
+            "param": [
+                "text"
+            ]
+        },
+        "ai": {
+            "description": "AI chat tool",
+            "category": "services",
+            "param": [
+                "prompt"
+            ]
+        },
         "vv": {
             "description": "Anti-view once command",
             "category": "media",
