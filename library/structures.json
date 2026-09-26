@@ -102,35 +102,43 @@
         },
         "joke": {
             "description": "Get a random joke",
-            "category": "fun"
+            "category": "casual"
         },
         "fact": {
             "description": "Get a random fact",
-            "category": "fun"
+            "category": "casual"
         },
         "quote": {
             "description": "Get a random quote",
-            "category": "fun"
+            "category": "casual"
         },
         "td": {
             "description": "Get a random truth or dare",
-            "category": "fun"
+            "category": "casual"
         },
         "wyr": {
             "description": "Get a random would you rather question",
-            "category": "fun"
+            "category": "casual"
         },
         "nhie": {
             "description": "Get a random \"Never Have I Ever\" question",
-            "category": "fun"
+            "category": "casual"
         },
         "chess": {
             "description": "Play a game of chess with a friend",
-            "category": "fun"
+            "category": "casual"
         },
         "wordlink": {
             "description": "Play a game of wordlink with a friend",
-            "category": "fun"
+            "category": "casual"
+        },
+        "ttt": {
+            "description": "Play a game of tic-tac-toe with a friend",
+            "category": "casual"
+        },
+        "hangman": {
+            "description": "Play a game of hangman.",
+            "category": "casual"
         },
         "weather": {
             "description": "Get the current weather of a city",

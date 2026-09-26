@@ -33,6 +33,7 @@ export const cache = {
     bot_id: '',
     current_version: pkg.version,
     latest_version: '',
+    port: 8000,
     repo_url: pkg.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
     last_owner_message: Date.now(),
     config_path: 'configs.json',

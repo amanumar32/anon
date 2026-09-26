@@ -1,6 +1,6 @@
 {
   "name": "Anon",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Self-host baileys whatsapp bot",
   "license": "ISC",
   "author": "Cyan+",
@@ -10,7 +10,8 @@
   "scripts": {
     "start": "npm install && node index.js",
     "dev": "node index.js",
-    "test": "node others/test.js"
+    "test": "node others/test.js",
+    "build": "echo No build command"
   },
   "repository": {
     "type": "git",
