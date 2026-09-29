@@ -1,7 +1,7 @@
 <div style="display: flex; flex-direction: column; position: relative">
 <img style="opacity: 0.6" src="https://i.imghippo.com/files/Nnwl8073AuI.jpg" alt="Main img">
-<span style="position: absolute; bottom: 0; margin: 1em; color: #fff">
-<p style="font-size: 30px; font-family: monospace; font-weight: 700; margin: 0">Anon</p>
+<span style="position: absolute; bottom: 1em; margin: 1em; color: #fff">
+<p style="font-size: xxx-large; font-family: monospace; font-weight: 700; margin: 0">Anon</p>
 </span>
 </div>
 
