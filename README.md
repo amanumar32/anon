@@ -1,9 +1,4 @@
-<div style="position: relative; width: 100%;">
-<img src="https://i.imghippo.com/files/Nnwl8073AuI.jpg" alt="Main img" style="width: 100%; display: block; opacity: 0.6;">
-<div style="position: absolute; bottom: 1em; left: 1em; color: #ffffff;">
-<h1 style="font-size: 3rem; font-family: monospace; font-weight: 700; margin: 0;">Anon</h1>
-</div>
-</div>
+<img src="https://i.imghippo.com/files/hv1630YK.jpg" alt="Main img">
 
 
 ## About Anon
