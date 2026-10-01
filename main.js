@@ -16,7 +16,7 @@ class Main {
     async init() {
         try {
             await recache('start');
-            cache.bot_id = sock?.user?.lid ? sock.user.lid.split(':')[0] + '@lid' : cache.configs.number + '@s.whatsapp.net';
+            cache.bot_id = this.sock?.user?.lid ? this.sock.user.lid.split(':')[0] + '@lid' : cache.configs.number + '@s.whatsapp.net';
             if (cache.configs.notifications) this.send.text(cache.configs.developer.logs_redirect_id || cache.bot_id, `*✅ Bot Activated*\n\nTime: ${new Date(cache.start_time).toLocaleString()}${Math.random() < 0.3 ? `\n\n> You can turn this off with \`${cache.configs.prefix}notification off\`` : ''}`);
             console.log('Bot connected successfully!');
         } catch (error) {
