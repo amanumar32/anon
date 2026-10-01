@@ -1,10 +1,10 @@
 {
   "name": "Anon",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Self-host baileys whatsapp bot",
   "license": "ISC",
   "author": "Cyan+",
-  "homepage": "cyan.halostudios.xyz",
+  "homepage": "https://cyan.halostudios.xyz",
   "type": "module",
   "main": "index.js",
   "scripts": {

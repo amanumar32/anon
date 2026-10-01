@@ -23,7 +23,6 @@ class Owner {
             cache.configs.prefix = param;
             message = `> *Prefix updated:* ${cache.configs.prefix}`;
         } else message = 'This prefix is invalid! Please use a different prefix.';
-        recache();
         send.text(from, message, msg);
     }
     async notifications(send, from, msg, text) {
@@ -34,7 +33,6 @@ class Owner {
             cache.configs.notifications = param === 'on';
             message = `🔔 Notifications turned *${param}*`;
         }
-        recache();
         send.text(from, message, msg);
     }
     async mode(send, from, msg, text) {
@@ -46,7 +44,6 @@ class Owner {
             message = `🌍 Mode set to *${param}*`;
             if (param === 'public') message += '\n\n> All users can use the bot anywhere';
         }
-        recache();
         send.text(from, message, msg);
     }
     async respond(send, from, msg, text, context) {
@@ -63,7 +60,6 @@ class Owner {
                 message = 'Custom message set successfully.'
             } else message = 'Please provide a custom message to set.'
         } else message = `*Usage:* \`${cache.configs.prefix}respond on/off/set\``;
-        recache();
         send.text(from, message, msg);
     }
     async sudo(send, from, text, msg) {
@@ -90,7 +86,6 @@ class Owner {
             mentions = [...mentions, ...cache.database.sudo];
             message = `> ■ *Sudo users* ■\n\n${cache.database.sudo?.map(i => `- @${i.split('@')[0]}`).join('\n') || '_none_'}`;
         } else message = `*Usage:* \`${cache.configs.prefix}sudo on/off/add/remove/list\``;
-        recache();
         send.text(from, message, msg, mentions || null);
     }
     async blacklist(send, from, msg, context, text) {
@@ -106,7 +101,6 @@ class Owner {
                 message = `*Group has been ${mode}ed*`;
             }
         } else message = `*Please provide a group to ${mode}*`;
-        recache();
         send.text(from, message, msg);
     }
     async ban(send, from, msg, text) {
@@ -127,7 +121,6 @@ class Owner {
                 }
             }
         } else message = `*Please mention a user to ${mode}*`;
-        recache();
         send.text(from, message, msg, mentions || null);
     }
     async background(send, from, msg, text, context, quotedMsg) {
@@ -147,7 +140,6 @@ class Owner {
                 cache.database.backgrounds = cache.database.backgrounds.filter((_, i) => i !== index);
                 message = 'Removed background successfully!';
             }
-            recache();
             send.text(from, message, msg);
         } catch (error) {
             console.error('Failed to add background:', error.message);

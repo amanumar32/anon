@@ -232,6 +232,13 @@
                 "&"
             ]
         },
+        "music": {
+            "description": "search for a song and get it's metadata",
+            "category": "media",
+            "param": [
+                "query"
+            ]
+        },
         "song": {
             "description": "Download your favorite songs",
             "category": "media",
@@ -253,6 +260,14 @@
             "param": [
                 "query"
             ]
+        },
+        "movie": {
+            "description": "Download a movie directly to WhatsApp",
+            "category": "media",
+            "param": [
+                "query"
+            ],
+            "note": "This feature queries from our own movie database which is still young and actively being populated, so not all movies will be available yet."
         },
         "download": {
             "description": "Download media from supported URLs",

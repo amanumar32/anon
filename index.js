@@ -27,8 +27,6 @@ async function startBot() {
         browser: ["Ubuntu", "Chrome", "20.0.04"],
     });
     const main = new Main(sock);
-    await recache(sock, 'start');
-
     sock.ev.on("creds.update", saveCreds);
     sock.ev.on("group-participants.update", async (update) => main.event(update));
 
