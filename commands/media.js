@@ -73,10 +73,9 @@ class Media {
             send.react(from, '🎵', msg.key);
             const query = text.replace(/(song|play|music)/i, '').trim();
             if (!query) throw new Error('No query provided!');
-            const data = await _functions.download_query(query, { type: 'audio' });
-            const media = await _functions.convert(data.media, { from: 'audio', to: 'audio' });
+            const data = await _functions.download_query(query, 'audio');
             await send.image(from, { url: data.thumbnail }, `*${data.title || query}*`);
-            await send.audio(from, media || { url: data.media }, msg);
+            await send.audio(from, { url: data.url }, msg);
         } catch (error) {
             console.error('Error downloading audio:', error.message);
             send.text(from, error.message, msg);
@@ -87,9 +86,8 @@ class Media {
             send.react(from, '📽️', msg.key);
             const query = text.replace(/(vid|video)/i, '').trim();
             if (!query) throw new Error('No query provided!');
-            const data = await _functions.download_query(query, { type: 'video' });
-            const media = await _functions.convert(data.media, { from: 'video', to: 'video' });
-            await send.video(from, media || { url: data.media }, `*${data.title || query}*`, msg);
+            const data = await _functions.download_query(query, 'video');
+            await send.video(from, { url: data.url }, `*${data.title || query}*`, msg);
         } catch (error) {
             console.error('Error downloading video:', error.message);
             send.text(from, error.message, msg);
@@ -123,10 +121,9 @@ class Media {
             send.react(from, '🔄', msg.key);
             const query = context.slice(1).replace(/(dl|download)/i, '').trim();
             if (!query) throw new Error('No query provided!');
-            const data = await _functions.download_query(query, { type: 'video' });
-            const media = await _functions.convert(data.media, { from: data.type, to: data.type });
-            if (data.type === 'video') await send.video(from, media || { url: data.media }, `*${data.title || '...'}*`, msg);
-            else if (data.type === 'image') await send.image(from, media || { url: data.media }, '', msg);
+            const data = await _functions.download_query(query);
+            if (data.type === 'video') await send.video(from, { url: data.url }, `*${data.title || '...'}*`, msg);
+            else if (data.type === 'image') await send.image(from, { url: data.url }, '', msg);
         } catch (error) {
             console.error('Error downloading query:', error.message);
             send.text(from, error.message, msg);

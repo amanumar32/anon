@@ -96,7 +96,7 @@ class Functions {
                     const size = Math.min(metadata.width, metadata.height, 512);
                     buffer = await image.resize({ width: crop ? size : 512, height: crop ? size : 512, fit: crop ? 'cover' : 'contain', withoutEnlargement: !crop }).webp().toBuffer();
                 }
-                const sticker = new Sticker(buffer, { pack: cache.bot_name, author: cache.author, type: crop ? 'crop' : 'full' });
+                const sticker = new Sticker(buffer, { pack: cache.bot_name, author: cache.author, type: crop ? 'crop' : 'full', quality: 80 });
                 result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'sticker') {
                 const { pack = '', author = '' } = options;
@@ -135,37 +135,13 @@ class Functions {
             if (fs.existsSync(frames)) fs.rmSync(frames, { recursive: true, force: true });
         }
     }
-    async download_query(query = '', options = { type: 'video' }) {
+    async download_query(query = '', type = 'audio') {
         try {
             if (!query) throw new Error('Query required');
-            const data = { title: '', author: '', duration: '', thumbnail: '', media: '', url: '', type: options.type || '' };
-            if (/https?:\/\/[^\s]+/.test(query)) data.url = query;
-            else {
-                const search = await yts(query);
-                if (!search || !search.videos.length) throw new Error('No media found!');
-                const video = search.videos[0];
-                data.title = video.title;
-                data.author = video.author.name;
-                data.duration = video.duration.timestamp;
-                data.url = video.url;
-                data.thumbnail = video.thumbnail;
-            }
-            if (/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|playlist\?list=)?)([a-zA-Z0-9_-]{11})/i.test(data.url)) {
-                const response = await axios.get(`https://eliteprotech-apis.zone.id/ytdown?url=${encodeURIComponent(data.url)}&format=${options.type === 'audio' ? 'mp3' : 'mp4'}`, { timeout: 60000, headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...', 'Accept': 'application/json, text/plain, */*' } });
-                data.media = response?.data?.downloadURL || null;
-                if (!data.title) data.title = response?.data?.title || '';
-            } else if (/https?:\/\/(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|reel|tv)\//i.test(data.url)) {
-                const response = await igdl(data.url);
-                data.media = response?.data[0]?.url || null;
-            } else if (/https?:\/\/(?:www\.)?facebook\.com\//i.test(data.url)) {
-                const response = await axios.get(`https://api.dreaded.site/api/facebook?url=${data.url}`);
-                data.media = response.data?.facebook?.sdVideo || null;
-            } else if (/\.(jpg|jpeg|png|gif|bmp|webp|pdf)$/i.test(data.url)) {
-                data.media = data.url;
-                data.type = 'image';
-            }
-            if (!data.media) throw new Error('No media received from API');
-            return data;
+            if (!type) /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|playlist\?list=)?)([a-zA-Z0-9_-]{11})/i.test(query) ? 'video' : /https?:\/\/(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|reel|tv)\//i.test(query) ? 'instagram' : /https?:\/\/(?:www\.)?facebook\.com\//i.test(query) ? 'facebook' : 'direct';
+            const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/${type}?query=${query}`);
+            if (!response.data?.data) throw new Error("No media received from API");
+            return { type, query, url: response.data.data.result.url, thumbnail: response.data.data.result.thumbnail, title: response.data.data.result.title };
         } catch (error) {
             console.error('Error downloading query:', error.message);
             throw error;

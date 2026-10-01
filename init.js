@@ -18,6 +18,7 @@ export const cache = {
         developer: {
             api_enabled: false,
             edited_source_code: false,
+            logs_redirect_id: ''
         }
     },
     database: {
