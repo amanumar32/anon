@@ -2,7 +2,7 @@ import fs from 'fs';
 import app from './api/app.js';
 
 let initialized = false;
-const package = JSON.parse(fs.readFileSync('./package.json'));
+const pack = JSON.parse(fs.readFileSync('./package.json'));
 const structures = JSON.parse(fs.readFileSync('./library/structures.json'));
 
 export const cache = {
@@ -29,15 +29,15 @@ export const cache = {
         backgrounds: [],
         groupSettings: {},
     },
-    bot_name: package.name,
-    author: package.author,
-    homepage_url: package.homepage,
+    bot_name: pack.name,
+    author: pack.author,
+    homepage_url: pack.homepage,
     bot_id: '',
-    current_version: package.version,
+    current_version: pack.version,
     latest_version: '',
     port: process.env.PORT || 3000,
     process_working: false,
-    repo_url: package.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
+    repo_url: pack.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
     last_owner_message: Date.now(),
     config_path: 'configs.json',
     database_path: './database/data.json',
