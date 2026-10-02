@@ -8,8 +8,8 @@ class Media {
     async vv(send, msg, quotedMsg, from) {
         try {
             send.react(from, '🔓', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             if (!quotedMsg) throw new Error("Please reply to a view-once message.");
             const media = quotedMsg.imageMessage || quotedMsg.videoMessage || quotedMsg.audioMessage || null;
             if (media?.viewOnce !== true) throw new Error("The quoted message is not a view-once media.");
@@ -24,14 +24,14 @@ class Media {
             console.error('Error in vv:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async tostic(send, text, from, msg, quotedMsg) {
         try {
             send.react(from, '🎨', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const message = quotedMsg || msg.message;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message }, 'buffer', {});
             const data = await _functions.convert(media, { from: '*', to: 'sticker', options: { crop: text.split(' ')[1]?.trim() === 'c', type: message?.imageMessage ? 'image' : 'video' } });
@@ -40,14 +40,14 @@ class Media {
             console.error('Error creating sticker:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async toimg(send, text, from, msg, quotedMsg) {
         try {
             send.react(from, '🖼️', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'image' });
             await send.image(from, data, '', msg);
@@ -55,14 +55,14 @@ class Media {
             console.error('Error creating image:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async tovid(send, text, from, msg, quotedMsg) {
         try {
             send.react(from, '🎥', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'video' });
             await send.video(from, data, '', msg);
@@ -70,14 +70,14 @@ class Media {
             console.error('Error creating video:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async pack(send, context, from, msg, quotedMsg, username) {
         try {
             send.react(from, '🎨', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const args = context.slice(1)?.replace(/(pack|take|siphon)/i, '')?.split('|')?.map(i => i.trim()) || [];
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'sticker', options: { pack: args[0] || username || '', author: args[1] || '' } });
@@ -86,14 +86,14 @@ class Media {
             console.error('Error creating pack:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async song(send, text, from, msg) {
         try {
             send.react(from, '🎵', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const query = text.replace(/(song|play)/i, '').trim();
             if (!query) throw new Error('No query provided!');
             const data = await _functions.download_query(query, 'audio');
@@ -103,14 +103,14 @@ class Media {
             console.error('Error downloading audio:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async vid(send, text, from, msg) {
         try {
             send.react(from, '📽️', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const query = text.replace(/(vid|video)/i, '').trim();
             if (!query) throw new Error('No query provided!');
             const data = await _functions.download_query(query, 'video');
@@ -119,14 +119,14 @@ class Media {
             console.error('Error downloading video:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async img(send, from, text, msg) {
         try {
             send.react(from, '🖼️', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const query = text.replace(/(image|img|pins)/i, '').trim();
             if (!query) throw new Error('No query provided!');
             if ((!process.env.GOOGLE_IMAGE_API_KEY || !process.env.GOOGLE_IMAGE_ENGINE_ID) && !process.env.UNSPLASH_API_KEY) throw new Error('No valid image API key provided in `.env`.');
@@ -146,14 +146,14 @@ class Media {
             console.error('Error downloading image:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async download(send, context, from, msg) {
         try {
             send.react(from, '🔄', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const query = context.slice(1).replace(/(dl|download)/i, '').trim();
             if (!query) throw new Error('No query provided!');
             const data = await _functions.download_query(query);
@@ -163,14 +163,14 @@ class Media {
             console.error('Error downloading query:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async upload(send, from, msg, quotedMsg, _return = false) {
         try {
             if (!_return) send.react(from, '🔄', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const media = quotedMsg || msg.message || null;
             if (!media?.imageMessage && !media?.stickerMessage) throw new Error('Only images and stickers can be uploaded.');
             if (!process.env.IMGBB_API_KEY) throw new Error('No `IMGBB_API_KEY` api key provided in `.env`');
@@ -190,14 +190,14 @@ class Media {
             if (_return) throw error;
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async emix(send, from, text, msg) {
         try {
             await send.react(from, '🫟', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
-            cache.process_working = true;
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const args = text.replace(/(emix|emoji)/i, '')?.split('+')?.map(i => i.trim()) || [];
             if (args.length !== 2 || !args[0] || !args[1]) throw new Error(`*Usage:* ${cache.configs.prefix}emix 😅+🙂‍↔️`);
             const url = await getEmojiMixUrl(args[0], args[1]);
@@ -208,7 +208,7 @@ class Media {
             console.error('Error combining emojis:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
 }

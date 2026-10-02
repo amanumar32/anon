@@ -48,7 +48,8 @@ class Services {
     async tts(send, from, msg, context, quotedText) {
         try {
             send.react(from, '▶️', msg.key);
-            if (cache.process_working) throw new Error('A process is already working in the background! Please wait for it to be completed...');
+            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
             const message = context.slice(1).replace(/tts/i, '').trim() || quotedText;
             if (!message) throw new Error('Please provide a text to convert.');
             const file = path.join(os.tmpdir(), `tts_${Date.now()}.mp3`);
@@ -62,7 +63,7 @@ class Services {
             console.error('Error creating tts:', error.message);
             send.text(from, error.message, msg);
         } finally {
-            cache.process_working = false;
+            cache.process_count -= 1;
         }
     }
     async stt(send, from, msg) {
