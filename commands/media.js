@@ -34,8 +34,7 @@ class Media {
             cache.process_count += 1;
             const message = quotedMsg || msg.message;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message }, 'buffer', {});
-            console.log(message?.imageMessage ? 'image' : 'video'); //TODO: Remove this line after testing
-            const data = await _functions.convert(media, { from: '*', to: 'sticker', options: { crop: text.split(' ')[1]?.trim() === 'c', type: message?.imageMessage ? 'image' : 'video' } });
+            const data = await _functions.convert(media, { from: '*', to: 'sticker', options: { crop: text.split(' ')[1]?.trim() === 'c', type: !(message?.videoMessage || message?.ptvMessage) ? 'image' : 'video' } });
             await send.sticker(from, data, msg);
         } catch (error) {
             console.error('Error creating sticker:', error.message);
@@ -79,8 +78,10 @@ class Media {
             send.react(from, '🎨', msg.key);
             if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
+            const message = quotedMsg || msg.message;
+            if (!message?.stickerMessage) throw new Error('Please reply to a sticker!');
             const args = context.slice(1)?.replace(/(pack|take|siphon)/i, '')?.split('|')?.map(i => i.trim()) || [];
-            const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
+            const media = await downloadMediaMessage({ key: { remoteJid: from }, message }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'sticker', options: { pack: args[0] || username || '', author: args[1] || '' } });
             await send.sticker(from, data, msg);
         } catch (error) {

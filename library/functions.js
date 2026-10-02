@@ -12,6 +12,8 @@ import { createCanvas } from 'canvas';
 import { Sticker } from 'wa-sticker-formatter';
 import { downloadMediaMessage } from '@whiskeysockets/baileys';
 
+ffmpeg.setFfmpegPath(ffmpegPath);
+
 class Functions {
     sentence_case = (str = '') => str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
     clean_id = (id) => id ? id.split(':')[0].split('@')[0] : ''
@@ -88,19 +90,30 @@ class Functions {
                 await new Promise((resolve, reject) => ffmpeg(input).toFormat('mjpeg').save(output).on('end', resolve).on('error', reject));
             } else if (from === '*' && to === 'sticker') {
                 let buffer = null;
-                const crop = !!options?.crop || false;
-                if (options?.type !== 'image') buffer = fs.readFileSync(input);
-                else {
-                    const image = sharp(input);
+                const crop = !!options?.crop;
+                const isVideo = options?.type === 'video';
+                if (isVideo) {
+                    const filter = crop ? 'scale=512:512:force_original_aspect_ratio=increase,crop=512:512' : 'scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=0x00000000';
+                    await new Promise((resolve, reject) => { ffmpeg(input).inputOptions(['-ss 00:00:00', '-t 00:00:06']).outputOptions(['-vcodec libwebp', `-vf ${filter}`, '-fpsmax 15', '-loop 0', '-preset default', '-an']).toFormat('webp').save(output).on('end', resolve).on('error', (err) => reject(err)); });
+                    buffer = fs.readFileSync(output);
+                } else {
+                    const image = sharp(input, { animated: true });
                     const metadata = await image.metadata();
-                    const size = Math.min(metadata.width, metadata.height, 512);
-                    buffer = await image.resize({ width: crop ? size : 512, height: crop ? size : 512, fit: crop ? 'cover' : 'contain', withoutEnlargement: !crop }).webp().toBuffer();
+                    const size = Math.min(metadata.width || 512, metadata.height || 512, 512);
+                    buffer = await image.resize({
+                        width: crop ? size : 512,
+                        height: crop ? size : 512,
+                        fit: crop ? 'cover' : 'contain',
+                        background: { r: 0, g: 0, b: 0, alpha: 0 }
+                    }).webp().toBuffer();
                 }
                 const sticker = new Sticker(buffer, { pack: cache.bot_name, author: cache.author, type: crop ? 'crop' : 'full', quality: 80 });
                 result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'sticker') {
                 const { pack = '', author = '' } = options;
-                const sticker = new Sticker(input, { pack: pack, author: author });
+                const metadata = await sharp(input, { animated: true }).metadata();
+                const isAnimated = (metadata.pages || 1) > 1;
+                const sticker = new Sticker(input, { pack: pack, author: author, type: 'full', quality: 100, animated: isAnimated });
                 result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'video') {
                 const metadata = await sharp(input).metadata();
