@@ -4,7 +4,7 @@ import { _functions } from "../library/functions.js";
 class Home {
     async menu(send, text, msg, from) {
         const param = text.split(' ')[1];
-        const backgrounds = [...cache.default_background_links, ...cache.database.backgrounds];
+        const backgrounds = [...cache.default_background_links, ...cache.database.data.backgrounds];
         const link = backgrounds[Math.floor(Math.random() * backgrounds.length)];
         const categories = Object.values(cache.command_list).reduce((acc, cmd) => {
             acc[cmd.category] = acc[cmd.category] || [];

@@ -53,8 +53,8 @@
             "description": "Check the bot's version and available updates",
             "category": "status"
         },
-        "alive": {
-            "description": "Check if the bot is alive and running",
+        "bot": {
+            "description": "Check if the bot is active and running",
             "category": "status"
         },
         "calc": {

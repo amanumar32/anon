@@ -43,11 +43,11 @@ class Main {
 
             const isPublic = cache.configs.mode === 'public';
             const isOwner = !!msg.key.fromMe || [cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
-            const isSudo = cache.configs.sudoOn && cache.database.sudo.includes(userid);
+            const isSudo = cache.configs.sudoOn && cache.database.data.sudo.includes(userid);
             const willRespond = cache.configs.respond;
 
             if (!isPublic && !isOwner && !isSudo) return;
-            if ([...cache.database.blacklist, ...cache.database.banned].some(id => [from, user_number, userid].includes(id)) && !['whitelist'].includes(text)) return;
+            if ([...cache.database.data.blacklist, ...cache.database.data.banned].some(id => [from, user_number, userid].includes(id)) && !['whitelist'].includes(text)) return;
 
             const command_list = Object.values(cache.command_list);
 
@@ -55,7 +55,7 @@ class Main {
                 if (command_list.filter(i => i.category === 'owner').map(e => e.name).some(c => text.startsWith(c))) {
                     if (!isOwner && command !== 'prefix') return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);
                     //Owner
-                    else if (text.startsWith('configs')) _owner.configs(this.send, from, msg);
+                    if (text.startsWith('configs')) _owner.configs(this.send, from, msg);
                     else if (text.startsWith('database')) _owner.database(this.send, from, msg);
                     else if ([text, command].some(r => r.startsWith('prefix'))) _owner.prefix(this.send, from, msg, text);
                     else if (text.startsWith('notification')) _owner.notifications(this.send, from, msg, text);
@@ -130,11 +130,11 @@ class Main {
                 //non-command handlers
             }
 
-            console.log(`{ "context": "${context}", "from": "${from}", "id": "${userid}", "number": "${user_number}", "username": "${username}", "quoted": "${quoted_text}", "date": "${new Date().toLocaleString()}" }`);
+            if (command.startsWith(cache.configs.prefix)) console.log(`{ "context": "${context}", "from": "${from}", "id": "${userid}", "number": "${user_number}", "username": "${username}", "quoted": "${quoted_text}", "date": "${new Date().toLocaleString()}" }`);
 
             if (isOwner) {
-                if (!cache.configs.name) cache.configs.name = username;
                 cache.last_owner_message = Date.now();
+                if (!cache.configs.name) cache.configs.name = username;
             }
             recache();
         } catch (error) {

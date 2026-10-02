@@ -14,7 +14,7 @@ class Casual {
     }
     async misc(send, from, text, msg) {
         try {
-            const mode = (() => { switch (text.trim()) { case /jokes?/i: return 'joke'; case /facts?/i: return 'fact'; case /quotes?/i: return 'quote'; default: return 'fact'; } })();
+            const mode = text.startsWith('joke') ? 'joke' : text.startsWith('fact') ? 'fact' : 'quote';
             let result = '';
             const get = async (url = '') => await axios.get(url).then((response) => { return response.data });
             if (mode === 'joke') {
@@ -60,7 +60,7 @@ class Casual {
             const usage = `*Usage:*\n\n- ${cache.configs.prefix}chess start - start a new chess game.\n- ${cache.configs.prefix}chess join - join an existing chess game\n- ${cache.configs.prefix}chess quit - resign from the current game\n- ${cache.configs.prefix}chess history - see the full game history\n- ${cache.configs.prefix}chess board - display the current game board\n- ${cache.configs.prefix}chess help - display the chess help list\n- ${cache.configs.prefix}chess <move> (e.g., ${cache.configs.prefix}chess e2e4) - perform a move`;
             const data = session.get(from) || { time: Date.now(), players: [], game: null, history: [], status: '' };
             if (mode === 'start') {
-                if (cache.configs.mode !== 'public' && !cache.database.sudo.length) throw new Error(`Public mode required to start a chess game. Send \`${cache.configs.prefix}mode public\` to continue.`);
+                if (cache.configs.mode !== 'public' && !cache.database.data.sudo.length) throw new Error(`Public mode required to start a chess game. Send \`${cache.configs.prefix}mode public\` to continue.`);
                 if (session.has(from)) throw new Error("A game is already in progress.");
                 data.players.push(userid);
                 data.status = 'pending';
