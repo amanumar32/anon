@@ -34,6 +34,7 @@ class Media {
             cache.process_count += 1;
             const message = quotedMsg || msg.message;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message }, 'buffer', {});
+            console.log(message?.imageMessage ? 'image' : 'video'); //TODO: Remove this line after testing
             const data = await _functions.convert(media, { from: '*', to: 'sticker', options: { crop: text.split(' ')[1]?.trim() === 'c', type: message?.imageMessage ? 'image' : 'video' } });
             await send.sticker(from, data, msg);
         } catch (error) {
@@ -167,6 +168,9 @@ class Media {
         }
     }
     async upload(send, from, msg, quotedMsg, _return = false) {
+        /**
+         * TODO: Change upload endpoint to use reflection upload (to avoid using imgbb) and add support for video uploads.
+         */
         try {
             if (!_return) send.react(from, '🔄', msg.key);
             if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');

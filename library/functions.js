@@ -89,7 +89,7 @@ class Functions {
             } else if (from === '*' && to === 'sticker') {
                 let buffer = null;
                 const crop = !!options?.crop || false;
-                if (options?.type === 'video') buffer = fs.readFileSync(input);
+                if (options?.type !== 'image') buffer = fs.readFileSync(input);
                 else {
                     const image = sharp(input);
                     const metadata = await image.metadata();
