@@ -107,13 +107,13 @@ class Functions {
                         background: { r: 0, g: 0, b: 0, alpha: 0 }
                     }).webp().toBuffer();
                 }
-                const sticker = new Sticker(buffer, { pack: cache.bot_name, author: cache.author, type: crop ? 'crop' : 'full', quality: 80 });
+                const sticker = new Sticker(buffer, { pack: cache.bot_name, author: cache.author, type: crop ? 'crop' : 'default', quality: 80 });
                 result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'sticker') {
                 const { pack = '', author = '' } = options;
                 const metadata = await sharp(input, { animated: true }).metadata();
                 const isAnimated = (metadata.pages || 1) > 1;
-                const sticker = new Sticker(input, { pack: pack, author: author, type: 'full', quality: 100, animated: isAnimated });
+                const sticker = new Sticker(input, { pack: pack, author: author, quality: 80, animated: isAnimated });
                 result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'video') {
                 const metadata = await sharp(input).metadata();
