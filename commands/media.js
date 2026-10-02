@@ -65,7 +65,7 @@ class Media {
             cache.process_count += 1;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'video' });
-            await send.video(from, data, '', msg);
+            await send.video(from, data, '', msg, [], true);
         } catch (error) {
             console.error('Error creating video:', error.message);
             send.text(from, error.message, msg);

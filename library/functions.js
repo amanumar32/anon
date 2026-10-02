@@ -71,8 +71,8 @@ class Functions {
         const temp = os.tmpdir();
         const ext = to === 'video' ? 'mp4' : to === 'image' ? 'jpg' : to === 'sticker' ? 'webp' : options?.ext || '';
 
-        const input = path.join(temp, `in_${Date.now()}`);
-        const output = path.join(temp, `out_${Date.now()}${ext ? `.${ext}` : ''}`);
+        let input = path.join(temp, `in_${Date.now()}`);
+        let output = path.join(temp, `out_${Date.now()}${ext ? `.${ext}` : ''}`);
         const frames = path.join(temp, `frames_${Date.now()}`);
         let result;
         try {
@@ -93,8 +93,9 @@ class Functions {
                 const crop = !!options?.crop;
                 const isVideo = options?.type === 'video';
                 if (isVideo) {
-                    const filter = crop ? 'scale=512:512:force_original_aspect_ratio=increase,crop=512:512' : 'scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=0x00000000';
-                    await new Promise((resolve, reject) => { ffmpeg(input).inputOptions(['-ss', '00:00:00', '-t', '00:00:06']).outputOptions(['-vcodec', 'libwebp', '-vf', `${filter},fps=15`, '-loop', '0', '-preset', 'default', '-an', '-pix_fmt', 'yuva420p']).toFormat('webp').on('error', reject).on('end', resolve).save(output) });
+                    output = path.join(temp, `out_${Date.now()}.mp4`);
+                    const filter = crop ? "crop='min(iw,ih)':'min(iw,ih)',scale=512:512" : "scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=black";
+                    await new Promise((resolve, reject) => { ffmpeg(input).inputOptions(['-ss', '00:00:00', '-t', '00:00:06']).outputOptions(['-vf', `${filter},fps=15`, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-an']).toFormat('mp4').on('error', reject).on('end', resolve).save(output); });
                     buffer = fs.readFileSync(output);
                 } else {
                     const image = sharp(input, { animated: true });
