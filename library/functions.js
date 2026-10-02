@@ -69,32 +69,32 @@ class Functions {
     async convert(media, configs = { from: '', to: '', options: {} }) {
         const { from, to, options } = configs;
         const temp = os.tmpdir();
+        const ext = to === 'video' ? 'mp4' : to === 'image' ? 'jpg' : to === 'sticker' ? 'webp' : options?.ext || '';
+
         const input = path.join(temp, `in_${Date.now()}`);
-        const ext = to === 'video' ? 'mp4' : to === 'image' ? 'jpg' : options?.ext || '';
         const output = path.join(temp, `out_${Date.now()}${ext ? `.${ext}` : ''}`);
         const frames = path.join(temp, `frames_${Date.now()}`);
         let result;
         try {
             if (!media) throw new Error('No media received for conversion');
-
             if (!Buffer.isBuffer(media)) await axios.get(media, { responseType: 'arraybuffer', timeout: 60000, maxContentLength: 50 * 1024 * 1024 }).then(response => media = Buffer.from(response.data));
             fs.writeFileSync(input, media);
             fs.mkdirSync(frames, { recursive: true });
             if (from === 'audio' && to === 'audio') {
-                await new Promise((resolve, reject) => ffmpeg(input).noVideo().audioCodec('libmp3lame').audioBitrate('128k').audioFrequency(44100).audioChannels(2).toFormat('mp3').save(output).on('end', resolve).on('error', reject));
+                await new Promise((resolve, reject) => ffmpeg(input).noVideo().audioCodec('libmp3lame').audioBitrate('128k').audioFrequency(44100).audioChannels(2).toFormat('mp3').on('error', reject).on('end', resolve).save(output));
             } else if (from === 'video' && to === 'video') {
-                await new Promise((resolve, reject) => ffmpeg(input).outputOptions(['-c:v libx264', '-c:a aac', '-pix_fmt yuv420p', '-preset ultrafast', '-crf 26', '-threads 2', '-movflags +faststart']).toFormat('mp4').save(output).on('end', resolve).on('error', reject));
+                await new Promise((resolve, reject) => ffmpeg(input).outputOptions(['-c:v', 'libx264', '-c:a', 'aac', '-pix_fmt', 'yuv420p', '-preset', 'ultrafast', '-crf', '26', '-threads', '2', '-movflags', '+faststart']).toFormat('mp4').on('error', reject).on('end', resolve).save(output));
             } else if (from === 'gif' && to === 'video') {
-                await new Promise((resolve, reject) => ffmpeg(input).outputOptions(['-pix_fmt yuv420p', '-vf scale=512:-2', '-movflags faststart', '-preset ultrafast']).toFormat('mp4').save(output).on('end', resolve).on('error', reject));
+                await new Promise((resolve, reject) => ffmpeg(input).outputOptions(['-pix_fmt', 'yuv420p', '-vf', 'scale=512:-2', '-movflags', 'faststart', '-preset', 'ultrafast']).toFormat('mp4').on('error', reject).on('end', resolve).save(output));
             } else if (from === 'image' && to === 'image') {
-                await new Promise((resolve, reject) => ffmpeg(input).toFormat('mjpeg').save(output).on('end', resolve).on('error', reject));
+                await new Promise((resolve, reject) => ffmpeg(input).toFormat('mjpeg').on('error', reject).on('end', resolve).save(output));
             } else if (from === '*' && to === 'sticker') {
                 let buffer = null;
                 const crop = !!options?.crop;
                 const isVideo = options?.type === 'video';
                 if (isVideo) {
                     const filter = crop ? 'scale=512:512:force_original_aspect_ratio=increase,crop=512:512' : 'scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=0x00000000';
-                    await new Promise((resolve, reject) => { ffmpeg(input).inputOptions(['-ss 00:00:00', '-t 00:00:06']).outputOptions(['-vcodec libwebp', `-vf ${filter},fps=15`, '-loop 0', '-preset default', '-an', '-pix_fmt yuva420p']).toFormat('webp').save(output).on('end', resolve).on('error', (err) => reject(err)) });
+                    await new Promise((resolve, reject) => { ffmpeg(input).inputOptions(['-ss', '00:00:00', '-t', '00:00:06']).outputOptions(['-vcodec', 'libwebp', '-vf', `${filter},fps=15`, '-loop', '0', '-preset', 'default', '-an', '-pix_fmt', 'yuva420p']).toFormat('webp').on('error', reject).on('end', resolve).save(output) });
                     buffer = fs.readFileSync(output);
                 } else {
                     const image = sharp(input, { animated: true });
@@ -125,10 +125,9 @@ class Functions {
                 } else if (config.isAnimated) fps = 10;
                 if (isNaN(fps) || fps <= 0) fps = 10;
                 await new Promise((resolve, reject) => {
-                    const command = ffmpeg().input(path.join(frames, 'frame_%03d.png')).inputOptions([`-framerate ${fps}`]).outputOptions(['-vcodec libx264', '-pix_fmt yuv420p', '-vf scale=trunc(iw/2)*2:trunc(ih/2)*2', '-an', '-preset ultrafast', '-threads 2', '-movflags +faststart']);
-                    if (!config.isAnimated) command.inputOptions(['-loop 1']).outputOptions(['-t 3']);
-                    command.output(output).toFormat('mp4').on('end', resolve).on('error', reject);
-                    command.run();
+                    const command = ffmpeg().input(path.join(frames, 'frame_%03d.png')).inputOptions(['-framerate', `${fps}`]).outputOptions(['-vcodec', 'libx264', '-pix_fmt', 'yuv420p', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', '-an', '-preset', 'ultrafast', '-threads', '2', '-movflags', '+faststart']);
+                    if (!config.isAnimated) command.inputOptions(['-loop', '1']).outputOptions(['-t', '3']);
+                    command.output(output).toFormat('mp4').on('error', reject).on('end', resolve).run();
                 });
             } else if (from === 'sticker' && to === 'image') {
                 result = await sharp(input).png().toBuffer();
