@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import { cache, recache } from '../init.js';
 import { _media } from './media.js';
 
-const exec_as = promisify(exec);
+export const exec_as = promisify(exec);
 
 class Owner {
     async configs(send, from, msg) {
@@ -147,7 +147,7 @@ class Owner {
         }
     }
     async update(send, from, msg, text, _return = false) {
-        const will_restart = text.replace('update', '')?.trim() === 'restart';
+        const will_restart = _return ? false : text.replace('update', '')?.trim() === 'restart';
         let sent;
         try {
             if (!_return) await send.react(from, '🔄', msg.key);

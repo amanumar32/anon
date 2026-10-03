@@ -8,7 +8,7 @@ class Media {
     async vv(send, msg, quotedMsg, from) {
         try {
             send.react(from, '🔓', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             if (!quotedMsg) throw new Error("Please reply to a view-once message.");
             const media = quotedMsg.imageMessage || quotedMsg.videoMessage || quotedMsg.audioMessage || null;
@@ -30,11 +30,11 @@ class Media {
     async tostic(send, text, from, msg, quotedMsg) {
         try {
             send.react(from, '🎨', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const message = quotedMsg || msg.message;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message }, 'buffer', {});
-            const data = await _functions.convert(media, { from: '*', to: 'sticker', options: { crop: text.split(' ')[1]?.trim() === 'c', type: !(message?.videoMessage || message?.ptvMessage) ? 'image' : 'video' } });
+            const data = await _functions.convert(media, { from: '*', to: 'sticker', options: { crop: text.split(' ')[1]?.trim() === 'c', type: message?.imageMessage ? 'image' : 'other' } });
             await send.sticker(from, data, msg);
         } catch (error) {
             console.error('Error creating sticker:', error.message);
@@ -46,7 +46,7 @@ class Media {
     async toimg(send, text, from, msg, quotedMsg) {
         try {
             send.react(from, '🖼️', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'image' });
@@ -61,7 +61,7 @@ class Media {
     async tovid(send, text, from, msg, quotedMsg) {
         try {
             send.react(from, '🎥', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const media = await downloadMediaMessage({ key: { remoteJid: from }, message: quotedMsg }, 'buffer', {});
             const data = await _functions.convert(media, { from: 'sticker', to: 'video' });
@@ -76,7 +76,7 @@ class Media {
     async pack(send, context, from, msg, quotedMsg, username) {
         try {
             send.react(from, '🎨', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const message = quotedMsg || msg.message;
             if (!message?.stickerMessage) throw new Error('Please reply to a sticker!');
@@ -94,11 +94,13 @@ class Media {
     async song(send, text, from, msg) {
         try {
             send.react(from, '🎵', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const query = text.replace(/(song|play)/i, '').trim();
-            if (!query) throw new Error('No query provided!');
-            const data = await _functions.download_query(query, 'audio');
+            if (!query) throw new Error('Please provide a query...');
+            const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/yt?query=${query}&media=audio`);
+            if (!response.data?.data) throw new Error("No data received from API");
+            const data = response.data.data;
             await send.image(from, { url: data.thumbnail }, `*${data.title || query}*`);
             await send.audio(from, { url: data.url }, msg);
         } catch (error) {
@@ -111,11 +113,13 @@ class Media {
     async vid(send, text, from, msg) {
         try {
             send.react(from, '📽️', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const query = text.replace(/(vid|video)/i, '').trim();
-            if (!query) throw new Error('No query provided!');
-            const data = await _functions.download_query(query, 'video');
+            if (!query) throw new Error('Please provide a query...');
+            const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/yt?query=${query}&media=video`);
+            if (!response.data?.data) throw new Error("No data received from API");
+            const data = response.data.data;
             await send.video(from, { url: data.url }, `*${data.title || query}*`, msg);
         } catch (error) {
             console.error('Error downloading video:', error.message);
@@ -127,10 +131,10 @@ class Media {
     async img(send, from, text, msg) {
         try {
             send.react(from, '🖼️', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const query = text.replace(/(image|img|pins)/i, '').trim();
-            if (!query) throw new Error('No query provided!');
+            if (!query) throw new Error('Please provide a query...');
             if ((!process.env.GOOGLE_IMAGE_API_KEY || !process.env.GOOGLE_IMAGE_ENGINE_ID) && !process.env.UNSPLASH_API_KEY) throw new Error('No valid image API key provided in `.env`.');
             let images = [];
             await axios.get('https://www.googleapis.com/customsearch/v1', { params: { key: process.env.GOOGLE_IMAGE_API_KEY, cx: process.env.GOOGLE_IMAGE_ENGINE_ID, q: query, searchType: 'image', num: 8, safe: 'active' }, timeout: 10000 }).then(response => images = response.data?.items?.map(item => item.link) || []);
@@ -151,16 +155,40 @@ class Media {
             cache.process_count -= 1;
         }
     }
+    async movie(send, from, text, msg) {
+        try {
+            send.react(from, '🍿', msg.key);
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            cache.process_count += 1;
+            const query = text.replace('movie', '').trim();
+            if (!query) throw new Error('Please provide a query...');
+            const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/movie?query=${query}`);
+            if (!response.data?.data) throw new Error("No data received from API");
+            const data = response.data.data;
+            await send.document(from, { url: data.url }, msg, data.title?.replace(/[<>:"/\\|?*\x00-\x1F]/g, '_'), data.title, data.mimetype);
+        } catch (error) {
+            console.error('Error downloading movie:', error.message);
+            send.text(from, error.message, msg);
+        } finally {
+            cache.process_count -= 1;
+        }
+    }
     async download(send, context, from, msg) {
         try {
             send.react(from, '🔄', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
-            const query = context.slice(1).replace(/(dl|download)/i, '').trim();
-            if (!query) throw new Error('No query provided!');
-            const data = await _functions.download_query(query);
-            if (data.type === 'video') await send.video(from, { url: data.url }, `*${data.title || '...'}*`, msg);
-            else if (data.type === 'image') await send.image(from, { url: data.url }, '', msg);
+            const query = context.slice(1).replace(/(dl|download)/i, '')?.trim();
+            if (!query) throw new Error('Please provide a query...');
+            const type = /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|playlist\?list=)?)([a-zA-Z0-9_-]{11})/i.test(query) ? 'yt' : /https?:\/\/(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|reel|tv)\//i.test(query) ? 'instagram' : /https?:\/\/(?:www\.)?facebook\.com\//i.test(query) ? 'facebook' : 'direct';
+            if (type === 'direct') {
+                await send.document(from, { url: query }, msg, '', '', ''); //FIXME: identify mimetype
+            } else {
+                const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/${type}?query=${query}`);
+                if (!response.data?.data) throw new Error("No data received from API");
+                const data = response.data.data;
+                await send.video(from, { url: data.url }, `*${data.title || '...'}*`, msg);
+            }
         } catch (error) {
             console.error('Error downloading query:', error.message);
             send.text(from, error.message, msg);
@@ -174,7 +202,7 @@ class Media {
          */
         try {
             if (!_return) send.react(from, '🔄', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const media = quotedMsg || msg.message || null;
             if (!media?.imageMessage && !media?.stickerMessage) throw new Error('Only images and stickers can be uploaded.');
@@ -201,7 +229,7 @@ class Media {
     async emix(send, from, text, msg) {
         try {
             await send.react(from, '🫟', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const args = text.replace(/(emix|emoji)/i, '')?.split('+')?.map(i => i.trim()) || [];
             if (args.length !== 2 || !args[0] || !args[1]) throw new Error(`*Usage:* ${cache.configs.prefix}emix 😅+🙂‍↔️`);

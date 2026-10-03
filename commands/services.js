@@ -48,7 +48,7 @@ class Services {
     async tts(send, from, msg, context, quotedText) {
         try {
             send.react(from, '▶️', msg.key);
-            if (cache.process_count >= cache.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
+            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const message = context.slice(1).replace(/tts/i, '').trim() || quotedText;
             if (!message) throw new Error('Please provide a text to convert.');
@@ -80,7 +80,7 @@ class Services {
             const response = await axios.get(`https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`);
             const lyrics = response.data?.lyrics || '';
             if (!lyrics) throw new Error('No Lyrics Found!');
-            send.text(from, `*${_functions.sentence_case(artist)} - ${_functions.sentence_case(title)}*\n${cache.white_space}\n${lyrics}`, msg);
+            send.text(from, `*${_functions.sentence_case(artist)} - ${_functions.sentence_case(title)}*\n${cache.structures.white_space}\n${lyrics}`, msg);
         } catch (error) {
             console.error('Error fetching lyrics:', error.message);
             send.text(from, error.message, msg);

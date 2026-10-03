@@ -91,25 +91,20 @@ class Functions {
             } else if (from === '*' && to === 'sticker') {
                 let buffer = null;
                 const crop = !!options?.crop;
-                const isVideo = options?.type === 'video';
-                if (isVideo) {
-                    output = path.join(temp, `out_${Date.now()}.mp4`);
-                    const filter = crop ? "crop='min(iw,ih)':'min(iw,ih)',scale=512:512" : "scale=512:512:force_original_aspect_ratio=decrease,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=black";
-                    await new Promise((resolve, reject) => { ffmpeg(input).inputOptions(['-ss', '00:00:00', '-t', '00:00:06']).outputOptions(['-vf', `${filter},fps=15`, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-an']).toFormat('mp4').on('error', reject).on('end', resolve).save(output); });
-                    buffer = fs.readFileSync(output);
-                } else {
+                if (options?.type !== 'image') buffer = fs.readFileSync(input);
+                else {
                     const image = sharp(input, { animated: true });
                     const metadata = await image.metadata();
                     const size = Math.min(metadata.width || 512, metadata.height || 512, 512);
-                    buffer = await image.resize({ width: crop ? size : 512, height: crop ? size : 512, fit: crop ? 'cover' : 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).webp().toBuffer();
+                    buffer = await image.resize({ width: crop ? size : 512, height: crop ? size : 512, fit: crop ? 'cover' : 'contain' }).webp().toBuffer();
                 }
-                const sticker = new Sticker(buffer, { pack: cache.bot_name, author: cache.author, type: crop ? 'crop' : 'default', quality: 80 });
+                const sticker = new Sticker(buffer, { pack: cache.bot_name, author: cache.author, type: crop ? 'crop' : 'default', quality: 60 });
                 result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'sticker') {
                 const { pack = '', author = '' } = options;
                 const metadata = await sharp(input, { animated: true }).metadata();
-                const isAnimated = (metadata.pages || 1) > 1;
-                const sticker = new Sticker(input, { pack: pack, author: author, quality: 80, animated: isAnimated });
+                const animated = (metadata.pages || 1) > 1;
+                const sticker = new Sticker(input, { pack: pack, author: author, quality: 80, animated: animated });
                 result = await sticker.toBuffer();
             } else if (from === 'sticker' && to === 'video') {
                 const metadata = await sharp(input).metadata();
@@ -141,18 +136,6 @@ class Functions {
             if (fs.existsSync(input)) fs.unlinkSync(input);
             if (fs.existsSync(output)) fs.unlinkSync(output);
             if (fs.existsSync(frames)) fs.rmSync(frames, { recursive: true, force: true });
-        }
-    }
-    async download_query(query = '', type = 'audio') {
-        try {
-            if (!query) throw new Error('Query required');
-            if (!type) /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|playlist\?list=)?)([a-zA-Z0-9_-]{11})/i.test(query) ? 'video' : /https?:\/\/(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|reel|tv)\//i.test(query) ? 'instagram' : /https?:\/\/(?:www\.)?facebook\.com\//i.test(query) ? 'facebook' : 'direct';
-            const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/${type}?query=${query}`);
-            if (!response.data?.data) throw new Error("No media received from API");
-            return { type, query, url: response.data.data.result.url, thumbnail: response.data.data.result.thumbnail, title: response.data.data.result.title };
-        } catch (error) {
-            console.error('Error downloading query:', error.message);
-            throw error;
         }
     }
     async get_board(type = '', game = null) {

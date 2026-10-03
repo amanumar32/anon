@@ -15,8 +15,8 @@ class Main {
     }
     async init() {
         try {
-            await recache('start');
-            cache.bot_id = this.sock?.user?.lid ? this.sock.user.lid.split(':')[0] + '@lid' : cache.configs.number + '@s.whatsapp.net';
+            cache.bot_id = this.sock.user?.lid ? this.sock.user.lid.split(':')[0] + '@lid' : cache.configs.number + '@s.whatsapp.net';
+            cache.start_time = Date.now();
             if (cache.configs.notifications) this.send.text(cache.configs.developer.logs_redirect_id || cache.bot_id, `*✅ Bot Activated*\n\nTime: ${new Date(cache.start_time).toLocaleString()}${Math.random() < 0.3 ? `\n\n> You can turn this off with \`${cache.configs.prefix}notification off\`` : ''}`);
             console.log('Bot connected successfully!');
         } catch (error) {
@@ -49,7 +49,7 @@ class Main {
             if (!isPublic && !isOwner && !isSudo) return;
             if ([...cache.database.data.blacklist, ...cache.database.data.banned].some(id => [from, user_number, userid].includes(id)) && !['whitelist'].includes(text)) return;
 
-            const command_list = Object.values(cache.command_list);
+            const command_list = Object.values(cache.structures.command_list);
 
             if (command.startsWith(cache.configs.prefix) || ['ping', 'bot', 'uptime', 'stats', 'prefix'].includes(command)) {
                 if (command_list.filter(i => i.category === 'owner').map(e => e.name).some(c => text.startsWith(c))) {
@@ -130,12 +130,17 @@ class Main {
                 //non-command handlers
             }
 
-            if (command.startsWith(cache.configs.prefix)) console.log(`{ "context": "${context}", "from": "${from}", "id": "${userid}", "number": "${user_number}", "username": "${username}", "quoted": "${quoted_text}", "date": "${new Date().toLocaleString()}" }`);
-
             if (isOwner) {
                 cache.last_owner_message = Date.now();
                 if (!cache.configs.name) cache.configs.name = username;
             }
+
+            if (command.startsWith(cache.configs.prefix)) {
+                console.log(`{ "context": "${context}", "from": "${from}", "id": "${userid}", "number": "${user_number}", "username": "${username}", "quoted": "${quoted_text}", "date": "${new Date().toLocaleString()}" }`);
+                const command_used = Object.keys(cache.structures.command_list).find(p => text.startsWith(p));
+                if (command_used) cache.database.commandStats[command_used] = (cache.database.commandStats[command_used] ?? 0) + 1;
+            }
+            (cache.database.memberActivity[from] ??= {})[userid] = ((cache.database.memberActivity[from][userid] ?? 0) + 1);
             recache();
         } catch (error) {
             console.error('Error in message handler:', error.message);

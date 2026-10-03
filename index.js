@@ -7,6 +7,7 @@ import { cache, recache } from "./init.js";
 import Main from './main.js';
 import dotenv from 'dotenv';
 import logger from "./library/logger.js";
+import app from "./api/app.js"
 
 dotenv.config({ quiet: true });
 logger();
@@ -53,3 +54,5 @@ async function startBot() {
 }
 
 startBot();
+await recache('start');
+if (cache.configs.developer.api_enabled) app.listen(cache.configs.developer.port, () => console.log(`Server running on port ${cache.configs.developer.port}`));
