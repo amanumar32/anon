@@ -99,7 +99,7 @@ class Media {
             const query = text.replace(/(song|play)/i, '').trim();
             if (!query) throw new Error('Please provide a query...');
             const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/yt?query=${query}&media=audio`);
-            if (!response.data?.data) throw new Error("No data received from API");
+            if (!response.data) throw new Error("No data received from API");
             const data = response.data;
             await send.image(from, { url: data.thumbnail }, `*${data.title || query}*`);
             await send.audio(from, { url: data.url }, msg);
@@ -118,7 +118,7 @@ class Media {
             const query = text.replace(/(vid|video)/i, '').trim();
             if (!query) throw new Error('Please provide a query...');
             const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/yt?query=${query}&media=video`);
-            if (!response.data?.data) throw new Error("No data received from API");
+            if (!response.data) throw new Error("No data received from API");
             const data = response.data;
             await send.video(from, { url: data.url }, `*${data.title || query}*`, msg);
         } catch (error) {
@@ -163,7 +163,7 @@ class Media {
             const query = text.replace('movie', '').trim();
             if (!query) throw new Error('Please provide a query...');
             const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/movie?query=${query}`);
-            if (!response.data?.data) throw new Error("No data received from API");
+            if (!response.data) throw new Error("No data received from API");
             const data = response.data;
             await send.document(from, { url: data.url }, msg, data.title?.replace(/[<>:"/\\|?*\x00-\x1F]/g, '_'), data.title, data.mimetype);
         } catch (error) {
@@ -185,7 +185,7 @@ class Media {
                 await send.document(from, { url: query }, msg, '', '', ''); //FIXME: identify mimetype
             } else {
                 const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/${type}?query=${query}`);
-                if (!response.data?.data) throw new Error("No data received from API");
+                if (!response.data) throw new Error("No data received from API");
                 const data = response.data;
                 await send.video(from, { url: data.url }, `*${data.title || '...'}*`, msg);
             }
