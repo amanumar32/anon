@@ -1,4 +1,3 @@
-
 class Send {
     constructor(sock) {
         this.sock = sock;

@@ -7,6 +7,7 @@ import { _owner } from "./commands/owner.js";
 import { _services } from "./commands/services.js";
 import { _stats } from "./commands/status.js";
 import { _tools } from "./commands/tools.js";
+import { _functions } from "./library/functions.js";
 
 class Main {
     constructor(sock) {
@@ -49,7 +50,7 @@ class Main {
             if (!isPublic && !isOwner && !isSudo) return;
             if ([...cache.database.data.blacklist, ...cache.database.data.banned].some(id => [from, user_number, userid].includes(id)) && !['whitelist'].includes(text)) return;
 
-            const command_list = Object.values(cache.structures.command_list);
+            const command_list = Object.values(_functions.structures.command_list);
 
             if (command.startsWith(cache.configs.prefix) || ['ping', 'bot', 'uptime', 'stats', 'prefix'].includes(command)) {
                 if (command_list.filter(i => i.category === 'owner').map(e => e.name).some(c => [text, command].some(g => g.startsWith(c)))) {
@@ -61,6 +62,7 @@ class Main {
                     else if (text.startsWith('notification')) _owner.notifications(this.send, from, msg, text);
                     else if (text.startsWith('mode')) _owner.mode(this.send, from, msg, text);
                     else if (text.startsWith('respond')) _owner.respond(this.send, from, msg, text, context);
+                    else if (text.startsWith('prompt')) _owner.prompt(this.send, from, msg, context);
                     else if (text.startsWith('sudo')) _owner.sudo(this.send, from, text, msg);
                     else if (['blacklist', 'whitelist'].some(e => text.startsWith(e))) _owner.blacklist(this.send, from, msg, context, text);
                     else if (['ban', 'unban'].some(e => text.startsWith(e))) _owner.ban(this.send, from, msg, text, isOwner);
@@ -68,7 +70,6 @@ class Main {
                     else if (text.startsWith('restart')) _owner.restart(this.send, from, msg);
                     else if (text.startsWith('reset')) _owner.reset(this.send, from, text, msg);
                     else if (text.startsWith('backup')) _owner.backup(this.send, from, msg);
-                    else if (text.startsWith('prompt')) _owner.prompt(this.send, from, msg, context);
                 } else {
                     //Home
                     if (text.startsWith('menu')) _home.menu(this.send, text, msg, from);
@@ -142,7 +143,7 @@ class Main {
 
             if (command.startsWith(cache.configs.prefix)) {
                 console.log(`{ "context": "${context}", "from": "${from}", "id": "${userid}", "number": "${user_number}", "username": "${username}", "quoted": "${quoted_text}", "date": "${new Date().toLocaleString()}" }`);
-                const command_used = Object.keys(cache.structures.command_list).find(p => text.startsWith(p));
+                const command_used = Object.keys(_functions.structures.command_list).find(p => text.startsWith(p));
                 if (command_used) cache.database.commandStats[command_used] = (cache.database.commandStats[command_used] ?? 0) + 1;
             }
             (cache.database.memberActivity[from] ??= {})[userid] = ((cache.database.memberActivity[from][userid] ?? 0) + 1);

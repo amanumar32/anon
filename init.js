@@ -1,7 +1,6 @@
 import fs from 'fs';
 
-const package_json = JSON.parse(fs.readFileSync('./package.json'));
-const structures_json = JSON.parse(fs.readFileSync('./library/structures.json'));
+const local = JSON.parse(fs.readFileSync('./package.json'));
 
 export const cache = {
     configs: {
@@ -12,15 +11,15 @@ export const cache = {
         sudoOn: true,
         notifications: true,
         prefix: '.',
-        static_message: 'Hey <user>! I\'ll respond to you once I\'m online.\n\n> This is an automated message.',
+        response: 'Hey <user>! I\'ll respond to you once I\'m online.\n\n> This is an automated message.',
         prompt: 'You are a helpful Assistant.',
         developer: {
             api_enabled: false,
             edited_source_code: false,
             process_limit: 3,
             port: 3000,
-            logs_redirect_id: '',
-            hour_delay_for_response: 2
+            hour_delay_for_response: 2,
+            logs_redirect_id: ''
         }
     },
     database: {
@@ -29,55 +28,42 @@ export const cache = {
             banned: [],
             blacklist: [],
             backgrounds: [],
-            groupSettings: {}
         },
+        groupSettings: {},
         memberActivity: {},
         commandStats: {}
     },
-    structures: {
-        command_list: Object.fromEntries(Object.entries(structures_json.command_list).map(([key, value]) => [key, { name: key, ...value }])),
-        white_space: structures_json.white_space,
-        morse_code_map: structures_json.morse_code_map,
-        default_background_links: structures_json.default_background_links,
-    },
-    configs_path: './configs.json',
-    database_path: './database',
-    necessary_directories: ['./logs', './database'],
-    bot_name: package_json.name,
-    author: package_json.author,
-    homepage_url: package_json.homepage,
+    main_keys: [],
+    bot_name: local.name,
+    author: local.author,
+    homepage_url: local.homepage,
     bot_id: '',
-    current_version: package_json.version,
+    current_version: local.version,
     latest_version: '',
     process_count: 0,
-    repo_url: package_json.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
+    repo_url: local.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
     last_owner_message: Date.now(),
     start_time: Date.now(),
     last_recache_update: Date.now(),
     initialized: false
 }
 
+cache.main_keys = Object.keys(cache).filter(i => typeof cache[i] === 'object').slice(0, 2);
+
 export async function recache(mode = 'update') {
     try {
-        cache.necessary_directories.forEach(dir => fs.mkdirSync(dir, { recursive: true }));
-        if (!fs.existsSync(cache.configs_path)) fs.writeFileSync(cache.configs_path, JSON.stringify(cache.configs, null, 4));
-
         if (mode === 'start') {
             if (cache.initialized) return true;
-            cache.configs = JSON.parse(fs.readFileSync(cache.configs_path)) || cache.configs;
-            Object.keys(cache.database).forEach(key => {
-                const file_path = `${cache.database_path}/${key}.json`;
-                if (!fs.existsSync(file_path)) fs.writeFileSync(file_path, JSON.stringify(cache.database[key], null, 4));
-                else cache.database[key] = JSON.parse(fs.readFileSync(file_path)) || cache.database[key];
+            cache.main_keys.forEach(key => {
+                if (!fs.existsSync(`${key}.json`)) fs.writeFileSync(`${key}.json`, JSON.stringify(cache[key], null, 4));
+                cache[key] = JSON.parse(fs.readFileSync(`${key}.json`)) || cache[key];
             });
-            const urlObj = new URL(cache.repo_url);
-            fetch(`https://raw.githubusercontent.com/${urlObj.pathname.replace(/^\//, '').replace(/\.git$/, '')}/refs/heads/main/package.json`).then((response) => response.json().then(data => cache.latest_version = data?.version || cache.current_version)).catch(e => cache.latest_version = cache.current_version);
             if (!fs.existsSync('.env')) fs.writeFileSync('.env', fs.readFileSync('.env.example'));
+            fetch(`https://raw.githubusercontent.com/${new URL(cache.repo_url).pathname.replace(/^\//, '').replace(/\.git$/, '')}/refs/heads/main/package.json`).then((response) => response.json().then(data => cache.latest_version = data?.version || cache.current_version)).catch(e => cache.latest_version = cache.current_version);
             cache.initialized = true;
             console.log('Database loaded successfully!');
         } else {
-            fs.writeFileSync(cache.configs_path, JSON.stringify(cache.configs, null, 4));
-            Object.keys(cache.database).forEach(key => fs.writeFileSync(`${cache.database_path}/${key}.json`, JSON.stringify(cache.database[key], null, 4)));
+            cache.main_keys.forEach(key => fs.writeFileSync(`${key}.json`, JSON.stringify(cache[key], null, 4)));
             cache.last_recache_update = Date.now();
         }
         return true;

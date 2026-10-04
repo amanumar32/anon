@@ -13,8 +13,17 @@ import { Sticker } from 'wa-sticker-formatter';
 import { downloadMediaMessage } from '@whiskeysockets/baileys';
 
 ffmpeg.setFfmpegPath(ffmpegPath);
+const local = JSON.parse(fs.readFileSync('./library/structures.json'));
 
 class Functions {
+    constructor() {
+        this.structures = {
+            command_list: Object.fromEntries(Object.entries(local.command_list).map(([key, value]) => [key, { name: key, ...value }])),
+            white_space: local.white_space,
+            morse_code_map: local.morse_code_map,
+            default_background_links: local.default_background_links,
+        }
+    }
     sentence_case = (str = '') => str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
     clean_id = (id) => id ? id.split(':')[0].split('@')[0] : ''
     list_env_keys = () => `${fs.readFileSync('./.env.example')}`.split('\n').map(i => i.split('=')[0]?.trim()).filter(e => !e.startsWith('#'))

@@ -4,14 +4,14 @@ import { _functions } from "../library/functions.js";
 class Home {
     async menu(send, text, msg, from) {
         const param = text.split(' ')[1];
-        const backgrounds = [...cache.structures.default_background_links, ...cache.database.data.backgrounds];
+        const backgrounds = [..._functions.structures.default_background_links, ...cache.database.data.backgrounds];
         const link = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-        const categories = Object.values(cache.structures.command_list).reduce((acc, cmd) => {
+        const categories = Object.values(_functions.structures.command_list).reduce((acc, cmd) => {
             acc[cmd.category] = acc[cmd.category] || [];
             acc[cmd.category].push(cmd);
             return acc;
         }, {});
-        let menu = `╭━━━ ■ *${cache.bot_name}* ■ ━━━\n┃ ◦ *Owner:* ${cache.configs.name}\n┃ ◦ *Version:* ${cache.current_version}\n┃ ◦ *Prefix:* ${cache.configs.prefix}\n╰━━━━━━━━━━━━━━━━━━━\n${cache.structures.white_space}\n`;
+        let menu = `╭━━━ ■ *${cache.bot_name}* ■ ━━━\n┃ ◦ *Owner:* ${cache.configs.name}\n┃ ◦ *Version:* ${cache.current_version}\n┃ ◦ *Prefix:* ${cache.configs.prefix}\n╰━━━━━━━━━━━━━━━━━━━\n${_functions.structures.white_space}\n`;
         const format = (category, list) => `┌── ► *${_functions.sentence_case(category)}* ◄\n│\n` + list.map(cmd => `│ ◦  ${cache.configs.prefix}${cmd.name}`).join('\n') + `\n│\n└───────────────\n`;
         if (categories[param]) {
             menu += format(param, categories[param]);
@@ -46,7 +46,7 @@ class Home {
     async help(send, from, text, msg) {
         const param = text.split(' ')[1];
         let message = `Need help? Type \`${cache.configs.prefix}help <command>\` to learn about a command or \`${cache.configs.prefix}support\` to learn more about *${cache.author}*.`;
-        if (cache.structures.command_list[param]) message = `*${_functions.sentence_case(cache.structures.command_list[param].name)}*\n\n*Usage:* \`${cache.configs.prefix}${cache.structures.command_list[param].name}${cache.structures.command_list[param].param ? ` ${cache.structures.command_list[param].param.map(i => `<${i}>`).join(' ')}` : ''}\`\n*Category:* ${cache.structures.command_list[param].category}\n*Description:* ${cache.structures.command_list[param].description}.\n${cache.structures.command_list[param].requirements ? `*Requirements:* ${cache.structures.command_list[param].requirements.map(i => i.replace('&', 'Quoted media').replace('@', 'Mentioned user')).join(', ')}` : ''}\n${cache.structures.command_list[param].note ? `\n> *Note:* ${cache.structures.command_list[param].note}.` : ''}`;
+        if (_functions.structures.command_list[param]) message = `*${_functions.sentence_case(_functions.structures.command_list[param].name)}*\n\n*Usage:* \`${cache.configs.prefix}${_functions.structures.command_list[param].name}${_functions.structures.command_list[param].param ? ` ${_functions.structures.command_list[param].param.map(i => `<${i}>`).join(' ')}` : ''}\`\n*Category:* ${_functions.structures.command_list[param].category}\n*Description:* ${_functions.structures.command_list[param].description}.\n${_functions.structures.command_list[param].requirements ? `*Requirements:* ${_functions.structures.command_list[param].requirements.map(i => i.replace('&', 'Quoted media').replace('@', 'Mentioned user')).join(', ')}` : ''}\n${_functions.structures.command_list[param].note ? `\n> *Note:* ${_functions.structures.command_list[param].note}.` : ''}`;
         send.text(from, message, msg);
     }
 }

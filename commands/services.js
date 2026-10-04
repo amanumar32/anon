@@ -80,7 +80,7 @@ class Services {
             const response = await axios.get(`https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`);
             const lyrics = response.data?.lyrics || '';
             if (!lyrics) throw new Error('No Lyrics Found!');
-            send.text(from, `*${_functions.sentence_case(artist)} - ${_functions.sentence_case(title)}*\n${cache.structures.white_space}\n${lyrics}`, msg);
+            send.text(from, `*${_functions.sentence_case(artist)} - ${_functions.sentence_case(title)}*\n${_functions.structures.white_space}\n${lyrics}`, msg);
         } catch (error) {
             console.error('Error fetching lyrics:', error.message);
             send.text(from, error.message, msg);

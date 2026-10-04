@@ -19,9 +19,7 @@ app.get('/api/cache', (req, res) => {
         else if (developer !== 'true' && cache.configs[key] !== undefined) cache.configs[key] = JSON.parse(value);
         recache();
     }
-    const data = Object.fromEntries(Object.entries(cache).filter(([key]) => !['configs_path', 'database_path', 'necessary_directories', 'structures'].includes(key)));
-    delete data.database.memberActivity;
-    res.json({ ...data });
+    res.json({ ...cache });
 });
 
 app.get('/api/control/:action', async (req, res) => {

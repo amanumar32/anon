@@ -7,12 +7,10 @@ export const exec_as = promisify(exec);
 
 class Owner {
     async configs(send, from, msg) {
-        const data = cache.configs;
-        send.text(from, `> ■ *Configs* ■\n\n- *Name:* ${data.name}\n- *Number:* ${data.number}\n- *Mode:* ${data.mode}\n- *Auto-respond:* ${data.respond}\n- *Sudo allowed:* ${data.sudoOn}\n- *Notifications:* ${data.notifications}\n- *Prefix:* ${data.prefix}\n`, msg);
+        send.text(from, `> ■ *Configs* ■\n\n${Object.keys(cache.configs).filter(i => typeof cache.configs[i] !== 'object').map(e => `- *${_functions.sentence_case(e)}:* ${cache.configs[e]}`).join('\n')}`, msg);
     }
     async database(send, from, msg) {
-        const data = cache.database.data;
-        send.text(from, `> ■ *Database* ■\n\n- *Banned:* ${data.banned.length} users\n- *Blacklist:* ${data.blacklist.length} groups\n- *Sudo:* ${data.sudo.length} users\n- *Backgrounds:* ${data.backgrounds.length} items\n- *Group settings:* ${Object.keys(data.groupSettings).length} groups\n`, msg);
+        send.text(from, `> ■ *Database* ■\n\n${Object.keys(cache.database.data).map(e => `- *${_functions.sentence_case(e)}:* ${cache.database.data[e].length} items`).join('\n')}`, msg);
     }
     async prefix(send, from, msg, text) {
         const param = text.replace('prefix', '').trim();
@@ -55,10 +53,19 @@ class Owner {
         } else if (param === 'set') {
             const new_message = context?.slice(1)?.replace(/respond set\s+/i, '')?.trim();
             if (new_message) {
-                cache.configs.static_message = new_message;
+                cache.configs.response = new_message;
                 message = 'Custom message set successfully.'
             } else message = 'Please provide a custom message to set.'
         } else message = `*Usage:* \`${cache.configs.prefix}respond on/off/set\``;
+        send.text(from, message, msg);
+    }
+    async prompt(send, from, msg, context) {
+        let message;
+        const param = context?.slice(1)?.replace(/prompt/i, '')?.trim();
+        if (param) {
+            cache.configs.prompt = param;
+            message = 'Prompt set successfully.';
+        } else message = 'Please provide a prompt to set.';
         send.text(from, message, msg);
     }
     async sudo(send, from, text, msg) {
@@ -173,7 +180,7 @@ class Owner {
                 cache.configs.developer.edited_source_code = false;
                 await this.update(send, from, msg, text, true);
                 const backup = (await this.backup(send, from, msg, true)).url;
-                if (backup) [cache.configs_path, cache.database_path].forEach(e => fs.unlinkSync(e));
+                if (backup) cache.main_keys.forEach(e => fs.unlinkSync(`${e}.json`));
                 await send.text(from, `☑️ Reset to default settings.\n*Backup:* ${backup || '_Failed: Your files were not deleted._'}\n\nRestarting...\n> You may need to start the server manually.`, msg);
                 this.restart(send, from, msg, true);
             } else send.text(from, `This will reset the bot to it's default state. All changes and modifications to the code will be discarded. Your configs and databases will be backed up and deleted.\nSend \`${cache.configs.prefix}reset true\` to proceed.`, msg);
@@ -184,15 +191,6 @@ class Owner {
     }
     async backup(send, from, msg, _return = false) {
         return { url: '' }
-    }
-    async prompt(send, from, msg, context) {
-        let message;
-        const param = context?.slice(1)?.replace(/prompt/i, '')?.trim();
-        if (param) {
-            cache.configs.prompt = param;
-            message = 'Prompt set successfully.';
-        } else message = 'Please provide a prompt to set.';
-        send.text(from, message, msg);
     }
 }
 
