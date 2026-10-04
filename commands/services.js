@@ -9,7 +9,7 @@ import { cache } from "../init.js";
 
 class Services {
     constructor() {
-        this.history = []
+        this.history = new Map();
     }
     async weather(send, text, from, msg) {
         try {
@@ -95,11 +95,23 @@ class Services {
             send.text(from, `*From:* ${response?.raw.src.toUpperCase() || 'Unknown'}\n\n${response?.text || 'No translation returned.'}`, msg);
         } catch (error) {
             console.error('Error translating:', error.message);
-            await send.text(from, error.message, msg);
+            send.text(from, error.message, msg);
         }
     }
-    async ai(send, msg, from, text, quotedText, _return = false) {
-        send.text(from, '> *This feature is either under development or will be removed soon...*', msg);
+    async ai(send, msg, from, context, quotedText, username, _return = false) {
+        try {
+            if (!_return) send.react(from, '🤖', msg.key);
+            if (!process.env.GEMINI_AI_API_KEY) throw new Error("No `GEMINI_AI_API_KEY` in env");
+            const messages = [{ role: 'system', content: cache.configs.prompt }, ...(this.history.get(from) || []), { role: 'user', content: `The user sent: ${context}${quotedText ? `\nThe user replied to your message: ${quotedText}` : ''}\nThe user's name is: ${username}` }];
+            const response = await axios.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_AI_API_KEY}`, JSON.stringify({ content: [{ parts: messages }] }), { headers: { 'Content-Type': 'application/json' } });
+            const message = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (!message) throw new Error('No data received from API');
+            if (_return) return message;
+            send.text(from, message, msg);
+        } catch (error) {
+            console.error('Error in ai:', error.message);
+            send.text(from, error.message, msg);
+        }
     }
 }
 

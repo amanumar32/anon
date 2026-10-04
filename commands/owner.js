@@ -2,7 +2,6 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { cache, recache } from '../init.js';
-import { _media } from './media.js';
 
 export const exec_as = promisify(exec);
 
@@ -123,34 +122,11 @@ class Owner {
         } else message = `*Please mention a user to ${mode}*`;
         send.text(from, message, msg, mentions || null);
     }
-    async background(send, from, msg, text, context, quotedMsg) {
-        try {
-            const param = text.split(' ')[1]?.trim();
-            let message;
-            if (param === 'add') {
-                send.react(from, '🔄', msg.key);
-                const url = (await _media.upload(send, from, msg, quotedMsg, true)).url;
-                if (!url) throw new Error('Failed to upload image, please try again later.');
-                if (cache.database.data.backgrounds.includes(url)) throw new Error('This image is already included in your backgrounds.');
-                cache.database.data.backgrounds.push(url);
-                message = `Added image to your backgrounds.\n*ID*: ${cache.database.data.backgrounds.indexOf(url)}\n\n> Type \`${cache.configs.prefix}menu\` to check it out!`;
-            } else if (param === 'remove') {
-                const index = parseInt(context.split(' ')[2]?.trim());
-                if (typeof index !== 'number' || index > (cache.database.data.backgrounds.length - 1)) throw new Error('This image is not in your background database.');
-                cache.database.data.backgrounds = cache.database.data.backgrounds.filter((_, i) => i !== index);
-                message = 'Removed background successfully!';
-            }
-            send.text(from, message, msg);
-        } catch (error) {
-            console.error('Failed to add background:', error.message);
-            send.text(from, error.message, msg);
-        }
-    }
     async update(send, from, msg, text, _return = false) {
         const will_restart = _return ? false : text.replace('update', '')?.trim() === 'restart';
         let sent;
         try {
-            if (!_return) await send.react(from, '🔄', msg.key);
+            if (!_return) send.react(from, '🔄', msg.key);
             sent = _return ? null : await send.text(from, 'Checking for updates...', msg);
             await exec_as('git --version').catch(() => { throw new Error('Git is required to update automatically and is not installed on your machine. Your options are:\n\n- Install git from https://git-scm.com/install/ *(recommended)*\n- Download the updated zip from the repository and extract the files to your machine.') });
             if (!fs.existsSync('.git')) {
@@ -176,7 +152,7 @@ class Owner {
             if (stdout.includes('package.json') || _return) await exec_as('npm install').catch(() => { });
             await recache();
             if (!_return) await send.edit(from, `✅ Update completed. ${will_restart ? 'The bot will now restart...' : `You can restart the bot with \`${cache.configs.prefix}restart\` to load changes.`}`, sent.key);
-            if (will_restart && !_return) this.restart(send, from, msg, true);
+            if (will_restart) this.restart(send, from, msg, true);
         } catch (error) {
             console.error('Error processing update:', error.message);
             if (_return) throw error;
@@ -193,14 +169,14 @@ class Owner {
         try {
             const param = text.replace('reset', '')?.trim();
             if (param === 'true') {
-                await send.react(from, '🔄', msg.key);
+                send.react(from, '🔄', msg.key);
                 cache.configs.developer.edited_source_code = false;
                 await this.update(send, from, msg, text, true);
                 const backup = (await this.backup(send, from, msg, true)).url;
-                if (backup) [cache.configs_path, cache.database_path].forEach(e => fs.rmSync(e, { force: true }));
+                if (backup) [cache.configs_path, cache.database_path].forEach(e => fs.unlinkSync(e));
                 await send.text(from, `☑️ Reset to default settings.\n*Backup:* ${backup || '_Failed: Your files were not deleted._'}\n\nRestarting...\n> You may need to start the server manually.`, msg);
                 this.restart(send, from, msg, true);
-            } else send.text(from, `This will reset the bot to it's default state. All changes and modifications to the code will be discarded. Your configs and databases will be backed up.\nSend \`${cache.configs.prefix}reset true\` to proceed.`, msg);
+            } else send.text(from, `This will reset the bot to it's default state. All changes and modifications to the code will be discarded. Your configs and databases will be backed up and deleted.\nSend \`${cache.configs.prefix}reset true\` to proceed.`, msg);
         } catch (error) {
             console.log('Error resetting bot:', error.message);
             send.text(from, error.message, msg);
@@ -209,15 +185,13 @@ class Owner {
     async backup(send, from, msg, _return = false) {
         return { url: '' }
     }
-    async env(send, from, msg, text) { }
     async prompt(send, from, msg, context) {
         let message;
-        const new_message = context?.slice(1)?.replace(/prompt/i, '')?.trim();
-        if (new_message) {
-            cache.configs.prompt = new_message;
-            message = 'Prompt set successfully.'
+        const param = context?.slice(1)?.replace(/prompt/i, '')?.trim();
+        if (param) {
+            cache.configs.prompt = param;
+            message = 'Prompt set successfully.';
         } else message = 'Please provide a prompt to set.';
-        recache();
         send.text(from, message, msg);
     }
 }

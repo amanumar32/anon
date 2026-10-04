@@ -367,16 +367,6 @@
                 "@"
             ]
         },
-        "background": {
-            "description": "Handle bot backgrounds for the menu",
-            "category": "owner",
-            "param": [
-                "add/remove"
-            ],
-            "requirements": [
-                "&"
-            ]
-        },
         "update": {
             "description": "Update the bot to the latest committed version",
             "category": "owner"
@@ -393,14 +383,6 @@
         "backup": {
             "description": "Backup your auth, configs and database to the cloud",
             "category": "owner"
-        },
-        "env": {
-            "description": "Add an env value automatically",
-            "category": "owner",
-            "param": [
-                "key",
-                "value"
-            ]
         },
         "prompt": {
             "description": "Set a custom prompt for your AI responses",

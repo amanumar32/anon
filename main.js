@@ -52,7 +52,7 @@ class Main {
             const command_list = Object.values(cache.structures.command_list);
 
             if (command.startsWith(cache.configs.prefix) || ['ping', 'bot', 'uptime', 'stats', 'prefix'].includes(command)) {
-                if (command_list.filter(i => i.category === 'owner').map(e => e.name).some(c => text.startsWith(c))) {
+                if (command_list.filter(i => i.category === 'owner').map(e => e.name).some(c => [text, command].some(g => g.startsWith(c)))) {
                     if (!isOwner && command !== 'prefix') return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);
                     //Owner
                     if (text.startsWith('configs')) _owner.configs(this.send, from, msg);
@@ -64,7 +64,6 @@ class Main {
                     else if (text.startsWith('sudo')) _owner.sudo(this.send, from, text, msg);
                     else if (['blacklist', 'whitelist'].some(e => text.startsWith(e))) _owner.blacklist(this.send, from, msg, context, text);
                     else if (['ban', 'unban'].some(e => text.startsWith(e))) _owner.ban(this.send, from, msg, text, isOwner);
-                    else if (text.startsWith('background')) _owner.background(this.send, from, msg, text, context, quoted_msg);
                     else if (text.startsWith('update')) _owner.update(this.send, from, msg, text);
                     else if (text.startsWith('restart')) _owner.restart(this.send, from, msg);
                     else if (text.startsWith('reset')) _owner.reset(this.send, from, text, msg);
@@ -111,7 +110,7 @@ class Main {
                     else if (text.startsWith('stt')) _services.stt(this.send, from, msg);
                     else if (text.startsWith('lyric')) _services.lyrics(this.send, from, text, msg);
                     else if (['tr', 'translate'].some(r => text.startsWith(r))) _services.translate(this.send, text, from, msg, quoted_text);
-                    else if (text.startsWith('ai')) _services.ai(this.send, msg, from, text, quoted_text);
+                    else if (text.startsWith('ai')) _services.ai(this.send, msg, from, context, quoted_text, username);
 
                     //Media
                     else if (text.startsWith('vv')) _media.vv(this.send, msg, quoted_msg, from);
@@ -133,7 +132,7 @@ class Main {
                 else if (_casual.sessions.wordlink.has(from) && _casual.sessions.wordlink.get(from).status === 'active') _casual.wordlink(this.send, text, from, msg, userid);
                 else if (_casual.sessions.ttt.has(from) && _casual.sessions.ttt.get(from).status === 'active') _casual.ttt(this.send, text, from, msg, userid);
                 else if (_casual.sessions.hangman.has(from) && _casual.sessions.hangman.get(from).status === 'active') _casual.hangman(this.send, text, from, msg, userid);
-                else if (willRespond && Date.now() > (cache.last_owner_message + (1000 * 60 * 60 * cache.configs.developer.hours_delay_for_response))) return; //TODO: Add auto responses for when the owner has been offline for 2hs+ and responses are on.
+                else if (willRespond && Date.now() > (cache.last_owner_message + (1000 * 60 * 60 * cache.configs.developer.hour_delay_for_response))) return; //TODO: Add auto responses for when the owner has been offline for 2hs+ and responses are on.
             }
 
             if (isOwner) {

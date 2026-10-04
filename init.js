@@ -20,7 +20,7 @@ export const cache = {
             process_limit: 3,
             port: 3000,
             logs_redirect_id: '',
-            hours_delay_for_response: 2
+            hour_delay_for_response: 2
         }
     },
     database: {

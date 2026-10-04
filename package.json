@@ -10,7 +10,7 @@
   "scripts": {
     "start": "npm install && node index.js",
     "dev": "node index.js",
-    "test": "node others/test.js",
+    "test": "node --env-file=.env others/test.js",
     "build": "echo No build command"
   },
   "repository": {
@@ -42,8 +42,7 @@
     "qrcode-terminal": "^0.12.0",
     "ruhend-scraper": "^10.0.3",
     "sharp": "^0.35.4",
-    "wa-sticker-formatter": "^4.4.4",
-    "ytsearch": "^1.0.4"
+    "wa-sticker-formatter": "^4.4.4"
   },
   "allowScripts": {
     "@whiskeysockets/baileys@7.0.0-rc14": true,
