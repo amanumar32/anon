@@ -91,6 +91,21 @@ class Media {
             cache.process_count -= 1;
         }
     }
+    async music(send, text, from, msg) {
+        try {
+            send.react(from, '🎧', msg.key);
+            const query = text.replace('music', '').trim();
+            if (!query) throw new Error('Please provide a query...');
+            const response = await axios.get(`https://reflection-g7x1.onrender.com/api/search/music?query=${query}`);
+            if (!response.data) throw new Error("No data received from API");
+            const data = response.data.results[0];
+            await send.image(from, { url: data.thumbnail }, `🏷️ *Title:* ${data.title}\n👤 *Artist:* ${data.artist}\n💿 *Album:* ${data.album}`);
+            await send.audio(from, { url: data.preview }, msg);
+        } catch (error) {
+            console.error('Error downloading music:', error.message);
+            send.text(from, error.message, msg);
+        }
+    }
     async song(send, text, from, msg) {
         try {
             send.react(from, '🎵', msg.key);

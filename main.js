@@ -100,9 +100,9 @@ class Main {
                     else if (['joke', 'fact', 'quote'].some(r => text.startsWith(r))) _casual.misc(this.send, from, text, msg);
                     else if (['td', 'wyr', 'nhie'].some(r => text.startsWith(r))) _casual.rounds(this.send, text, from, msg);
                     else if (text.startsWith('chess')) _casual.chess(this.send, text, from, msg, userid);
-                    else if (text.startsWith('wordlink')) return;
-                    else if (text.startsWith('ttt')) return;
-                    else if (text.startsWith('hangman')) return;
+                    else if (text.startsWith('wordlink')) _casual.wordlink(this.send, text, from, msg, userid);
+                    else if (text.startsWith('ttt')) _casual.ttt(this.send, text, from, msg, userid);
+                    else if (text.startsWith('hangman')) _casual.hangman(this.send, text, from, msg, userid);
 
                     //Services
                     else if (text.startsWith('weather')) _services.weather(this.send, text, from, msg);
@@ -119,15 +119,21 @@ class Main {
                     else if (text.startsWith('toimg')) _media.toimg(this.send, text, from, msg, quoted_msg);
                     else if (text.startsWith('tovid')) _media.tovid(this.send, text, from, msg, quoted_msg);
                     else if (['pack', 'take', 'siphon'].some(r => text.startsWith(r))) _media.pack(this.send, context, from, msg, quoted_msg, username);
+                    else if (text.startsWith('music')) _media.music(this.send, text, from, msg);
                     else if (['song', 'play'].some(r => text.startsWith(r))) _media.song(this.send, text, from, msg);
                     else if (['vid', 'video'].some(r => text.startsWith(r))) _media.vid(this.send, text, from, msg);
                     else if (['img', 'image', 'pins'].some(r => text.startsWith(r))) _media.img(this.send, from, text, msg);
+                    else if (text.startsWith('movie')) _media.movie(this.send, from, text, msg);
                     else if (['download', 'dl'].some(r => text.startsWith(r))) _media.download(this.send, context, from, msg);
                     else if (['upload', 'ul'].some(r => text.startsWith(r))) _media.upload(this.send, from, msg, quoted_msg);
                     else if (text.startsWith('emix')) _media.emix(this.send, from, text, msg);
                 }
             } else {
-                //non-command handlers
+                if (_casual.sessions.chess.has(from) && _casual.sessions.chess.get(from).status === 'active') _casual.chess(this.send, text, from, msg, userid);
+                else if (_casual.sessions.wordlink.has(from) && _casual.sessions.wordlink.get(from).status === 'active') _casual.wordlink(this.send, text, from, msg, userid);
+                else if (_casual.sessions.ttt.has(from) && _casual.sessions.ttt.get(from).status === 'active') _casual.ttt(this.send, text, from, msg, userid);
+                else if (_casual.sessions.hangman.has(from) && _casual.sessions.hangman.get(from).status === 'active') _casual.hangman(this.send, text, from, msg, userid);
+                else if (willRespond && Date.now() > (cache.last_owner_message + (1000 * 60 * 60 * cache.configs.developer.hours_delay_for_response))) return; //TODO: Add auto responses for when the owner has been offline for 2hs+ and responses are on.
             }
 
             if (isOwner) {
