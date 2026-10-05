@@ -5,15 +5,13 @@ import axios from 'axios';
 import sharp from 'sharp';
 import ffmpegPath from 'ffmpeg-static';
 import ffmpeg from 'fluent-ffmpeg';
-import yts from 'yt-search';
-import { igdl } from 'ruhend-scraper';
 import { cache } from '../init.js';
 import { createCanvas } from 'canvas';
 import { Sticker } from 'wa-sticker-formatter';
 import { downloadMediaMessage } from '@whiskeysockets/baileys';
 
 ffmpeg.setFfmpegPath(ffmpegPath);
-const local = JSON.parse(fs.readFileSync('./library/structures.json'));
+const local = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'library', 'structures.json')));
 
 class Functions {
     constructor() {

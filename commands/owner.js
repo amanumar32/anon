@@ -2,6 +2,7 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import { cache, recache } from '../init.js';
+import { _functions } from '../library/functions.js';
 
 export const exec_as = promisify(exec);
 
