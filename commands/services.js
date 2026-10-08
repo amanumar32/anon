@@ -22,7 +22,7 @@ class Services {
             if (!data.latitude || !data.longitude) throw new Error('City not found.');
             response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${data.latitude}&longitude=${data.longitude}&current_weather=true&hourly=temperature_2m,weathercode,relative_humidity_2m,wind_speed_10m&timezone=auto&forecast_days=1`);
             if (!response.data) throw new Error('Could not fetch weather data.');
-            const result = { temperature: response.data.current_weather.temperature, description: interpretWeatherCode(response.data.current_weather.weathercode), windSpeed: response.data.current_weather.windspeed, humidity: response.data.hourly.relative_humidity_2m[0], time: new Date().toLocaleString('en-GB', { timeZone: data.timezone }) };
+            const result = { temperature: response.data.current_weather.temperature, description: _functions.interpret_weather_code(response.data.current_weather.weathercode), windSpeed: response.data.current_weather.windspeed, humidity: response.data.hourly.relative_humidity_2m[0], time: new Date().toLocaleString('en-GB', { timeZone: data.timezone }) };
             send.text(from, `*${data.name}, ${data.country}, ${data.admin1 ? data.admin1 : ''}*\n\n🌡️ Temperature: ${result.temperature}°C\n☁️ Conditions: ${result.description}\n🌬️ Wind Speed: ${result.windSpeed} km/h\n💧 Humidity: ${result.humidity}%\n🕐 Local Time: ${result.time}`, msg);
         } catch (error) {
             console.error('Error fetching weather:', error.message);
