@@ -99,7 +99,7 @@ class Media {
             const response = await axios.get(`https://reflection-g7x1.onrender.com/api/search/music?query=${query}`);
             if (!response.data?.results) throw new Error("No songs found for the query.");
             const data = response.data.results[0];
-            await send.image(from, { url: data.thumbnail }, `🏷️ *Title:* ${data.title}\n👤 *Artist:* ${data.artist}\n💿 *Album:* ${data.album}`);
+            await send.image(from, { url: data.thumbnail }, `🏷️ *Title:* ${data.title}\n👤 *Artist:* ${data.artist}\n💿 *Album:* ${data.album}`, msg);
             await send.audio(from, { url: data.preview }, msg);
         } catch (error) {
             console.error('Error downloading music:', error.message);
