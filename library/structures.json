@@ -261,14 +261,6 @@
                 "query"
             ]
         },
-        "movie": {
-            "description": "Download a movie directly to WhatsApp",
-            "category": "media",
-            "param": [
-                "query"
-            ],
-            "note": "This feature queries from our own movie database which is still young and actively being populated, so not all movies will be available yet."
-        },
         "download": {
             "description": "Download media from supported URLs",
             "category": "media",

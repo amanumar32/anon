@@ -13,8 +13,8 @@ class Owner {
     async database(send, from, msg) {
         send.text(from, `> ■ *Database* ■\n\n${Object.keys(cache.database.data).map(e => `- *${_functions.sentence_case(e)}:* ${cache.database.data[e].length} items`).join('\n')}`, msg);
     }
-    async prefix(send, from, msg, text) {
-        const param = text.replace('prefix', '').trim();
+    async prefix(send, from, msg, text, command) {
+        const param = text.replace(/p?refix/, '').trim();
         let message;
         if (!param) message = `> *Prefix:* ${cache.configs.prefix}`;
         else if (param.match(/^[^\p{L}\p{N}\s]+$/u) && param.length === 1) {

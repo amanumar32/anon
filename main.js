@@ -42,18 +42,19 @@ class Main {
             const quoted_text = quoted_msg?.conversation || quoted_msg?.extendedTextMessage?.text || '';
             const quoted_jid = quoted?.participant || '';
 
+            const isBot = !!msg.key.fromMe;
             const isPublic = cache.configs.mode === 'public';
-            const isOwner = !!msg.key.fromMe || [cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
+            const isOwner = isBot || [cache.bot_id, cache.configs.number + '@s.whatsapp.net'].includes(userid);
             const isSudo = cache.configs.sudoOn && cache.database.data.sudo.includes(userid);
             const willRespond = cache.configs.respond;
 
             if (!isPublic && !isOwner && !isSudo) return;
             if ([...cache.database.data.blacklist, ...cache.database.data.banned].some(id => [from, user_number, userid].includes(id)) && !['whitelist'].includes(text)) return;
 
-            const command_list = Object.values(_functions.structures.command_list);
+            const LIST = Object.values(_functions.structures.command_list);
 
             if (command.startsWith(cache.configs.prefix) || ['ping', 'bot', 'uptime', 'stats', 'prefix'].includes(command)) {
-                if (command_list.filter(i => i.category === 'owner').map(e => e.name).some(c => [text, command].some(g => g.startsWith(c)))) {
+                if (LIST.filter(i => i.category === 'owner').map(e => e.name).some(c => [text, command].some(g => g.startsWith(c)))) {
                     if (!isOwner && command !== 'prefix') return this.send.text(from, 'You seem to have stumbled upon an owner only command...', msg);
                     //Owner
                     if (text.startsWith('configs')) _owner.configs(this.send, from, msg);
@@ -123,7 +124,6 @@ class Main {
                     else if (['song', 'play'].some(r => text.startsWith(r))) _media.song(this.send, text, from, msg);
                     else if (['vid', 'video'].some(r => text.startsWith(r))) _media.vid(this.send, text, from, msg);
                     else if (['img', 'image', 'pins'].some(r => text.startsWith(r))) _media.img(this.send, from, text, msg);
-                    else if (text.startsWith('movie')) _media.movie(this.send, from, text, msg);
                     else if (['download', 'dl'].some(r => text.startsWith(r))) _media.download(this.send, context, from, msg);
                     else if (['upload', 'ul'].some(r => text.startsWith(r))) _media.upload(this.send, from, msg, quoted_msg);
                     else if (text.startsWith('emix')) _media.emix(this.send, from, text, msg);

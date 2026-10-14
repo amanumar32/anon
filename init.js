@@ -44,7 +44,7 @@ export const cache = {
     repo_url: local.repository.url.replace(/^git\+/, '').replace(/\.git$/, '') + '.git',
     last_owner_message: Date.now(),
     start_time: Date.now(),
-    last_recache_update: Date.now(),
+    last_recache: Date.now(),
     initialized: false
 }
 
@@ -64,7 +64,7 @@ export async function recache(mode = 'update') {
             console.log('Database loaded successfully!');
         } else {
             cache.main_keys.forEach(key => fs.writeFileSync(`${key}.json`, JSON.stringify(cache[key], null, 4)));
-            cache.last_recache_update = Date.now();
+            cache.last_recache = Date.now();
         }
         return true;
     } catch (error) {

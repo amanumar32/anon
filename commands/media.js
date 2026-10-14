@@ -170,27 +170,10 @@ class Media {
             cache.process_count -= 1;
         }
     }
-    async movie(send, from, text, msg) {
-        try {
-            send.react(from, '🍿', msg.key);
-            if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
-            cache.process_count += 1;
-            const query = text.replace('movie', '').trim();
-            if (!query) throw new Error('Please provide a query...');
-            const response = await axios.get(`https://reflection-g7x1.onrender.com/api/download/movie?query=${query}`);
-            if (!response.data) throw new Error("No data received from API");
-            const data = response.data;
-            await send.document(from, { url: data.url }, msg, data.title?.replace(/[<>:"/\\|?*\x00-\x1F]/g, '_'), data.title, data.mimetype);
-        } catch (error) {
-            console.error('Error downloading movie:', error.message);
-            send.text(from, error.message, msg);
-        } finally {
-            cache.process_count -= 1;
-        }
-    }
     async download(send, context, from, msg) {
         try {
             send.react(from, '🔄', msg.key);
+            throw new Error('This command is currently disabled due to API issues. Please use the `song`, `vid`, or `img` commands instead.');
             if (cache.process_count >= cache.configs.developer.process_limit) throw new Error('Background process limit reached! Please wait till some processes are completed...');
             cache.process_count += 1;
             const query = context.slice(1).replace(/(dl|download)/i, '')?.trim();

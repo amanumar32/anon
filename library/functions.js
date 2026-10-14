@@ -18,7 +18,7 @@ class Functions {
         this.structures = {
             command_list: Object.fromEntries(Object.entries(local.command_list).map(([key, value]) => [key, { name: key, ...value }])),
             white_space: local.white_space,
-            morse_code_map: local.morse_code_map,
+            morse_map: local.morse_code_map,
             default_background_links: local.default_background_links,
         }
     }
