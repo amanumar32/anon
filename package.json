@@ -1,0 +1,60 @@
+{
+  "name": "Anon",
+  "version": "1.0.7",
+  "description": "Self-host baileys whatsapp bot",
+  "license": "ISC",
+  "author": "Cyan+",
+  "homepage": "https://cyan.halostudios.xyz",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm install && node index.js",
+    "dev": "node index.js",
+    "test": "node --env-file=.env others/test.js",
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amanumar32/anon.git"
+  },
+  "dependencies": {
+    "@google/genai": "^2.23.0",
+    "@hapi/boom": "^10.0.1",
+    "@napi-rs/canvas": "^1.0.11",
+    "@vitalets/google-translate-api": "^9.2.1",
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "archiver": "^8.0.0",
+    "axios": "^1.20.0",
+    "cheerio": "^1.2.0",
+    "chess.js": "^1.4.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "emoji-mixer": "^1.3.1",
+    "express": "^5.2.1",
+    "ffmpeg-static": "^5.3.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "gtts": "^0.2.1",
+    "input": "^1.0.1",
+    "mathjs": "^15.2.0",
+    "mumaker": "^2.0.0",
+    "node-schedule": "^2.1.1",
+    "p-queue": "^9.3.5",
+    "pino": "^10.3.1",
+    "qrcode-terminal": "^0.12.0",
+    "ruhend-scraper": "^10.0.3",
+    "sharp": "^0.35.4",
+    "wa-sticker-formatter": "^4.4.4"
+  },
+  "allowScripts": {
+    "@whiskeysockets/baileys@7.0.0-rc14": true,
+    "canvas@3.2.3": true,
+    "ffmpeg-static@5.3.0": true,
+    "protobufjs@7.6.6": true,
+    "sharp@0.30.7": true,
+    "@google/genai@2.23.0": true,
+    "core-js@2.6.12": true
+  },
+  "devDependencies": {
+    "javascript-obfuscator": "^5.9.1"
+  }
+}

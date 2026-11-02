@@ -1,0 +1,687 @@
+{
+    "command_list": {
+        "menu": {
+            "description": "Display a list of all commands",
+            "category": "home",
+            "param": [
+                "category"
+            ]
+        },
+        "support": {
+            "description": "Contact and support the developer",
+            "category": "home"
+        },
+        "repo": {
+            "description": "The bot's Github repository",
+            "category": "home"
+        },
+        "owner": {
+            "description": "Bot owner",
+            "category": "home"
+        },
+        "feedback": {
+            "description": "Send us a feedback or report a bug",
+            "category": "home",
+            "param": [
+                "message"
+            ]
+        },
+        "donate": {
+            "description": "Support the developer",
+            "category": "home"
+        },
+        "help": {
+            "description": "Get help on how to use a command",
+            "category": "home",
+            "param": [
+                "command"
+            ]
+        },
+        "ping": {
+            "description": "Check the bot's latency",
+            "category": "status"
+        },
+        "uptime": {
+            "description": "Check the bot's uptime",
+            "category": "status"
+        },
+        "status": {
+            "description": "Check the bot's full status",
+            "category": "status"
+        },
+        "version": {
+            "description": "Check the bot's version and available updates",
+            "category": "status"
+        },
+        "bot": {
+            "description": "Check if the bot is active and running",
+            "category": "status"
+        },
+        "calc": {
+            "description": "Calculate a mathematical expression",
+            "category": "tools",
+            "param": [
+                "expression"
+            ]
+        },
+        "hash": {
+            "description": "Hash a string",
+            "category": "tools",
+            "param": [
+                "string"
+            ]
+        },
+        "qr": {
+            "description": "Generate a QR code",
+            "category": "tools",
+            "param": [
+                "text"
+            ]
+        },
+        "morse": {
+            "description": "Convert text to morse code and back",
+            "category": "tools",
+            "param": [
+                "text"
+            ]
+        },
+        "weather": {
+            "description": "Get the current weather of a city",
+            "category": "tools",
+            "param": [
+                "city"
+            ]
+        },
+        "news": {
+            "description": "Get the latest headlines",
+            "category": "tools",
+            "param": [
+                "topic?"
+            ]
+        },
+        "lyrics": {
+            "description": "Get the lyrics of your favorite songs",
+            "category": "tools",
+            "param": [
+                "artist",
+                "title"
+            ]
+        },
+        "translate": {
+            "description": "Translate a sentence",
+            "category": "tools",
+            "param": [
+                "text"
+            ]
+        },
+        "ai": {
+            "description": "AI chat tool",
+            "category": "tools",
+            "param": [
+                "prompt"
+            ]
+        },
+        "pick": {
+            "description": "Pick a random option from a list",
+            "category": "tools",
+            "param": [
+                "opt1, opt2, ..."
+            ]
+        },
+        "coin": {
+            "description": "Heads or tails",
+            "category": "tools"
+        },
+        "dice": {
+            "description": "Roll a dice",
+            "category": "tools"
+        },
+        "joke": {
+            "description": "Get a random joke",
+            "category": "casual"
+        },
+        "fact": {
+            "description": "Get a random fact",
+            "category": "casual"
+        },
+        "quote": {
+            "description": "Get a random quote",
+            "category": "casual"
+        },
+        "td": {
+            "description": "Get a random truth or dare",
+            "category": "casual"
+        },
+        "wyr": {
+            "description": "Get a random would you rather question",
+            "category": "casual"
+        },
+        "nhie": {
+            "description": "Get a random \"Never Have I Ever\" question",
+            "category": "casual"
+        },
+        "chess": {
+            "description": "Play a game of chess with a friend",
+            "category": "casual"
+        },
+        "wordlink": {
+            "description": "Play a game of wordlink with a friend",
+            "category": "casual"
+        },
+        "ttt": {
+            "description": "Play a game of tic-tac-toe with a friend",
+            "category": "casual"
+        },
+        "hangman": {
+            "description": "Play a game of hangman.",
+            "category": "casual"
+        },
+        "vv": {
+            "description": "Anti-view once command",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "tostic": {
+            "description": "Convert a picture/video to a sticker",
+            "category": "media",
+            "param": [
+                "c?"
+            ],
+            "requirements": [
+                "&"
+            ],
+            "note": "Add the `c` parameter to crop the sticker, or leave it blank otherwise"
+        },
+        "toimg": {
+            "description": "Convert a sticker to an image",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "tovid": {
+            "description": "Convert a sticker to a video",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "pack": {
+            "description": "Siphon a sticker as your own",
+            "category": "media",
+            "param": [
+                "pack|author?"
+            ],
+            "requirements": [
+                "&"
+            ]
+        },
+        "music": {
+            "description": "search for a song and get it's metadata",
+            "category": "media",
+            "param": [
+                "query"
+            ]
+        },
+        "song": {
+            "description": "Download your favorite songs",
+            "category": "media",
+            "param": [
+                "title",
+                "artist"
+            ]
+        },
+        "vid": {
+            "description": "Download a video from YouTube",
+            "category": "media",
+            "param": [
+                "title"
+            ]
+        },
+        "img": {
+            "description": "Download images from the internet",
+            "category": "media",
+            "param": [
+                "query"
+            ]
+        },
+        "download": {
+            "description": "Download media from supported URLs",
+            "category": "media",
+            "param": [
+                "url"
+            ],
+            "note": "Supported platforms include: YouTube, Facebook, Instagram, and Direct URLs"
+        },
+        "upload": {
+            "description": "Upload an image and get a direct URL",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "emix": {
+            "description": "Combine two emojis together and get a sticker",
+            "category": "media",
+            "param": [
+                "emoji 1",
+                "emoji 2"
+            ]
+        },
+        "tts": {
+            "description": "Text-to-speech services",
+            "category": "media",
+            "param": [
+                "text"
+            ]
+        },
+        "stt": {
+            "description": "Speech-to-text services",
+            "category": "media",
+            "requirements": [
+                "&"
+            ]
+        },
+        "waifu": {
+            "description": "SFW 'waifu' query",
+            "category": "sfw"
+        },
+        "maid": {
+            "description": "SFW 'maid' query",
+            "category": "sfw"
+        },
+        "uniform": {
+            "description": "SFW 'uniform' query",
+            "category": "sfw"
+        },
+        "oppai": {
+            "description": "SFW 'oppai' query",
+            "category": "sfw"
+        },
+        "selfies": {
+            "description": "SFW 'selfies' query",
+            "category": "sfw"
+        },
+        "rem": {
+            "description": "SFW 'rem' query",
+            "category": "sfw"
+        },
+        "hentai": {
+            "description": "NSFW 'hentai' query",
+            "category": "nsfw"
+        },
+        "ero": {
+            "description": "NSFW 'ero' query",
+            "category": "nsfw"
+        },
+        "ass": {
+            "description": "NSFW 'ass' query",
+            "category": "nsfw"
+        },
+        "paizuri": {
+            "description": "NSFW 'paizuri' query",
+            "category": "nsfw"
+        },
+        "oral": {
+            "description": "NSFW 'oral' query",
+            "category": "nsfw"
+        },
+        "ecchi": {
+            "description": "NSFW 'ecchi' query",
+            "category": "nsfw"
+        },
+        "milf": {
+            "description": "NSFW 'milf' query",
+            "category": "nsfw"
+        },
+        "afk": {
+            "description": "Indicate you're _away from keyboard_",
+            "category": "group",
+            "param": [
+                "reason?"
+            ],
+            "note": "All users can use this command"
+        },
+        "poll": {
+            "description": "Create a poll",
+            "category": "group",
+            "param": [
+                "title|opt1|opt2|..."
+            ],
+            "note": "All users can use this command"
+        },
+        "group info": {
+            "description": "Get information about a group",
+            "category": "group"
+        },
+        "group settings": {
+            "description": "Get the configurations for a group",
+            "category": "group"
+        },
+        "group id": {
+            "description": "Get a group's ID",
+            "category": "group"
+        },
+        "group admins": {
+            "description": "List all group admins",
+            "category": "group"
+        },
+        "group members": {
+            "description": "List all group members",
+            "category": "group"
+        },
+        "tag": {
+            "description": "Tag all members with a message",
+            "category": "group",
+            "param": [
+                "message"
+            ]
+        },
+        "hide tag": {
+            "description": "Tag all members with a message, and delete the original message",
+            "category": "group",
+            "param": [
+                "message"
+            ]
+        },
+        "active": {
+            "description": "List the most active group members",
+            "category": "group"
+        },
+        "inactive": {
+            "description": "List the least active group members",
+            "category": "group"
+        },
+        "activity": {
+            "description": "The group's activity in percentage",
+            "category": "group"
+        },
+        "antidel": {
+            "description": "Toggle anti-del",
+            "category": "group",
+            "param": [
+                "on/off"
+            ]
+        },
+        "antilink": {
+            "description": "Toggle anti-link",
+            "category": "group",
+            "param": [
+                "on/off/set"
+            ]
+        },
+        "antibad": {
+            "description": "Toggle anti-badword",
+            "category": "group",
+            "param": [
+                "on/off/set"
+            ]
+        },
+        "antistatus": {
+            "description": "Toggle anti-status",
+            "category": "group",
+            "param": [
+                "on/off/set"
+            ]
+        },
+        "welcome": {
+            "description": "Handle group welcome messages",
+            "category": "group",
+            "param": [
+                "on/off/set"
+            ]
+        },
+        "goodbye": {
+            "description": "Handle group goodbye messages",
+            "category": "group",
+            "param": [
+                "on/off/set"
+            ]
+        },
+        "badword": {
+            "description": "Manage the listed badwords for a group",
+            "category": "group",
+            "param": [
+                "add/remove/list"
+            ]
+        },
+        "change name": {
+            "description": "Change the group name",
+            "category": "group",
+            "param": [
+                "name"
+            ]
+        },
+        "change desc": {
+            "description": "Change the group description",
+            "category": "group",
+            "param": [
+                "description"
+            ]
+        },
+        "change pic": {
+            "description": "Change the group picture",
+            "category": "group",
+            "param": [
+                "image"
+            ],
+            "requirements": [
+                "&"
+            ]
+        },
+        "invite": {
+            "description": "Group invites",
+            "category": "group",
+            "param": [
+                "reset?"
+            ]
+        },
+        "open": {
+            "description": "Open the group",
+            "category": "group"
+        },
+        "close": {
+            "description": "Close the group",
+            "category": "group"
+        },
+        "promote": {
+            "description": "Promote a user",
+            "category": "group",
+            "requirements": [
+                "@"
+            ]
+        },
+        "demote": {
+            "description": "Demote a user",
+            "category": "group",
+            "requirements": [
+                "@"
+            ]
+        },
+        "del": {
+            "description": "Delete a message",
+            "category": "group",
+            "requirements": [
+                "&"
+            ]
+        },
+        "warn": {
+            "description": "Warn a user",
+            "category": "group",
+            "requirements": [
+                "@"
+            ]
+        },
+        "kick": {
+            "description": "Remove a user from the group a user",
+            "category": "group",
+            "requirements": [
+                "@"
+            ]
+        },
+        "usage": {
+            "description": "Command usage stats",
+            "category": "owner"
+        },
+        "prefix": {
+            "description": "Change the bot's command prefix",
+            "category": "owner",
+            "param": [
+                "prefix"
+            ]
+        },
+        "notification": {
+            "description": "Toggle bot notifications",
+            "category": "owner",
+            "param": [
+                "on/off"
+            ]
+        },
+        "mode": {
+            "description": "Change the bot's mode",
+            "category": "owner",
+            "param": [
+                "public/private"
+            ]
+        },
+        "respond": {
+            "description": "Toggle and set bot responses to messages",
+            "category": "owner",
+            "param": [
+                "on/off/set"
+            ]
+        },
+        "sudo": {
+            "description": "Handle sudo users",
+            "category": "owner",
+            "param": [
+                "add/remove/on/off/list"
+            ],
+            "requirements": [
+                "@"
+            ],
+            "note": "Sudo users can use the bot while in private mode"
+        },
+        "nsfw": {
+            "description": "Toggle nsfw content",
+            "category": "owner",
+            "param": [
+                "on/off"
+            ],
+            "note": "NSFW content can be irrelevant for some users"
+        },
+        "blacklist": {
+            "description": "Blacklist a group",
+            "category": "owner",
+            "param": [
+                "group"
+            ]
+        },
+        "whitelist": {
+            "description": "Whitelist a group",
+            "category": "owner",
+            "param": [
+                "group"
+            ]
+        },
+        "ban": {
+            "description": "Ban a user",
+            "category": "owner",
+            "requirements": [
+                "@"
+            ]
+        },
+        "unban": {
+            "description": "Unban a user",
+            "category": "owner",
+            "requirements": [
+                "@"
+            ]
+        },
+        "update": {
+            "description": "Update the bot to the latest committed version",
+            "category": "owner"
+        },
+        "restart": {
+            "description": "Attempts to restart the server",
+            "category": "owner",
+            "note": "You may need to start the server manually if the bot doesn't start after a few minutes"
+        },
+        "backup": {
+            "description": "Backup your auth, configs and database to the cloud",
+            "category": "owner"
+        }
+    },
+    "white_space": "​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​",
+    "morse_code_map": {
+        "0": "-----",
+        "1": ".----",
+        "2": "..---",
+        "3": "...--",
+        "4": "....-",
+        "5": ".....",
+        "6": "-....",
+        "7": "--...",
+        "8": "---..",
+        "9": "----.",
+        "a": ".-",
+        "b": "-...",
+        "c": "-.-.",
+        "d": "-..",
+        "e": ".",
+        "f": "..-.",
+        "g": "--.",
+        "h": "....",
+        "i": "..",
+        "j": ".---",
+        "k": "-.-",
+        "l": ".-..",
+        "m": "--",
+        "n": "-.",
+        "o": "---",
+        "p": ".--.",
+        "q": "--.-",
+        "r": ".-.",
+        "s": "...",
+        "t": "-",
+        "u": "..-",
+        "v": "...-",
+        "w": ".--",
+        "x": "-..-",
+        "y": "-.--",
+        "z": "--..",
+        ".": ".-.-.-",
+        ",": "--..--",
+        "?": "..--..",
+        "'": ".----.",
+        "!": "-.-.--",
+        "/": "-..-.",
+        "-": "-....-",
+        ":": "---...",
+        ";": "-.-.-.",
+        "=": "-...-",
+        "+": ".-.-.",
+        "@": ".--.-.",
+        " ": "/",
+        "": " ",
+        "&": ".-...",
+        "(": "-.--.",
+        ")": "-.--.-",
+        "$": "...-..-",
+        "_": "..--.-",
+        "\"": ".-..-.",
+        "#": "...-.-",
+        "*": "-..--",
+        "\n": "\n"
+    },
+    "default_background_links": [
+        "https://i.ibb.co/6czK1t0q/upload.jpg",
+        "https://i.ibb.co/q36VdFqp/upload.jpg",
+        "https://i.ibb.co/pvffkk9Y/upload.png",
+        "https://i.ibb.co/8hxVNVK/upload.jpg",
+        "https://i.ibb.co/Cp9STRyr/upload.jpg",
+        "https://i.ibb.co/pNGvpbg/upload.jpg"
+    ]
+}
