@@ -356,10 +356,6 @@
             "description": "Get information about a group",
             "category": "group"
         },
-        "group settings": {
-            "description": "Get the configurations for a group",
-            "category": "group"
-        },
         "group id": {
             "description": "Get a group's ID",
             "category": "group"
@@ -677,11 +673,14 @@
         "\n": "\n"
     },
     "default_background_links": [
-        "https://i.ibb.co/6czK1t0q/upload.jpg",
-        "https://i.ibb.co/q36VdFqp/upload.jpg",
-        "https://i.ibb.co/pvffkk9Y/upload.png",
-        "https://i.ibb.co/8hxVNVK/upload.jpg",
-        "https://i.ibb.co/Cp9STRyr/upload.jpg",
-        "https://i.ibb.co/pNGvpbg/upload.jpg"
+        "https://i.imghippo.com/files/YHtg9435COM.jpg",
+        "https://i.imghippo.com/files/rii1471iWs.jpg",
+        "https://i.imghippo.com/files/ufi5359YVU.jpg",
+        "https://i.imghippo.com/files/CHLy3191BE.jpg",
+        "https://i.imghippo.com/files/Rwi1709PLU.jpg",
+        "https://i.imghippo.com/files/TcWB8432WHI.jpg",
+        "https://i.imghippo.com/files/rDO3079On.jpg",
+        "https://i.imghippo.com/files/MuMU1737bE.jpg",
+        "https://i.imghippo.com/files/aFPg6411Qcg.jpg"
     ]
 }
